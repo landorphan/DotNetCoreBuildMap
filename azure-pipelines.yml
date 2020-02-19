@@ -239,6 +239,17 @@ jobs:
         echo Use the environment variables input below to pass secret variables to this script
       displayName: 'Testability: NuGet Code Sign copy'
 
+    - task: CopyFiles@2
+      inputs:
+        sourceFolder: '$(System.ArtifactsDirectory)'
+        contents: '*.nupkg'
+        TargetFolder: '$(Build.ArtifactStagingDirectory)'
+      displayName: "Copy NuGet Files To Artifact Staging"
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        artifactName: signed
 
     # - script: |
     #    echo Write your commands here
