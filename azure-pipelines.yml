@@ -90,6 +90,7 @@ steps:
 - bash: |
    # Write your commands here
    
+   ls -l
    mv Directory.Build.Props Local.Build.Props
    
    # Use the environment variables input below to pass secret variables to this script
