@@ -5,7 +5,7 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <PackageId>Landorphan.DotNetCoreBuildTools</PackageId>
-    <Version>$(Version)</Version>
+    <Version>$(BUILD_VERSION)</Version>
     <Authors>Timothy Stockstill, Landorphan LLC, Michael Prochaska</Authors>
     <Company>Landorphan LLC</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
