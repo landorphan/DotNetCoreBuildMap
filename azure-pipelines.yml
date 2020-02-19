@@ -91,7 +91,7 @@ steps:
    # Write your commands here
    
    ls -l
-   mv Directory.Build.Props Local.Build.Props
+   mv Directory.Build.props Local.Build.props
    
    # Use the environment variables input below to pass secret variables to this script
   displayName: 'Make Local.Build.Props'
@@ -133,10 +133,10 @@ steps:
   displayName: 'Create Directory.Build.Props File'
   inputs:
     fileoverwrite: true
-    filepath: '$(Build.SourcesDirectory)/Directory.Build.Props'
+    filepath: '$(Build.SourcesDirectory)/Directory.Build.props'
     filecontent: |
      <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-      <Import Project="Local.Build.Props" />
+      <Import Project="Local.Build.props" />
        <ItemGroup>
          <Compile Include="$(Build.SourcesDirectory)\sign.cs" />
        </ItemGroup>
