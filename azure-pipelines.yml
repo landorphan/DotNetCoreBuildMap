@@ -193,7 +193,7 @@ jobs:
 
     - bash: |
         ls -l "$(Agent.BuildDirectory)/d"
-        ls -l /home/vsts/work/_temp
+
       displayName: 'List Temp Directory Contents'
       
     - script: |
