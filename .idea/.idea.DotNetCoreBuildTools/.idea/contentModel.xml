@@ -7,6 +7,8 @@
         <e p="bin" t="ExcludeRecursive" />
         <e p="DotNetCoreBuildMap.cs" t="Include" />
         <e p="DotNetCoreBuildTools.csproj" t="IncludeRecursive" />
+        <e p="DotNetCoreBuildTools.csproj-E" t="Include" />
+        <e p="DotNetCoreBuildTools.csprojE" t="Include" />
         <e p="Helpers" t="Include">
           <e p="XPlatHelper.cs" t="Include" />
         </e>

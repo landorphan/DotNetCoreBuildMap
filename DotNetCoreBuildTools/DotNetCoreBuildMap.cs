@@ -46,8 +46,24 @@ namespace ProjectOrder
         {
             var me = new CreateOrder();
             var runParameters = new RunParameters();
-            runParameters.PathList.Add(@"/Volumes/[C] tistocks-v0/temp/NewProject/NewProjectA/NewProjectA.sln");
-            runParameters.PathList.Add(@"/Volumes/[C] tistocks-v0/temp/NewProject/NewProjectB/NewProjectB.sln");
+//            runParameters.PathList.Add(@"/Volumes/[C] tistocks-v0/temp/NewProject/NewProjectA/NewProjectA.sln");
+//            runParameters.PathList.Add(@"/Volumes/[C] tistocks-v0/temp/NewProject/NewProjectB/NewProjectB.sln");
+            foreach (var arg in args)
+            {
+                runParameters.PathList.Add(arg);
+            }
+
+            if (Console.IsInputRedirected)
+            {
+                using (var reader = new StreamReader(Console.OpenStandardInput()))
+                {
+                    while (!reader.EndOfStream)
+                    {
+                        runParameters.PathList.Add(reader.ReadLine());
+                    }
+                }
+            }
+            
             me.Run(runParameters);
         }
 
