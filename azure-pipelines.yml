@@ -131,8 +131,8 @@ steps:
    Out-File -FilePath '$(Build.BinariesDirectory)/raw-build/version.txt' -InputObject $Env:BUILD_VERSION -Encoding ASCII
    cat '$(Build.BinariesDirectory)/raw-build/version.txt'
 
-#   find . -name '*.csproj' | xargs -I % sed -iE 's/\$(BUILD_VERSION)//g' %
    Get-ChildItem -Recurse  *.csproj | % { ((Get-Content -path "$_" -Raw) -replace '\$\(BUILD_VERSION\)',"$Env:BUILD_VERSION") | Set-Content -Path "$_" }
+   # find . -name '*.csproj' | xargs -I % sed -iE 's/\$(BUILD_VERSION)//g' %
    # Use the environment variables input below to pass secret variables to this script.
   displayName: 'Add Pre-release qualifer'
 
