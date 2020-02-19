@@ -71,7 +71,7 @@ steps:
 - powershell: |
    # Write your powershell commands here.
    
-   Expand-Archive -Path "$(Agent.BuildDirectory)/d/NuGetKeyVaultSignTool.zip" -DestinationPath "$(Agent.BuildDirectory)/d/"
+   Expand-Archive -Path "$(Agent.BuildDirectory)/d/nugetkeyvaultsigntool.zip" -DestinationPath "$(Agent.BuildDirectory)/d/"
    
    # Use the environment variables input below to pass secret variables to this script.
   displayName: 'Unzip NuGetKeyVaultSignTool.zip into Agent.BuildDirectory/d'
