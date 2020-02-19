@@ -142,10 +142,10 @@ steps:
        </ItemGroup>
      </Project>
 
-# - task: DownloadSecureFile@1
-#   displayName: 'Download Key.Snk'
-#   inputs:
-#     secureFile: 'Landorphan-Light.snk' 
+- task: DownloadSecureFile@1
+  displayName: 'Download Key.Snk'
+  inputs:
+    secureFile: 'Landorphan-Light.snk' 
 
 # - script: dotnet build --configuration $(buildConfiguration)
 #   displayName: 'dotnet build $(buildConfiguration)'
