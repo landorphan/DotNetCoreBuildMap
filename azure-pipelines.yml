@@ -10,8 +10,10 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-  buildConfiguration: 'Release'
-
+  - group: Landorphan-Build-Secrets
+  - name: buildConfiguration
+    value: 'Release'
+  
 steps:
 - script: |
    echo Write your commands here
