@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetCoreBuildMap", "DotNetCoreBuildMap\DotNetCoreBuildMap.csproj", "{01BD78FE-1E0E-42B1-BFD7-A07BA5853D95}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetCoreBuildTools", "DotNetCoreBuildTools\DotNetCoreBuildTools.csproj", "{01BD78FE-1E0E-42B1-BFD7-A07BA5853D95}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -6,8 +6,6 @@ namespace ProjectOrder
 {
    public class RunParameters
    {
-      public List<string> SolutionFilePathsList { get; set; }
-
-      public List<string> ProjectFilePaths { get; set; }
+      public List<string> PathList { get; set; } = new List<string>();
    }
 }

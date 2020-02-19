@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="$USER_HOME$/Library/Caches/Rider2018.3/extResources" t="IncludeRecursive" />
+    <e p="$USER_HOME$/Library/Caches/Rider2018.3/resharper-host/local/Transient/ReSharperHost/v183/SolutionCaches/_DotNetCoreBuildTools.810836623.00" t="ExcludeRecursive" />
+    <e p="$PROJECT_DIR$" t="IncludeFlat">
+      <e p="DotNetCoreBuildTools" t="IncludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="DotNetCoreBuildMap.cs" t="Include" />
+        <e p="DotNetCoreBuildTools.csproj" t="IncludeRecursive" />
+        <e p="Helpers" t="Include">
+          <e p="XPlatHelper.cs" t="Include" />
+        </e>
+        <e p="Model" t="Include">
+          <e p="ProjectFile.cs" t="Include" />
+          <e p="ProjectFileBase.cs" t="Include" />
+          <e p="ProjectFileReference.cs" t="Include" />
+          <e p="VisualStudioSolutionFile.cs" t="Include" />
+        </e>
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp3.1" t="Include">
+              <e p="DotNetCoreBuildTools.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="Parsers" t="Include">
+          <e p="SolutionFileParser.cs" t="Include" />
+        </e>
+        <e p="RunParameters.cs" t="Include" />
+      </e>
+      <e p="DotNetCoreBuildTools.sln" t="IncludeFlat" />
+      <e p="packages" t="ExcludeRecursive" />
+    </e>
+  </component>
+</project>
