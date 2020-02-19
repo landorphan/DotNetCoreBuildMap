@@ -50,7 +50,7 @@ steps:
        mkdir "$(Agent.BuildDirectory)\d\";
    }
 
-   ls Env:
+   ls $Env:
    
    # Use the environment variables input below to pass secret variables to this script.
   displayName: 'Create Agent.BuildDirectory\d'
