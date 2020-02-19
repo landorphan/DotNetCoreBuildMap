@@ -149,6 +149,7 @@ steps:
 
 - bash: |
     ls -l "$(Agent.BuildDirectory)/d"
+    ls -l "$(Build.BinariesDirectory)/raw-build"
     ls -l /home/vsts/work/_temp
   displayName: 'List Temp Directory Contents'
   
