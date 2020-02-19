@@ -148,12 +148,36 @@ jobs:
         ls -l ./DotNetCoreBuildTools/bin/Release
       displayName: 'List Build Directory Contents'
 
+    - task: CopyFiles@2
+      inputs:
+        sourceFolder: '$(Build.SourcesDirectory)'
+        contents: '**/$(BuildConfiguration)/**/*.nupkg'
+        TargetFolder: '$(Build.ArtifactStagingDirectory)'
+      displayName: "Copy NuGet Files To Artifact Staging"
+
+    - task: CopyFiles@2
+      inputs:
+        sourceFolder: '$(Build.SourcesDirectory)'
+        contents: '$(Build.BinariesDirectory)/raw-build/version.txt'
+        TargetFolder: '$(Build.ArtifactStagingDirectory)'
+      displayName: "Copy Version File To Artifact Staging"
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        artifactName: pre-sign
+
   - job:
     displayName: "Sign NuGet"
     dependsOn: buildBinaries
     pool: 
       vmImage: 'windows-latest'
     steps:
+    - task: DownloadPipelineArtifact@2
+      inputs:
+        path: '$(System.ArtifactsDirectory)'
+        artifact: pre-sign
+
     - powershell: |
         # Write your powershell commands here.
         
@@ -199,10 +223,10 @@ jobs:
     - script: |
         echo Write your commands here
         
-        VERSION=$(cat "$(Build.BinariesDirectory)/raw-build/version.txt")
+        VERSION=$(cat "$(System.ArtifactsDirectory)/version.txt")
         echo $VERSION
         
-        dotnet "$(Agent.BuildDirectory)/d/NuGetKeyVaultSignTool.dll" sign "./DotNetCoreBuildTools/bin/Release/Landorphan.DotNetCoreBuildTools.$VERSION.nupkg" --file-digest sha256 --timestamp-rfc3161 http://timestamp.comodoca.com --timestamp-digest sha256 --azure-key-vault-url "https://landorphan-build.vault.azure.net/" --azure-key-vault-client-id "b32bbbae-55c3-4f5b-bf40-0292d349886f" --azure-key-vault-client-secret "$(LandorphanKeyVaultKey)" --azure-key-vault-certificate "Landorphan-LightWeight-CodeSign"
+        dotnet "$(Agent.BuildDirectory)/d/NuGetKeyVaultSignTool.dll" sign "$(System.ArtifactsDirectory)/Landorphan.DotNetCoreBuildTools.$VERSION.nupkg" --file-digest sha256 --timestamp-rfc3161 http://timestamp.comodoca.com --timestamp-digest sha256 --azure-key-vault-url "https://landorphan-build.vault.azure.net/" --azure-key-vault-client-id "b32bbbae-55c3-4f5b-bf40-0292d349886f" --azure-key-vault-client-secret "$(LandorphanKeyVaultKey)" --azure-key-vault-certificate "Landorphan-LightWeight-CodeSign"
         
         echo Use the environment variables input below to pass secret variables to this script
       displayName: 'Testability: NuGet Code Sign copy'
