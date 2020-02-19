@@ -147,5 +147,9 @@ steps:
   inputs:
     secureFile: 'Landorphan-Light.snk' 
 
+- bash: |
+    ls -l /home/vsts/work/_temp
+  displayName: 'List Temp Directory Contents'
+  
 # - script: dotnet build --configuration $(buildConfiguration)
 #   displayName: 'dotnet build $(buildConfiguration)'
