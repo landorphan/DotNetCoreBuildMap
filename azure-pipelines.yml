@@ -6,188 +6,209 @@
 trigger:
 - master
 
-pool:
-  vmImage: 'ubuntu-latest'
+jobs:
+  - job: buildBinaries
+    displayName: "Build DotNet Core Binaries"
+    pool:
+      vmImage: 'ubuntu-latest'
 
-variables:
-  - group: Landorphan-Build-Secrets
-  - name: buildConfiguration
-    value: 'Release'
-  
-steps:
-- script: |
-   echo Write your commands here
-   
-   mkdir "$(Build.BinariesDirectory)/raw-build"
-   dir "$(Build.BinariesDirectory)/raw-build"
-   set
-   
-   
-   echo Use the environment variables input below to pass secret variables to this script
-  displayName: 'Display Environment Info & Setup'
+    variables:
+      - group: Landorphan-Build-Secrets
+      - name: buildConfiguration
+        value: 'Release'
+      
+    steps:
+    - script: |
+      echo Write your commands here
+      
+      mkdir "$(Build.BinariesDirectory)/raw-build"
+      dir "$(Build.BinariesDirectory)/raw-build"
+      set
+      
+      
+      echo Use the environment variables input below to pass secret variables to this script
+      displayName: 'Display Environment Info & Setup'
 
-- script: |
-   echo Write your commands here
-   
-   mkdir %AGENT_BUILDDIRECTORY%/d
-   
-   echo Use the environment variables input below to pass secret variables to this script
-  displayName: 'Create Dependency Directory'
+    - script: |
+      echo Write your commands here
+      
+      mkdir %AGENT_BUILDDIRECTORY%/d
+      
+      echo Use the environment variables input below to pass secret variables to this script
+      displayName: 'Create Dependency Directory'
 
-- task: DotNetCoreCLI@2
-  displayName: 'Download AzureSignTool'
-  inputs:
-    command: custom
-    custom: tool
-    arguments: 'install AzureSignTool --version 2.0.17 --tool-path $(Agent.BuildDirectory)/d'
+    - task: DotNetCoreCLI@2
+      displayName: 'Download AzureSignTool'
+      inputs:
+        command: custom
+        custom: tool
+        arguments: 'install AzureSignTool --version 2.0.17 --tool-path $(Agent.BuildDirectory)/d'
 
-#Start: This should be in an include
-- powershell: |
-   # Write your powershell commands here.
-   
-   if (!(Test-Path "$(Agent.BuildDirectory)\d\"))
-   {
-       mkdir "$(Agent.BuildDirectory)\d\";
-   }
+    #Start: This should be in an include
+    - powershell: |
+      # Write your powershell commands here.
+      
+      if (!(Test-Path "$(Agent.BuildDirectory)\d\"))
+      {
+          mkdir "$(Agent.BuildDirectory)\d\";
+      }
 
-   Get-Item -Path Env:
-   # Use the environment variables input below to pass secret variables to this script.
-  displayName: 'Create Agent.BuildDirectory\d'
+      Get-Item -Path Env:
+      # Use the environment variables input below to pass secret variables to this script.
+      displayName: 'Create Agent.BuildDirectory/d'
+    #END: This should be in an include
 
-- bash: |
-   # Write your commands here
-   
-   convert_path() {
-     echo $(echo "/$1" | sed 's/\\/\//g' | sed 's/://' | sed -e 's/\(.*\)/\L\1/')
-   }
-   
-   TOOL_PATH="$(echo $(convert_path '$(Agent.BuildDirectory)/d/NuGetKeyVaultSignTool.zip'))"
-   
-   echo $TOOL_PATH
-   
-   curl -o "$TOOL_PATH" "https://lndfbuild.blob.core.windows.net/utils/NuGetKeyVaultSignTool.zip"
-   ls -l "$(Agent.BuildDirectory)/d"
-   
-   # Use the environment variables input below to pass secret variables to this script
-  displayName: 'Download NuGetKeyVaultSignTool.zip'
-
-- powershell: |
-   # Write your powershell commands here.
-   
-   Expand-Archive -Path "$(Agent.BuildDirectory)/d/nugetkeyvaultsigntool.zip" -DestinationPath "$(Agent.BuildDirectory)/d/"
-   
-   # Use the environment variables input below to pass secret variables to this script.
-  displayName: 'Unzip NuGetKeyVaultSignTool.zip into Agent.BuildDirectory/d'
-#END: This should be in an include
-
-- task: eliostruyf.build-task.custom-build-task.file-creator@2
-  displayName: 'Create sign.cs File'
-  inputs:
-    fileoverwrite: true
-    filepath: '$(Build.SourcesDirectory)/sign.cs'
-    filecontent: |
-     using System.Reflection;
-     
-     [assembly:AssemblyKeyFileAttribute(@"$(Agent.TempDirectory)/Landorphan-Light.snk")]
-     
-- bash: |
-   # Write your commands here
-   
-   ls -l
-   mv Directory.Build.props Local.Build.props
-   
-   # Use the environment variables input below to pass secret variables to this script
-  displayName: 'Make Local.Build.Props'
+    - task: eliostruyf.build-task.custom-build-task.file-creator@2
+      displayName: 'Create sign.cs File'
+      inputs:
+        fileoverwrite: true
+        filepath: '$(Build.SourcesDirectory)/sign.cs'
+        filecontent: |
+        using System.Reflection;
+        
+        [assembly:AssemblyKeyFileAttribute(@"$(Agent.TempDirectory)/Landorphan-Light.snk")]
+        
+    - bash: |
+      # Write your commands here
+      
+      ls -l
+      mv Directory.Build.props Local.Build.props
+      
+      # Use the environment variables input below to pass secret variables to this script
+      displayName: 'Make Local.Build.Props'
 
 
-- bash: |
-   # Write your commands here
-   
-   VERSION_FILE="$(echo '/$(Build.BinariesDirectory)' | sed 's/\\/\//g' | sed 's/://' | sed -e 's/\(.*\)/\L\1/')/raw-build/version.txt"
-   echo $VERSION_FILE 
-   find AssemblyVersion.cs -exec sed -i -r "s/\(\"([0-9]+\.[0-9]+)\.[0-9]+\"/(\"\1\."$BUILD_BUILDID"\"/g" {} \;
-   cat AssemblyVersion.cs | grep -oP '(?<=AssemblyVersion\(\")[0-9]+\.[0-9]+\.[0-9]+' > $VERSION_FILE
-   cat "$VERSION_FILE"
-   
-   # Use the environment variables input below to pass secret variables to this script
-  displayName: 'Update Build Version'
+    - bash: |
+      # Write your commands here
+      
+      VERSION_FILE="$(echo '/$(Build.BinariesDirectory)' | sed 's/\\/\//g' | sed 's/://' | sed -e 's/\(.*\)/\L\1/')/raw-build/version.txt"
+      echo $VERSION_FILE 
+      find AssemblyVersion.cs -exec sed -i -r "s/\(\"([0-9]+\.[0-9]+)\.[0-9]+\"/(\"\1\."$BUILD_BUILDID"\"/g" {} \;
+      cat AssemblyVersion.cs | grep -oP '(?<=AssemblyVersion\(\")[0-9]+\.[0-9]+\.[0-9]+' > $VERSION_FILE
+      cat "$VERSION_FILE"
+      
+      # Use the environment variables input below to pass secret variables to this script
+      displayName: 'Update Build Version'
 
-- powershell: |
-   # Write your powershell commands here.
-   
-   $Env:BUILD_VERSION = (cat '$(Build.BinariesDirectory)/raw-build/version.txt')
-   if ($env:BUILD_SOURCEBRANCHNAME -eq 'develop') 
-   { 
-     $Env:BUILD_VERSION = $Env:BUILD_VERSION + "-prerelease"; 
-   }
-   elseif ($env:BUILD_SOURCEBRANCHNAME -eq 'master') 
-   { 
-   }
-   else 
-   { 
-     $Env:BUILD_VERSION = $Env:BUILD_VERSION + "-develop"; 
-   }
-   echo "$Env:BUILD_VERSION"
+    - powershell: |
+      # Write your powershell commands here.
+      
+      $Env:BUILD_VERSION = (cat '$(Build.BinariesDirectory)/raw-build/version.txt')
+      if ($env:BUILD_SOURCEBRANCHNAME -eq 'develop') 
+      { 
+        $Env:BUILD_VERSION = $Env:BUILD_VERSION + "-prerelease"; 
+      }
+      elseif ($env:BUILD_SOURCEBRANCHNAME -eq 'master') 
+      { 
+      }
+      else 
+      { 
+        $Env:BUILD_VERSION = $Env:BUILD_VERSION + "-develop"; 
+      }
+      echo "$Env:BUILD_VERSION"
 
-   Write-Host "##vso[task.setvariable variable=BUILD_VERSION]$($env:BUILD_VERSION)"
-   
-   Out-File -FilePath '$(Build.BinariesDirectory)/raw-build/version.txt' -InputObject $Env:BUILD_VERSION -Encoding ASCII
-   cat '$(Build.BinariesDirectory)/raw-build/version.txt'
+      Write-Host "##vso[task.setvariable variable=BUILD_VERSION]$($env:BUILD_VERSION)"
+      
+      Out-File -FilePath '$(Build.BinariesDirectory)/raw-build/version.txt' -InputObject $Env:BUILD_VERSION -Encoding ASCII
+      cat '$(Build.BinariesDirectory)/raw-build/version.txt'
 
-   Get-ChildItem -Recurse  *.csproj | % { ((Get-Content -path "$_" -Raw) -replace '\$\(BUILD_VERSION\)',"$Env:BUILD_VERSION") | Set-Content -Path "$_" }
-   # find . -name '*.csproj' | xargs -I % sed -iE 's/\$(BUILD_VERSION)//g' %
-   # Use the environment variables input below to pass secret variables to this script.
-  displayName: 'Add Pre-release qualifer'
+      Get-ChildItem -Recurse  *.csproj | % { ((Get-Content -path "$_" -Raw) -replace '\$\(BUILD_VERSION\)',"$Env:BUILD_VERSION") | Set-Content -Path "$_" }
+      # find . -name '*.csproj' | xargs -I % sed -iE 's/\$(BUILD_VERSION)//g' %
+      # Use the environment variables input below to pass secret variables to this script.
+      displayName: 'Add Pre-release qualifer'
 
-- task: eliostruyf.build-task.custom-build-task.file-creator@2
-  displayName: 'Create Directory.Build.Props File'
-  inputs:
-    fileoverwrite: true
-    filepath: '$(Build.SourcesDirectory)/Directory.Build.props'
-    filecontent: |
-     <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-      <Import Project="Local.Build.props" />
-       <ItemGroup>
-         <Compile Include="$(Build.SourcesDirectory)\sign.cs" />
-       </ItemGroup>
-     </Project>
+    - task: eliostruyf.build-task.custom-build-task.file-creator@2
+      displayName: 'Create Directory.Build.Props File'
+      inputs:
+        fileoverwrite: true
+        filepath: '$(Build.SourcesDirectory)/Directory.Build.props'
+        filecontent: |
+        <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+          <Import Project="Local.Build.props" />
+          <ItemGroup>
+            <Compile Include="$(Build.SourcesDirectory)\sign.cs" />
+          </ItemGroup>
+        </Project>
 
-- task: DownloadSecureFile@1
-  displayName: 'Download Key.Snk'
-  inputs:
-    secureFile: 'Landorphan-Light.snk' 
+    - task: DownloadSecureFile@1
+      displayName: 'Download Key.Snk'
+      inputs:
+        secureFile: 'Landorphan-Light.snk' 
 
-- bash: |
-    ls -l "$(Agent.BuildDirectory)/d"
-    ls -l "$(Build.BinariesDirectory)/raw-build"
-    ls -l /home/vsts/work/_temp
-    cat DotNetCoreBuildTools/DotNetCoreBuildTools.csproj
-  displayName: 'List Temp Directory Contents'
-  
-- script: |
-    dotnet build --configuration $(buildConfiguration)
-  displayName: 'dotnet build $(buildConfiguration)'
+    - bash: |
+        ls -l "$(Agent.BuildDirectory)/d"
+        ls -l "$(Build.BinariesDirectory)/raw-build"
+        ls -l /home/vsts/work/_temp
+        cat DotNetCoreBuildTools/DotNetCoreBuildTools.csproj
+      displayName: 'List Temp Directory Contents'
+      
+    - script: |
+        dotnet build --configuration $(buildConfiguration)
+      displayName: 'dotnet build $(buildConfiguration)'
 
-- bash: |
-    ls -l ./DotNetCoreBuildTools/bin/Release
-  displayName: 'List Build Directory Contents'
+    - bash: |
+        ls -l ./DotNetCoreBuildTools/bin/Release
+      displayName: 'List Build Directory Contents'
 
-- script: |
-   echo Write your commands here
-   
-   VERSION=$(cat "$(Build.BinariesDirectory)/raw-build/version.txt")
-   echo $VERSION
-   
-   dotnet $AGENT_BUILDDIRECTORY/d/NuGetKeyVaultSignTool.dll sign "./DotNetCoreBuildTools/bin/Release/Landorphan.DotNetCoreBuildTools.$VERSION.nupkg" --file-digest sha256 --timestamp-rfc3161 http://timestamp.comodoca.com --timestamp-digest sha256 --azure-key-vault-url "https://landorphan-build.vault.azure.net/" --azure-key-vault-client-id "b32bbbae-55c3-4f5b-bf40-0292d349886f" --azure-key-vault-client-secret "$(LandorphanKeyVaultKey)" --azure-key-vault-certificate "Landorphan-LightWeight-CodeSign"
-   
-   echo Use the environment variables input below to pass secret variables to this script
-  displayName: 'Testability: NuGet Code Sign copy'
+  job:
+    displayName: "Sign NuGet"
+    dependsOn: buildBinaries
+    pool: 
+      vmImage: 'windows-latest'
+    - powershell: |
+      # Write your powershell commands here.
+      
+      if (!(Test-Path "$(Agent.BuildDirectory)\d\"))
+      {
+          mkdir "$(Agent.BuildDirectory)\d\";
+      }
+
+      Get-Item -Path Env:
+      # Use the environment variables input below to pass secret variables to this script.
+      displayName: 'Create Agent.BuildDirectory/d'
+
+    - bash: |
+      # Write your commands here
+      
+      convert_path() {
+        echo $(echo "/$1" | sed 's/\\/\//g' | sed 's/://' | sed -e 's/\(.*\)/\L\1/')
+      }
+      
+      TOOL_PATH="$(echo $(convert_path '$(Agent.BuildDirectory)/d/NuGetKeyVaultSignTool.zip'))"
+      
+      echo $TOOL_PATH
+      
+      curl -o "$TOOL_PATH" "https://lndfbuild.blob.core.windows.net/utils/NuGetKeyVaultSignTool.zip"
+      ls -l "$(Agent.BuildDirectory)/d"
+      
+      # Use the environment variables input below to pass secret variables to this script
+      displayName: 'Download NuGetKeyVaultSignTool.zip'
+
+    - powershell: |
+      # Write your powershell commands here.
+      
+      Expand-Archive -Path "$(Agent.BuildDirectory)/d/nugetkeyvaultsigntool.zip" -DestinationPath "$(Agent.BuildDirectory)/d/"
+      
+      # Use the environment variables input below to pass secret variables to this script.
+      displayName: 'Unzip NuGetKeyVaultSignTool.zip into Agent.BuildDirectory/d'
+    #END: This should be in an include
+
+    - script: |
+      echo Write your commands here
+      
+      VERSION=$(cat "$(Build.BinariesDirectory)/raw-build/version.txt")
+      echo $VERSION
+      
+      dotnet $AGENT_BUILDDIRECTORY/d/NuGetKeyVaultSignTool.dll sign "./DotNetCoreBuildTools/bin/Release/Landorphan.DotNetCoreBuildTools.$VERSION.nupkg" --file-digest sha256 --timestamp-rfc3161 http://timestamp.comodoca.com --timestamp-digest sha256 --azure-key-vault-url "https://landorphan-build.vault.azure.net/" --azure-key-vault-client-id "b32bbbae-55c3-4f5b-bf40-0292d349886f" --azure-key-vault-client-secret "$(LandorphanKeyVaultKey)" --azure-key-vault-certificate "Landorphan-LightWeight-CodeSign"
+      
+      echo Use the environment variables input below to pass secret variables to this script
+      displayName: 'Testability: NuGet Code Sign copy'
 
 
-# - script: |
-#    echo Write your commands here
-   
-#    "$(Agent.BuildDirectory)/d/azuresigntool" sign "$BUILD_SOURCESDIRECTORY/bin/release/DotNetCoreBuildTools/netstandard2.0/DotNetCoreBuildTools.dll" --file-digest sha256 --description-url "https://github.com/landorphan/DotNetCoreBuildTools" --no-page-hashing --timestamp-rfc3161 http://timestamp.comodoca.com --timestamp-digest sha256 --azure-key-vault-url "https://landorphan-build.vault.azure.net/" --azure-key-vault-client-id "b32bbbae-55c3-4f5b-bf40-0292d349886f" --azure-key-vault-client-secret "$(LandorphanKeyVaultKey)" --azure-key-vault-certificate "Landorphan-LightWeight-CodeSign"
-   
-#    echo Use the environment variables input below to pass secret variables to this script
-#   displayName: 'Azure Code Sign copy'
+    # - script: |
+    #    echo Write your commands here
+      
+    #    "$(Agent.BuildDirectory)/d/azuresigntool" sign "$BUILD_SOURCESDIRECTORY/bin/release/DotNetCoreBuildTools/netstandard2.0/DotNetCoreBuildTools.dll" --file-digest sha256 --description-url "https://github.com/landorphan/DotNetCoreBuildTools" --no-page-hashing --timestamp-rfc3161 http://timestamp.comodoca.com --timestamp-digest sha256 --azure-key-vault-url "https://landorphan-build.vault.azure.net/" --azure-key-vault-client-id "b32bbbae-55c3-4f5b-bf40-0292d349886f" --azure-key-vault-client-secret "$(LandorphanKeyVaultKey)" --azure-key-vault-certificate "Landorphan-LightWeight-CodeSign"
+      
+    #    echo Use the environment variables input below to pass secret variables to this script
+    #   displayName: 'Azure Code Sign copy'
