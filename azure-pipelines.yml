@@ -221,9 +221,10 @@ jobs:
 
       displayName: 'List Temp Directory Contents'
       
-    - script: |
+    - bash: |
         echo Write your commands here
         
+        ls -l "$(System.ArtifactsDirectory)"
         VERSION=$(cat "$(System.ArtifactsDirectory)/version.txt")
         echo $VERSION
         
