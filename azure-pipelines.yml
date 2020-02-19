@@ -145,7 +145,7 @@ steps:
 - task: DownloadSecureFile@1
   displayName: 'Download Key.Snk'
   inputs:
-    secureFile: 'Landorphan-Light.snk'
+    secureFile: 'Landorphan-Light.snk' 
 
 - script: dotnet build --configuration $(buildConfiguration)
   displayName: 'dotnet build $(buildConfiguration)'
