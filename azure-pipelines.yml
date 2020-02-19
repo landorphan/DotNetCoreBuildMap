@@ -81,7 +81,7 @@ steps:
   displayName: 'Create sign.cs File'
   inputs:
     fileoverwrite: true
-    filepath: '$(Build.SourcesDirectory)\sign.cs'
+    filepath: '$(Build.SourcesDirectory)/sign.cs'
     filecontent: |
      using System.Reflection;
      
