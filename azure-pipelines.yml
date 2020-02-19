@@ -191,6 +191,11 @@ jobs:
       displayName: 'Unzip NuGetKeyVaultSignTool.zip into Agent.BuildDirectory/d'
     #END: This should be in an include
 
+    - bash: |
+        ls -l "$(Agent.BuildDirectory)/d"
+        ls -l /home/vsts/work/_temp
+      displayName: 'List Temp Directory Contents'
+      
     - script: |
         echo Write your commands here
         
