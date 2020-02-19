@@ -172,6 +172,12 @@ jobs:
     dependsOn: buildBinaries
     pool: 
       vmImage: 'windows-latest'
+
+    variables:
+      - group: Landorphan-Build-Secrets
+      - name: buildConfiguration
+        value: 'Release'
+
     steps:
     - task: DownloadPipelineArtifact@2
       inputs:
