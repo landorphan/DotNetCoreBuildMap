@@ -150,8 +150,8 @@ jobs:
 
     - task: CopyFiles@2
       inputs:
-        sourceFolder: '$(Build.SourcesDirectory)'
-        contents: '**/$(BuildConfiguration)/**/*.nupkg'
+        sourceFolder: '$(Build.SourcesDirectory)/DotNetCoreBuildTools/bin/Release/'
+        contents: '*.nupkg'
         TargetFolder: '$(Build.ArtifactStagingDirectory)'
       displayName: "Copy NuGet Files To Artifact Staging"
 
