@@ -63,6 +63,7 @@ steps:
    echo $TOOL_PATH
    
    curl -o "$TOOL_PATH" "https://lndfbuild.blob.core.windows.net/utils/NuGetKeyVaultSignTool.zip"
+   ls -l "$(Agent.BuildDirectory)/d/NuGetKeyVaultSignTool.zip"
    
    # Use the environment variables input below to pass secret variables to this script
   displayName: 'Download NuGetKeyVaultSignTool.zip'
