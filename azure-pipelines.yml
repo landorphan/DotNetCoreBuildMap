@@ -217,6 +217,7 @@ jobs:
 
     - bash: |
         ls -l "$(Agent.BuildDirectory)/d"
+        ls -l "$(System.ArtifactsDirectory)"
 
       displayName: 'List Temp Directory Contents'
       
