@@ -85,7 +85,7 @@ steps:
     filecontent: |
      using System.Reflection;
      
-     [assembly:AssemblyKeyFileAttribute(@"$(Agent.TempDirectory)\Landorphan-Light.snk")]
+     [assembly:AssemblyKeyFileAttribute(@"$(Agent.TempDirectory)/Landorphan-Light.snk")]
      
 - bash: |
    # Write your commands here
