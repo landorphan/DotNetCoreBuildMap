@@ -169,6 +169,17 @@ steps:
     ls -l ./DotNetCoreBuildTools/bin/Release
   displayName: 'List Build Directory Contents'
 
+- script: |
+   echo Write your commands here
+   
+   set /p VERSION=<"$(Build.BinariesDirectory)/raw-build/version.txt"
+   echo %VERSION%
+   
+   dotnet %AGENT_BUILDDIRECTORY%/d/NuGetKeyVaultSignTool.dll sign "./DotNetCoreBuildTools/bin/Release/Landorphan.DotNetCoreBuildTools.%VERSION%.nupkg" --file-digest sha256 --timestamp-rfc3161 http://timestamp.comodoca.com --timestamp-digest sha256 --azure-key-vault-url "https://landorphan-build.vault.azure.net/" --azure-key-vault-client-id "b32bbbae-55c3-4f5b-bf40-0292d349886f" --azure-key-vault-client-secret "$(LandorphanKeyVaultKey)" --azure-key-vault-certificate "Landorphan-LightWeight-CodeSign"
+   
+   echo Use the environment variables input below to pass secret variables to this script
+  displayName: 'Testability: NuGet Code Sign copy'
+
 
 # - script: |
 #    echo Write your commands here
