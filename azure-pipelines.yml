@@ -158,7 +158,7 @@ steps:
   displayName: 'dotnet build $(buildConfiguration)'
 
 - bash: |
-    ls -l ./DotNetCoreBuildTools/bin/Release/netcoreapp3.1
+    ls -l ./DotNetCoreBuildTools/bin/Release
   displayName: 'List Build Directory Contents'
 
 
