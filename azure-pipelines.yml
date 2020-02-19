@@ -157,8 +157,8 @@ jobs:
 
     - task: CopyFiles@2
       inputs:
-        sourceFolder: '$(Build.SourcesDirectory)'
-        contents: '$(Build.BinariesDirectory)/raw-build/version.txt'
+        sourceFolder: '$(Build.BinariesDirectory)'
+        contents: 'raw-build/version.txt'
         TargetFolder: '$(Build.ArtifactStagingDirectory)'
       displayName: "Copy Version File To Artifact Staging"
 
