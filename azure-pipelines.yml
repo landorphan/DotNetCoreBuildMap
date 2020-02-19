@@ -30,10 +30,11 @@ jobs:
     - script: |
         echo Write your commands here
         
-        mkdir %AGENT_BUILDDIRECTORY%/d
+        mkdir "$(Build.BinariesDirectory)/d"
         
         echo Use the environment variables input below to pass secret variables to this script
-        displayName: 'Create Dependency Directory'
+      displayName: 'Create Dependency Directory'
+
     - task: DotNetCoreCLI@2
       displayName: 'Download AzureSignTool'
       inputs:
