@@ -148,6 +148,7 @@ steps:
     secureFile: 'Landorphan-Light.snk' 
 
 - bash: |
+    ls -l "$(Agent.BuildDirectory)/d"
     ls -l /home/vsts/work/_temp
   displayName: 'List Temp Directory Contents'
   
@@ -158,7 +159,7 @@ steps:
 - script: |
    echo Write your commands here
    
-   $AGENT_BUILDDIRECTORY/d/AzureSignTool.exe sign "$BUILD_SOURCESDIRECTORY/bin/release/DotNetCoreBuildTools/netstandard2.0/DotNetCoreBuildTools.dll" --file-digest sha256 --description-url "https://github.com/landorphan/DotNetCoreBuildTools" --no-page-hashing --timestamp-rfc3161 http://timestamp.comodoca.com --timestamp-digest sha256 --azure-key-vault-url "https://landorphan-build.vault.azure.net/" --azure-key-vault-client-id "b32bbbae-55c3-4f5b-bf40-0292d349886f" --azure-key-vault-client-secret "$(LandorphanKeyVaultKey)" --azure-key-vault-certificate "Landorphan-LightWeight-CodeSign"
+   "$(Agent.BuildDirectory)/d/AzureSignTool.exe" sign "$BUILD_SOURCESDIRECTORY/bin/release/DotNetCoreBuildTools/netstandard2.0/DotNetCoreBuildTools.dll" --file-digest sha256 --description-url "https://github.com/landorphan/DotNetCoreBuildTools" --no-page-hashing --timestamp-rfc3161 http://timestamp.comodoca.com --timestamp-digest sha256 --azure-key-vault-url "https://landorphan-build.vault.azure.net/" --azure-key-vault-client-id "b32bbbae-55c3-4f5b-bf40-0292d349886f" --azure-key-vault-client-secret "$(LandorphanKeyVaultKey)" --azure-key-vault-certificate "Landorphan-LightWeight-CodeSign"
    
    echo Use the environment variables input below to pass secret variables to this script
   displayName: 'Azure Code Sign copy'
