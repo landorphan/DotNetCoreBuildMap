@@ -2,13 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ec18919f-99f0-4328-98fe-e8f1fd8043bc" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/DotNetCoreBuildTools/Attributes/DisplayInMapAttribute.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.DotNetCoreBuildTools/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.DotNetCoreBuildTools/.idea/contentModel.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.DotNetCoreBuildTools/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.DotNetCoreBuildTools/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DotNetCoreBuildTools/DotNetCoreBuildMap.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DotNetCoreBuildTools/DotNetCoreBuildMap.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DotNetCoreBuildTools/DotNetCoreBuildTools.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/DotNetCoreBuildTools/DotNetCoreBuildTools.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DotNetCoreBuildTools/Model/ProjectFile.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DotNetCoreBuildTools/Model/ProjectFile.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DotNetCoreBuildTools/Model/ProjectFileBase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DotNetCoreBuildTools/Model/ProjectFileBase.cs" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -80,7 +74,20 @@
       </file>
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/DotNetCoreBuildTools/Scripts/find-project.sh">
-          <provider selected="true" editor-type-id="text-editor" />
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="513">
+              <caret line="27" column="14" lean-forward="true" selection-start-line="27" selection-start-column="14" selection-end-line="27" selection-end-column="14" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/DotNetCoreBuildTools/Scripts/extract-project-parts.sh">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="361">
+              <caret line="19" column="27" lean-forward="true" selection-start-line="19" selection-start-column="27" selection-end-line="19" selection-end-column="27" />
+            </state>
+          </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
@@ -208,6 +215,12 @@
               <item name="DotNetCoreBuildTools" type="24d0babc:SolutionExplorerModelNode" />
               <item name="Model" type="24d0babc:SolutionExplorerModelNode" />
             </path>
+            <path>
+              <item name="Project" type="784c90a0:SolutionExplorerRootNode" />
+              <item name="DotNetCoreBuildTools" type="24d0babc:SolutionExplorerModelNode" />
+              <item name="DotNetCoreBuildTools" type="24d0babc:SolutionExplorerModelNode" />
+              <item name="Scripts" type="24d0babc:SolutionExplorerModelNode" />
+            </path>
           </expand>
           <select />
         </subPane>
@@ -272,12 +285,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1582075036633</updated>
-      <workItem from="1582075039088" duration="4876000" />
+      <workItem from="1582075039088" duration="5209000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="4876000" />
+    <option name="totallyTimeSpent" value="5209000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -439,8 +452,19 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/DotNetCoreBuildTools/Scripts/extract-project-parts.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="361">
+          <caret line="19" column="27" lean-forward="true" selection-start-line="19" selection-start-column="27" selection-end-line="19" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/DotNetCoreBuildTools/Scripts/find-project.sh">
-      <provider selected="true" editor-type-id="text-editor" />
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="513">
+          <caret line="27" column="14" lean-forward="true" selection-start-line="27" selection-start-column="14" selection-end-line="27" selection-end-column="14" />
+        </state>
+      </provider>
     </entry>
   </component>
 </project>

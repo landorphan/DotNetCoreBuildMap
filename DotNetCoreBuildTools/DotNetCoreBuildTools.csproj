@@ -12,12 +12,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Update="Scripts\extract-project-parts.sh">
+    <None Remove="Scripts\extract-project-parts.sh" />
+    <Content Include="Scripts\extract-project-parts.sh">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Scripts\find-project.sh">
+    </Content>
+    <None Remove="Scripts\find-project.sh" />
+    <Content Include="Scripts\find-project.sh">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    </Content>
   </ItemGroup>
 
 </Project>
