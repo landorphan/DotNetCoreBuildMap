@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 using System.Xml.XPath;
+using ProjectOrder.Attributes;
 using ProjectOrder.Helpers;
 
 namespace ProjectOrder.Model
 {
    public class ProjectFile : ProjectFileBase, IComparable<ProjectFile>, IComparer<ProjectFile>
    {
+      [DisplayInMap]
       public int BuildGroup { get; set; }
       
       public enum TypeOfProject
@@ -20,8 +22,10 @@ namespace ProjectOrder.Model
          Test
       }
       
+      [DisplayInMap]
       public TypeOfProject ProjectType { get; set; }
       
+      [DisplayInMap]
       public string Solution { get; set; } 
       
       public ProjectFile() : base()

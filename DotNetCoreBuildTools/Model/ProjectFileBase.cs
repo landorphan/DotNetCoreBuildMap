@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using ProjectOrder.Attributes;
 
 namespace ProjectOrder.Model
 {
@@ -20,10 +21,13 @@ namespace ProjectOrder.Model
          this.FilePath = original.FilePath;
       }
       
+      [DisplayInMap]
       public string Id { get; set; } = Guid.NewGuid().ToString().ToUpperInvariant();
 
+      [DisplayInMap]
       public string Name { get; set; }
 
+      [DisplayInMap]
       public string FilePath { get; set; }
       
       public string Directory => Path.GetDirectoryName(this.FilePath);

@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
+using ProjectOrder.Attributes;
 using ProjectOrder.Helpers;
 using ProjectOrder.Model;
 using ProjectOrder.Parsers;
@@ -46,8 +48,6 @@ namespace ProjectOrder
         {
             var me = new CreateOrder();
             var runParameters = new RunParameters();
-//            runParameters.PathList.Add(@"/Volumes/[C] tistocks-v0/temp/NewProject/NewProjectA/NewProjectA.sln");
-//            runParameters.PathList.Add(@"/Volumes/[C] tistocks-v0/temp/NewProject/NewProjectB/NewProjectB.sln");
             foreach (var arg in args)
             {
                 runParameters.PathList.Add(arg);
@@ -134,16 +134,38 @@ namespace ProjectOrder
 
         public void WriteProjectListOutput()
         {
+            Type projectFileType = typeof(ProjectFile);
+            var properties = projectFileType.GetProperties().Where(p => p.GetCustomAttribute(typeof(DisplayInMapAttribute)) != null);
+            int i = 0;
+            foreach (var property in properties)
+            {
+                Console.Write($":{i}>{property.Name}<{i++}");
+                Console.WriteLine(":");
+            }
             foreach (var projectFile in MasterProjectList.Values.OrderBy(x => x.BuildGroup))
             {
-                int i = 0;
-                Console.Write($"|{i}>{projectFile.BuildGroup}<{i++}");
-                Console.Write($"|{i}>{projectFile.Id}<{i++}");
-                Console.Write($"|{i}>{projectFile.ProjectType}<{i++}");
-                Console.Write($"|{i}>{projectFile.Name}<{i++}");
-                Console.Write($"|{i}>{projectFile.Solution}<{i++}");
-                Console.Write($"|{i}>{projectFile.FilePath}<{i++}");
+                i = 0;
+                foreach (var property in properties)
+                {
+                    Console.Write($"|{i}>{property.GetValue(projectFile)}<{i++}");
+                }
+//                Console.Write($"|{i}>{projectFile.Id}<{i++}");
+//                Console.Write($"|{i}>{projectFile.ProjectType}<{i++}");
+//                Console.Write($"|{i}>{projectFile.Name}<{i++}");
+//                Console.Write($"|{i}>{projectFile.Solution}<{i++}");
+//                Console.Write($"|{i}>{projectFile.FilePath}<{i++}");
                 Console.WriteLine("|");
+            }
+
+            foreach (var projectFile in MasterProjectList.Values.OrderBy(x => x.BuildGroup))
+            {
+                if (projectFile.DependentOn?.Count > 0)
+                {
+                    foreach (var dependentOn in projectFile.DependentOn)
+                    {
+                        Console.WriteLine($"*{projectFile.FilePath}|{dependentOn.FilePath}*");
+                    }
+                }
             }
         }
 

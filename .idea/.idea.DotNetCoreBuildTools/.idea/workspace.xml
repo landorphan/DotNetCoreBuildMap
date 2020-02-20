@@ -2,9 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ec18919f-99f0-4328-98fe-e8f1fd8043bc" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/DotNetCoreBuildTools/Attributes/DisplayInMapAttribute.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.DotNetCoreBuildTools/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.DotNetCoreBuildTools/.idea/contentModel.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.DotNetCoreBuildTools/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.DotNetCoreBuildTools/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DotNetCoreBuildTools/DotNetCoreBuildMap.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DotNetCoreBuildTools/DotNetCoreBuildMap.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DotNetCoreBuildTools/DotNetCoreBuildTools.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/DotNetCoreBuildTools/DotNetCoreBuildTools.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DotNetCoreBuildTools/Model/ProjectFile.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DotNetCoreBuildTools/Model/ProjectFile.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DotNetCoreBuildTools/Model/ProjectFileBase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DotNetCoreBuildTools/Model/ProjectFileBase.cs" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -26,44 +30,111 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/DotNetCoreBuildTools/DotNetCoreBuildMap.cs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="172">
-              <caret line="48" column="112" selection-start-line="48" selection-start-column="42" selection-end-line="48" selection-end-column="112" />
+            <state relative-caret-position="530">
+              <caret line="167" column="17" lean-forward="true" selection-start-line="167" selection-start-column="17" selection-end-line="167" selection-end-column="17" />
               <folding>
-                <marker date="1582150395609" expanded="false" signature="6:235" ph="..." />
-                <marker date="1582150395609" expanded="true" signature="259:8046" ph="{...}" />
-                <marker date="1582150395609" expanded="true" signature="337:8044" ph="{...}" />
-                <marker date="1582150395609" expanded="true" signature="352:1455" ph="/* public int InternalCompare(KeyValuePair&lt;Guid, List&lt;Guid&gt;&gt; x, KeyValuePair&lt;Guid, List&lt;Guid&gt;&gt; y) ... */" />
-                <marker date="1582150395609" expanded="true" signature="1503:2363" ph="{...}" />
-                <marker date="1582150395609" expanded="true" signature="1607:1836" ph="/* runParameters.PathList.Add(@&quot;/Volumes/[C] tistocks-v0/temp/NewProject/NewProjectA/NewProjectA.sln&quot;); ... */" />
-                <marker date="1582150395609" expanded="true" signature="1874:1951" ph="{...}" />
-                <marker date="1582150395609" expanded="true" signature="1995:2305" ph="{...}" />
-                <marker date="1582150395609" expanded="true" signature="2092:2291" ph="{...}" />
-                <marker date="1582150395609" expanded="true" signature="2158:2273" ph="{...}" />
-                <marker date="1582150395609" expanded="true" signature="2729:3290" ph="{...}" />
-                <marker date="1582150395609" expanded="true" signature="2796:3280" ph="{...}" />
-                <marker date="1582150395609" expanded="true" signature="3004:3127" ph="{...}" />
-                <marker date="1582150395609" expanded="true" signature="3148:3266" ph="{...}" />
-                <marker date="1582150395609" expanded="true" signature="3340:3698" ph="{...}" />
-                <marker date="1582150395609" expanded="true" signature="3418:3688" ph="{...}" />
-                <marker date="1582150395609" expanded="true" signature="3520:3674" ph="{...}" />
-                <marker date="1582150395609" expanded="true" signature="3740:5220" ph="{...}" />
-                <marker date="1582150395609" expanded="true" signature="3806:5210" ph="{...}" />
-                <marker date="1582150395609" expanded="true" signature="4063:4220" ph="/* TWO passes are needed here to ensure all dependencies are tracked. ... */" />
-                <marker date="1582150395609" expanded="true" signature="4310:4742" ph="{...}" />
-                <marker date="1582150395609" expanded="true" signature="4919:5196" ph="{...}" />
-                <marker date="1582150395609" expanded="true" signature="5028:5178" ph="{...}" />
-                <marker date="1582150395609" expanded="true" signature="5271:5453" ph="{...}" />
-                <marker date="1582150395609" expanded="true" signature="5340:5443" ph="{...}" />
-                <marker date="1582150395609" expanded="true" signature="5499:6116" ph="{...}" />
-                <marker date="1582150395609" expanded="true" signature="5602:6106" ph="{...}" />
-                <marker date="1582150395609" expanded="true" signature="6167:6481" ph="{...}" />
-                <marker date="1582150395609" expanded="true" signature="6259:6471" ph="{...}" />
-                <marker date="1582150395609" expanded="true" signature="6324:6457" ph="{...}" />
-                <marker date="1582150395609" expanded="true" signature="6535:8038" ph="{...}" />
-                <marker date="1582150395609" expanded="true" signature="6819:8028" ph="/* Dictionary&lt;Guid, List&lt;Guid&gt;&gt; orderMap = new Dictionary&lt;Guid, List&lt;Guid&gt;&gt;(); ... */" />
+                <marker date="1582156037328" expanded="false" signature="6:291" ph="..." />
+                <marker date="1582156037328" expanded="true" signature="315:8797" ph="{...}" />
+                <marker date="1582156037328" expanded="true" signature="393:8795" ph="{...}" />
+                <marker date="1582156037328" expanded="true" signature="408:1511" ph="/* public int InternalCompare(KeyValuePair&lt;Guid, List&lt;Guid&gt;&gt; x, KeyValuePair&lt;Guid, List&lt;Guid&gt;&gt; y) ... */" />
+                <marker date="1582156037328" expanded="true" signature="1559:2189" ph="{...}" />
+                <marker date="1582156037328" expanded="true" signature="1700:1777" ph="{...}" />
+                <marker date="1582156037328" expanded="true" signature="1821:2131" ph="{...}" />
+                <marker date="1582156037328" expanded="true" signature="1918:2117" ph="{...}" />
+                <marker date="1582156037328" expanded="true" signature="1984:2099" ph="{...}" />
+                <marker date="1582156037328" expanded="true" signature="2555:3116" ph="{...}" />
+                <marker date="1582156037328" expanded="true" signature="2622:3106" ph="{...}" />
+                <marker date="1582156037328" expanded="true" signature="2830:2953" ph="{...}" />
+                <marker date="1582156037328" expanded="true" signature="2974:3092" ph="{...}" />
+                <marker date="1582156037328" expanded="true" signature="3166:3524" ph="{...}" />
+                <marker date="1582156037328" expanded="true" signature="3244:3514" ph="{...}" />
+                <marker date="1582156037328" expanded="true" signature="3346:3500" ph="{...}" />
+                <marker date="1582156037328" expanded="true" signature="3566:5046" ph="{...}" />
+                <marker date="1582156037328" expanded="true" signature="3632:5036" ph="{...}" />
+                <marker date="1582156037328" expanded="true" signature="3889:4046" ph="/* TWO passes are needed here to ensure all dependencies are tracked. ... */" />
+                <marker date="1582156037328" expanded="true" signature="4136:4568" ph="{...}" />
+                <marker date="1582156037328" expanded="true" signature="4745:5022" ph="{...}" />
+                <marker date="1582156037328" expanded="true" signature="4854:5004" ph="{...}" />
+                <marker date="1582156037328" expanded="true" signature="5097:5279" ph="{...}" />
+                <marker date="1582156037328" expanded="true" signature="5166:5269" ph="{...}" />
+                <marker date="1582156037328" expanded="true" signature="5325:6867" ph="{...}" />
+                <marker date="1582156037328" expanded="true" signature="5597:5727" ph="{...}" />
+                <marker date="1582156037328" expanded="true" signature="5820:6431" ph="{...}" />
+                <marker date="1582156037328" expanded="true" signature="5910:6029" ph="{...}" />
+                <marker date="1582156037328" expanded="true" signature="6030:6377" ph="/* Console.Write($&quot;|{i}&gt;{projectFile.Id}&lt;{i++}&quot;); ... */" />
+                <marker date="1582156037328" expanded="true" signature="6525:6857" ph="{...}" />
+                <marker date="1582156037328" expanded="true" signature="6595:6843" ph="{...}" />
+                <marker date="1582156037328" expanded="true" signature="6686:6825" ph="{...}" />
+                <marker date="1582156037328" expanded="true" signature="6918:7232" ph="{...}" />
+                <marker date="1582156037328" expanded="true" signature="7010:7222" ph="{...}" />
+                <marker date="1582156037328" expanded="true" signature="7075:7208" ph="{...}" />
+                <marker date="1582156037328" expanded="true" signature="7286:8789" ph="{...}" />
+                <marker date="1582156037328" expanded="true" signature="7570:8779" ph="/* Dictionary&lt;Guid, List&lt;Guid&gt;&gt; orderMap = new Dictionary&lt;Guid, List&lt;Guid&gt;&gt;(); ... */" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/DotNetCoreBuildTools/Scripts/find-project.sh">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/DotNetCoreBuildTools/Attributes/DisplayInMapAttribute.cs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="114">
+              <caret line="6" column="6" lean-forward="true" selection-start-line="6" selection-start-column="6" selection-end-line="6" selection-end-column="6" />
+              <folding>
+                <marker date="1582155280531" expanded="true" signature="48:119" ph="{...}" />
+                <marker date="1582155280531" expanded="true" signature="100:117" ph="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/DotNetCoreBuildTools/Model/ProjectFile.cs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="285">
+              <caret line="24" column="20" lean-forward="true" selection-start-line="24" selection-start-column="20" selection-end-line="24" selection-end-column="20" />
+              <folding>
+                <marker date="1582155278198" expanded="false" signature="6:172" ph="..." />
+                <marker date="1582155278198" expanded="true" signature="202:3181" ph="{...}" />
+                <marker date="1582155278198" expanded="true" signature="300:3179" ph="{...}" />
+                <marker date="1582155278198" expanded="true" signature="407:509" ph="{...}" />
+                <marker date="1582155278198" expanded="true" signature="705:721" ph="{...}" />
+                <marker date="1582155278198" expanded="true" signature="773:789" ph="{...}" />
+                <marker date="1582155278198" expanded="true" signature="863:879" ph="{...}" />
+                <marker date="1582155278198" expanded="true" signature="1224:2704" ph="{...}" />
+                <marker date="1582155278198" expanded="true" signature="1944:2016" ph="{...}" />
+                <marker date="1582155278198" expanded="true" signature="2131:2204" ph="{...}" />
+                <marker date="1582155278198" expanded="true" signature="2290:2370" ph="{...}" />
+                <marker date="1582155278198" expanded="true" signature="2385:2461" ph="{...}" />
+                <marker date="1582155278198" expanded="true" signature="2515:2696" ph="{...}" />
+                <marker date="1582155278198" expanded="true" signature="2760:3073" ph="{...}" />
+                <marker date="1582155278198" expanded="true" signature="2831:2875" ph="{...}" />
+                <marker date="1582155278198" expanded="true" signature="2939:2984" ph="{...}" />
+                <marker date="1582155278198" expanded="true" signature="3120:3174" ph="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/DotNetCoreBuildTools/Model/ProjectFileBase.cs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="551">
+              <caret line="32" selection-start-line="32" selection-end-line="32" />
+              <folding>
+                <marker date="1582155280537" expanded="false" signature="6:30" ph="..." />
+                <marker date="1582155280537" expanded="true" signature="91:819" ph="{...}" />
+                <marker date="1582155280537" expanded="true" signature="125:817" ph="{...}" />
+                <marker date="1582155280537" expanded="true" signature="211:311" ph="{...}" />
+                <marker date="1582155280537" expanded="true" signature="367:495" ph="{...}" />
               </folding>
             </state>
           </provider>
@@ -76,15 +147,21 @@
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/DotNetCoreBuildTools/DotNetCoreBuildMap.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DotNetCoreBuildTools/Model/ProjectFileBase.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DotNetCoreBuildTools/Attributes/DisplayInMapAttribute.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/AssemblyVersion.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DotNetCoreBuildTools/Model/ProjectFile.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/AssemblyVersion.cs" />
+        <option value="$PROJECT_DIR$/DotNetCoreBuildTools/Attributes/DisplayInMapAttribute.cs" />
+        <option value="$PROJECT_DIR$/DotNetCoreBuildTools/Model/ProjectFileBase.cs" />
+        <option value="$PROJECT_DIR$/DotNetCoreBuildTools/Model/ProjectFile.cs" />
         <option value="$PROJECT_DIR$/DotNetCoreBuildTools/DotNetCoreBuildMap.cs" />
       </list>
     </option>
@@ -117,6 +194,12 @@
               <item name="Project" type="784c90a0:SolutionExplorerRootNode" />
               <item name="DotNetCoreBuildTools" type="24d0babc:SolutionExplorerModelNode" />
               <item name="DotNetCoreBuildTools" type="24d0babc:SolutionExplorerModelNode" />
+              <item name="Attributes" type="24d0babc:SolutionExplorerModelNode" />
+            </path>
+            <path>
+              <item name="Project" type="784c90a0:SolutionExplorerRootNode" />
+              <item name="DotNetCoreBuildTools" type="24d0babc:SolutionExplorerModelNode" />
+              <item name="DotNetCoreBuildTools" type="24d0babc:SolutionExplorerModelNode" />
               <item name="Helpers" type="24d0babc:SolutionExplorerModelNode" />
             </path>
             <path>
@@ -138,6 +221,7 @@
     <property name="Rider.ProjectViewActivator.IsNotFirstRun" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="C#" />
+    <property name="last_opened_file_path" value="/tmp/extract-project-parts.sh" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
   </component>
@@ -188,12 +272,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1582075036633</updated>
-      <workItem from="1582075039088" duration="2441000" />
+      <workItem from="1582075039088" duration="4876000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="2441000" />
+    <option name="totallyTimeSpent" value="4876000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -206,12 +290,11 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="6" y="24" width="3425" height="1375" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info id="Favorites" side_tool="true" />
       <window_info id="Image Layers" />
       <window_info id="Capture Tool" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.16494235" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.16494235" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="NuGet" />
       <window_info anchor="bottom" id="Docker" show_stripe_button="false" />
@@ -223,7 +306,7 @@
       <window_info anchor="bottom" id="Build" weight="0.32936507" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32936507" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.32936507" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -241,38 +324,6 @@
   </component>
   <component name="UnityProjectConfiguration" hasMinimizedUI="null" />
   <component name="UnityUnitTestConfiguration" currentTestLauncher="NUnit" />
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/DotNetCoreBuildTools/DotNetCoreBuildMap.cs</url>
-          <line>46</line>
-          <properties documentPath="$PROJECT_DIR$/DotNetCoreBuildTools/DotNetCoreBuildMap.cs" initialLine="46">
-            <startOffsets>
-              <option value="1526" />
-            </startOffsets>
-            <endOffsets>
-              <option value="1553" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/DotNetCoreBuildTools/DotNetCoreBuildMap.cs</url>
-          <line>47</line>
-          <properties documentPath="$PROJECT_DIR$/DotNetCoreBuildTools/DotNetCoreBuildMap.cs" initialLine="47">
-            <startOffsets>
-              <option value="1566" />
-            </startOffsets>
-            <endOffsets>
-              <option value="1606" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
-  </component>
   <component name="editorHistoryManager">
     <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch.cs">
       <provider selected="true" editor-type-id="text-editor">
@@ -291,46 +342,105 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/DotNetCoreBuildTools/DotNetCoreBuildMap.cs">
+    <entry file="file://$PROJECT_DIR$/DotNetCoreBuildTools/Attributes/DisplayInMapAttribute.cs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="172">
-          <caret line="48" column="112" selection-start-line="48" selection-start-column="42" selection-end-line="48" selection-end-column="112" />
+        <state relative-caret-position="114">
+          <caret line="6" column="6" lean-forward="true" selection-start-line="6" selection-start-column="6" selection-end-line="6" selection-end-column="6" />
           <folding>
-            <marker date="1582150395609" expanded="false" signature="6:235" ph="..." />
-            <marker date="1582150395609" expanded="true" signature="259:8046" ph="{...}" />
-            <marker date="1582150395609" expanded="true" signature="337:8044" ph="{...}" />
-            <marker date="1582150395609" expanded="true" signature="352:1455" ph="/* public int InternalCompare(KeyValuePair&lt;Guid, List&lt;Guid&gt;&gt; x, KeyValuePair&lt;Guid, List&lt;Guid&gt;&gt; y) ... */" />
-            <marker date="1582150395609" expanded="true" signature="1503:2363" ph="{...}" />
-            <marker date="1582150395609" expanded="true" signature="1607:1836" ph="/* runParameters.PathList.Add(@&quot;/Volumes/[C] tistocks-v0/temp/NewProject/NewProjectA/NewProjectA.sln&quot;); ... */" />
-            <marker date="1582150395609" expanded="true" signature="1874:1951" ph="{...}" />
-            <marker date="1582150395609" expanded="true" signature="1995:2305" ph="{...}" />
-            <marker date="1582150395609" expanded="true" signature="2092:2291" ph="{...}" />
-            <marker date="1582150395609" expanded="true" signature="2158:2273" ph="{...}" />
-            <marker date="1582150395609" expanded="true" signature="2729:3290" ph="{...}" />
-            <marker date="1582150395609" expanded="true" signature="2796:3280" ph="{...}" />
-            <marker date="1582150395609" expanded="true" signature="3004:3127" ph="{...}" />
-            <marker date="1582150395609" expanded="true" signature="3148:3266" ph="{...}" />
-            <marker date="1582150395609" expanded="true" signature="3340:3698" ph="{...}" />
-            <marker date="1582150395609" expanded="true" signature="3418:3688" ph="{...}" />
-            <marker date="1582150395609" expanded="true" signature="3520:3674" ph="{...}" />
-            <marker date="1582150395609" expanded="true" signature="3740:5220" ph="{...}" />
-            <marker date="1582150395609" expanded="true" signature="3806:5210" ph="{...}" />
-            <marker date="1582150395609" expanded="true" signature="4063:4220" ph="/* TWO passes are needed here to ensure all dependencies are tracked. ... */" />
-            <marker date="1582150395609" expanded="true" signature="4310:4742" ph="{...}" />
-            <marker date="1582150395609" expanded="true" signature="4919:5196" ph="{...}" />
-            <marker date="1582150395609" expanded="true" signature="5028:5178" ph="{...}" />
-            <marker date="1582150395609" expanded="true" signature="5271:5453" ph="{...}" />
-            <marker date="1582150395609" expanded="true" signature="5340:5443" ph="{...}" />
-            <marker date="1582150395609" expanded="true" signature="5499:6116" ph="{...}" />
-            <marker date="1582150395609" expanded="true" signature="5602:6106" ph="{...}" />
-            <marker date="1582150395609" expanded="true" signature="6167:6481" ph="{...}" />
-            <marker date="1582150395609" expanded="true" signature="6259:6471" ph="{...}" />
-            <marker date="1582150395609" expanded="true" signature="6324:6457" ph="{...}" />
-            <marker date="1582150395609" expanded="true" signature="6535:8038" ph="{...}" />
-            <marker date="1582150395609" expanded="true" signature="6819:8028" ph="/* Dictionary&lt;Guid, List&lt;Guid&gt;&gt; orderMap = new Dictionary&lt;Guid, List&lt;Guid&gt;&gt;(); ... */" />
+            <marker date="1582155280531" expanded="true" signature="48:119" ph="{...}" />
+            <marker date="1582155280531" expanded="true" signature="100:117" ph="{...}" />
           </folding>
         </state>
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DotNetCoreBuildTools/Model/ProjectFile.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="24" column="20" lean-forward="true" selection-start-line="24" selection-start-column="20" selection-end-line="24" selection-end-column="20" />
+          <folding>
+            <marker date="1582155278198" expanded="false" signature="6:172" ph="..." />
+            <marker date="1582155278198" expanded="true" signature="202:3181" ph="{...}" />
+            <marker date="1582155278198" expanded="true" signature="300:3179" ph="{...}" />
+            <marker date="1582155278198" expanded="true" signature="407:509" ph="{...}" />
+            <marker date="1582155278198" expanded="true" signature="705:721" ph="{...}" />
+            <marker date="1582155278198" expanded="true" signature="773:789" ph="{...}" />
+            <marker date="1582155278198" expanded="true" signature="863:879" ph="{...}" />
+            <marker date="1582155278198" expanded="true" signature="1224:2704" ph="{...}" />
+            <marker date="1582155278198" expanded="true" signature="1944:2016" ph="{...}" />
+            <marker date="1582155278198" expanded="true" signature="2131:2204" ph="{...}" />
+            <marker date="1582155278198" expanded="true" signature="2290:2370" ph="{...}" />
+            <marker date="1582155278198" expanded="true" signature="2385:2461" ph="{...}" />
+            <marker date="1582155278198" expanded="true" signature="2515:2696" ph="{...}" />
+            <marker date="1582155278198" expanded="true" signature="2760:3073" ph="{...}" />
+            <marker date="1582155278198" expanded="true" signature="2831:2875" ph="{...}" />
+            <marker date="1582155278198" expanded="true" signature="2939:2984" ph="{...}" />
+            <marker date="1582155278198" expanded="true" signature="3120:3174" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DotNetCoreBuildTools/Model/ProjectFileBase.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="551">
+          <caret line="32" selection-start-line="32" selection-end-line="32" />
+          <folding>
+            <marker date="1582155280537" expanded="false" signature="6:30" ph="..." />
+            <marker date="1582155280537" expanded="true" signature="91:819" ph="{...}" />
+            <marker date="1582155280537" expanded="true" signature="125:817" ph="{...}" />
+            <marker date="1582155280537" expanded="true" signature="211:311" ph="{...}" />
+            <marker date="1582155280537" expanded="true" signature="367:495" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DotNetCoreBuildTools/DotNetCoreBuildMap.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="530">
+          <caret line="167" column="17" lean-forward="true" selection-start-line="167" selection-start-column="17" selection-end-line="167" selection-end-column="17" />
+          <folding>
+            <marker date="1582156037328" expanded="false" signature="6:291" ph="..." />
+            <marker date="1582156037328" expanded="true" signature="315:8797" ph="{...}" />
+            <marker date="1582156037328" expanded="true" signature="393:8795" ph="{...}" />
+            <marker date="1582156037328" expanded="true" signature="408:1511" ph="/* public int InternalCompare(KeyValuePair&lt;Guid, List&lt;Guid&gt;&gt; x, KeyValuePair&lt;Guid, List&lt;Guid&gt;&gt; y) ... */" />
+            <marker date="1582156037328" expanded="true" signature="1559:2189" ph="{...}" />
+            <marker date="1582156037328" expanded="true" signature="1700:1777" ph="{...}" />
+            <marker date="1582156037328" expanded="true" signature="1821:2131" ph="{...}" />
+            <marker date="1582156037328" expanded="true" signature="1918:2117" ph="{...}" />
+            <marker date="1582156037328" expanded="true" signature="1984:2099" ph="{...}" />
+            <marker date="1582156037328" expanded="true" signature="2555:3116" ph="{...}" />
+            <marker date="1582156037328" expanded="true" signature="2622:3106" ph="{...}" />
+            <marker date="1582156037328" expanded="true" signature="2830:2953" ph="{...}" />
+            <marker date="1582156037328" expanded="true" signature="2974:3092" ph="{...}" />
+            <marker date="1582156037328" expanded="true" signature="3166:3524" ph="{...}" />
+            <marker date="1582156037328" expanded="true" signature="3244:3514" ph="{...}" />
+            <marker date="1582156037328" expanded="true" signature="3346:3500" ph="{...}" />
+            <marker date="1582156037328" expanded="true" signature="3566:5046" ph="{...}" />
+            <marker date="1582156037328" expanded="true" signature="3632:5036" ph="{...}" />
+            <marker date="1582156037328" expanded="true" signature="3889:4046" ph="/* TWO passes are needed here to ensure all dependencies are tracked. ... */" />
+            <marker date="1582156037328" expanded="true" signature="4136:4568" ph="{...}" />
+            <marker date="1582156037328" expanded="true" signature="4745:5022" ph="{...}" />
+            <marker date="1582156037328" expanded="true" signature="4854:5004" ph="{...}" />
+            <marker date="1582156037328" expanded="true" signature="5097:5279" ph="{...}" />
+            <marker date="1582156037328" expanded="true" signature="5166:5269" ph="{...}" />
+            <marker date="1582156037328" expanded="true" signature="5325:6867" ph="{...}" />
+            <marker date="1582156037328" expanded="true" signature="5597:5727" ph="{...}" />
+            <marker date="1582156037328" expanded="true" signature="5820:6431" ph="{...}" />
+            <marker date="1582156037328" expanded="true" signature="5910:6029" ph="{...}" />
+            <marker date="1582156037328" expanded="true" signature="6030:6377" ph="/* Console.Write($&quot;|{i}&gt;{projectFile.Id}&lt;{i++}&quot;); ... */" />
+            <marker date="1582156037328" expanded="true" signature="6525:6857" ph="{...}" />
+            <marker date="1582156037328" expanded="true" signature="6595:6843" ph="{...}" />
+            <marker date="1582156037328" expanded="true" signature="6686:6825" ph="{...}" />
+            <marker date="1582156037328" expanded="true" signature="6918:7232" ph="{...}" />
+            <marker date="1582156037328" expanded="true" signature="7010:7222" ph="{...}" />
+            <marker date="1582156037328" expanded="true" signature="7075:7208" ph="{...}" />
+            <marker date="1582156037328" expanded="true" signature="7286:8789" ph="{...}" />
+            <marker date="1582156037328" expanded="true" signature="7570:8779" ph="/* Dictionary&lt;Guid, List&lt;Guid&gt;&gt; orderMap = new Dictionary&lt;Guid, List&lt;Guid&gt;&gt;(); ... */" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DotNetCoreBuildTools/Scripts/find-project.sh">
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
   </component>
 </project>
