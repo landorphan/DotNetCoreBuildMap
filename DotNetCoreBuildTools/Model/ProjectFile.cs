@@ -21,9 +21,19 @@ namespace ProjectOrder.Model
          Web,
          Test
       }
-      
+
+      public enum PackageType
+      {
+         None,
+         PackageOnBuild,
+         PackageStepNeeded
+      }
+
       [DisplayInMap]
       public TypeOfProject ProjectType { get; set; }
+      
+      [DisplayInMap]
+      public PackageType Package { get; set; }
       
       [DisplayInMap]
       public string Solution { get; set; } 
@@ -53,6 +63,9 @@ namespace ProjectOrder.Model
          string outputType = (xDocument.XPathSelectElement("/Project/PropertyGroup[not(@Condition) or @Condition='']/OutputType"))?.Value;
          var packageReferences = (xDocument.XPathEvaluate("/Project/ItemGroup/PackageReference/@Include") as IEnumerable<object>)?.Cast<XAttribute>();
          var projectReferences = (xDocument.XPathEvaluate("/Project/ItemGroup/ProjectReference/@Include") as IEnumerable<object>)?.Cast<XAttribute>();
+         var canPackageReference = (xDocument.XPathSelectElement("/Project/PropertyGroup[not(@Condition) or @Condition='']/IsPackable"))?.Value;
+         var packageIdReference = (xDocument.XPathSelectElement("/Project/PropertyGroup[not(@Condition) or @Condition='']/PackageId"))?.Value;
+         var packageOnBuildReference = (xDocument.XPathSelectElement("/Project/PropertyGroup[not(@Condition) or @Condition='']/GeneratePackageOnBuild"))?.Value;
 	
          if (string.Equals(sdk, WebSdk, StringComparison.OrdinalIgnoreCase))
          {
@@ -75,6 +88,20 @@ namespace ProjectOrder.Model
          {
             var includePath = XPlatHelper.FullyNormalizePath(this.Directory, include.Value);
             this.DependentOn.Add(masterProjectList[includePath]);
+         }
+
+         if (bool.TryParse(canPackageReference, out var canPackage) && canPackage &&
+             !string.IsNullOrWhiteSpace(packageIdReference))
+         {
+            if (bool.TryParse(packageOnBuildReference, out var packageOnBuild) && packageOnBuild)
+            {
+               
+               this.Package = PackageType.PackageOnBuild;
+            }
+            else
+            {
+               this.Package = PackageType.PackageStepNeeded;
+            }
          }
       }
 
