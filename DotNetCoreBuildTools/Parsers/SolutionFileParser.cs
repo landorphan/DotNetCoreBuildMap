@@ -15,6 +15,7 @@ namespace ProjectOrder.Parsers
       public enum State
       {
          NotInProject,
+         InSolutionFolder,
          InProject,
          InProjectDependencies,
       }
@@ -96,12 +97,19 @@ namespace ProjectOrder.Parsers
       
       private const string DependencyLinePattern = @"\s*\{([a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12})\}\s*=\s*\{([a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12})\}.*";
       private readonly Regex DependencyLineRegex = new Regex(DependencyLinePattern, RegexOptions.Compiled);
-      
+
+
+      private const string SolutionFolderId = @"2150E333-8FDC-42A3-9474-1A3956D46DE8";
       void ProcStartProject(string line)
       {
          var match = ProjectLineRegex.Match(line);
          if (match.Groups.Count == 5)
          {
+            if (match.Groups[1].Value.ToUpperInvariant() == SolutionFolderId)
+            {
+               this.SolutionFileState = State.InSolutionFolder;
+               return;
+            }
             this.currentProject = new ProjectFileReference()
             {
                Id = match.Groups[4].Value.ToUpperInvariant(),

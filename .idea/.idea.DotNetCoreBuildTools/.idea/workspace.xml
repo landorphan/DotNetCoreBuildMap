@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ec18919f-99f0-4328-98fe-e8f1fd8043bc" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/DotNetCoreBuildTools/DotNetCoreBuildTools.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/DotNetCoreBuildTools/DotNetCoreBuildTools.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.DotNetCoreBuildTools/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.DotNetCoreBuildTools/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DotNetCoreBuildTools/Parsers/SolutionFileParser.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DotNetCoreBuildTools/Parsers/SolutionFileParser.cs" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -11,11 +12,11 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/AssemblyVersion.cs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="247">
+            <state>
               <caret line="13" column="23" selection-start-line="13" selection-start-column="23" selection-end-line="13" selection-end-column="23" />
               <folding>
                 <marker date="1582081520220" expanded="true" signature="26:311" ph="/* Version information for an assembly consists of the following four values: ... */" />
@@ -27,8 +28,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/DotNetCoreBuildTools/DotNetCoreBuildMap.cs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="530">
-              <caret line="167" column="17" lean-forward="true" selection-start-line="167" selection-start-column="17" selection-end-line="167" selection-end-column="17" />
+            <state relative-caret-position="2698">
+              <caret line="159" column="6" selection-start-line="159" selection-start-column="6" selection-end-line="159" selection-end-column="6" />
               <folding>
                 <marker date="1582156037328" expanded="false" signature="6:291" ph="..." />
                 <marker date="1582156037328" expanded="true" signature="315:8797" ph="{...}" />
@@ -72,11 +73,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/DotNetCoreBuildTools/Scripts/find-project.sh">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="513">
-              <caret line="27" column="14" lean-forward="true" selection-start-line="27" selection-start-column="14" selection-end-line="27" selection-end-column="14" />
+            <state relative-caret-position="570">
+              <caret line="30" column="3" selection-start-line="30" selection-start-column="3" selection-end-line="30" selection-end-column="3" />
             </state>
           </provider>
         </entry>
@@ -85,7 +86,7 @@
         <entry file="file://$PROJECT_DIR$/DotNetCoreBuildTools/Scripts/extract-project-parts.sh">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="361">
-              <caret line="19" column="27" lean-forward="true" selection-start-line="19" selection-start-column="27" selection-end-line="19" selection-end-column="27" />
+              <caret line="19" column="27" selection-start-line="19" selection-start-column="27" selection-end-line="19" selection-end-column="27" />
             </state>
           </provider>
         </entry>
@@ -93,8 +94,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/DotNetCoreBuildTools/Attributes/DisplayInMapAttribute.cs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="114">
-              <caret line="6" column="6" lean-forward="true" selection-start-line="6" selection-start-column="6" selection-end-line="6" selection-end-column="6" />
+            <state relative-caret-position="-19">
+              <caret line="6" column="6" selection-start-line="6" selection-start-column="6" selection-end-line="6" selection-end-column="6" />
               <folding>
                 <marker date="1582155280531" expanded="true" signature="48:119" ph="{...}" />
                 <marker date="1582155280531" expanded="true" signature="100:117" ph="{...}" />
@@ -106,26 +107,75 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/DotNetCoreBuildTools/Model/ProjectFile.cs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="24" column="20" lean-forward="true" selection-start-line="24" selection-start-column="20" selection-end-line="24" selection-end-column="20" />
+            <state relative-caret-position="-1">
+              <caret line="78" column="10" lean-forward="true" selection-start-line="78" selection-start-column="10" selection-end-line="78" selection-end-column="10" />
               <folding>
-                <marker date="1582155278198" expanded="false" signature="6:172" ph="..." />
-                <marker date="1582155278198" expanded="true" signature="202:3181" ph="{...}" />
-                <marker date="1582155278198" expanded="true" signature="300:3179" ph="{...}" />
-                <marker date="1582155278198" expanded="true" signature="407:509" ph="{...}" />
-                <marker date="1582155278198" expanded="true" signature="705:721" ph="{...}" />
-                <marker date="1582155278198" expanded="true" signature="773:789" ph="{...}" />
-                <marker date="1582155278198" expanded="true" signature="863:879" ph="{...}" />
-                <marker date="1582155278198" expanded="true" signature="1224:2704" ph="{...}" />
-                <marker date="1582155278198" expanded="true" signature="1944:2016" ph="{...}" />
-                <marker date="1582155278198" expanded="true" signature="2131:2204" ph="{...}" />
-                <marker date="1582155278198" expanded="true" signature="2290:2370" ph="{...}" />
-                <marker date="1582155278198" expanded="true" signature="2385:2461" ph="{...}" />
-                <marker date="1582155278198" expanded="true" signature="2515:2696" ph="{...}" />
-                <marker date="1582155278198" expanded="true" signature="2760:3073" ph="{...}" />
-                <marker date="1582155278198" expanded="true" signature="2831:2875" ph="{...}" />
-                <marker date="1582155278198" expanded="true" signature="2939:2984" ph="{...}" />
-                <marker date="1582155278198" expanded="true" signature="3120:3174" ph="{...}" />
+                <marker date="1582221205500" expanded="false" signature="6:172" ph="..." />
+                <marker date="1582221205500" expanded="true" signature="202:4288" ph="{...}" />
+                <marker date="1582221205500" expanded="true" signature="300:4286" ph="{...}" />
+                <marker date="1582221205500" expanded="true" signature="407:509" ph="{...}" />
+                <marker date="1582221205500" expanded="true" signature="540:623" ph="{...}" />
+                <marker date="1582221205500" expanded="true" signature="888:904" ph="{...}" />
+                <marker date="1582221205500" expanded="true" signature="956:972" ph="{...}" />
+                <marker date="1582221205500" expanded="true" signature="1046:1062" ph="{...}" />
+                <marker date="1582221205500" expanded="true" signature="1407:3811" ph="{...}" />
+                <marker date="1582221205500" expanded="true" signature="2576:2648" ph="{...}" />
+                <marker date="1582221205500" expanded="true" signature="2763:2836" ph="{...}" />
+                <marker date="1582221205500" expanded="true" signature="2922:3002" ph="{...}" />
+                <marker date="1582221205500" expanded="true" signature="3017:3093" ph="{...}" />
+                <marker date="1582221205500" expanded="true" signature="3147:3328" ph="{...}" />
+                <marker date="1582221205500" expanded="true" signature="3475:3803" ph="{...}" />
+                <marker date="1582221205500" expanded="true" signature="3584:3686" ph="{...}" />
+                <marker date="1582221205500" expanded="true" signature="3703:3792" ph="{...}" />
+                <marker date="1582221205500" expanded="true" signature="3867:4180" ph="{...}" />
+                <marker date="1582221205500" expanded="true" signature="3938:3982" ph="{...}" />
+                <marker date="1582221205500" expanded="true" signature="4046:4091" ph="{...}" />
+                <marker date="1582221205500" expanded="true" signature="4227:4281" ph="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/231CAC4C-D307-4AEA-83F1-76589F64BFB3/1a/0c592071/Interop.cs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="243">
+              <caret line="24" column="56" selection-start-line="24" selection-start-column="52" selection-end-line="24" selection-end-column="56" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/DotNetCoreBuildTools/Parsers/SolutionFileParser.cs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="366">
+              <caret line="110" column="22" selection-start-line="110" selection-start-column="22" selection-end-line="110" selection-end-column="22" />
+              <folding>
+                <marker date="1582322782080" expanded="false" signature="6:217" ph="..." />
+                <marker date="1582322782080" expanded="true" signature="249:5111" ph="{...}" />
+                <marker date="1582322782080" expanded="true" signature="286:5109" ph="{...}" />
+                <marker date="1582322782080" expanded="true" signature="316:434" ph="{...}" />
+                <marker date="1582322782080" expanded="true" signature="462:621" ph="{...}" />
+                <marker date="1582322782080" expanded="true" signature="757:1206" ph="{...}" />
+                <marker date="1582322782080" expanded="true" signature="1007:1198" ph="{...}" />
+                <marker date="1582322782080" expanded="true" signature="1058:1187" ph="{...}" />
+                <marker date="1582322782080" expanded="true" signature="1264:1343" ph="{...}" />
+                <marker date="1582322782080" expanded="true" signature="1458:2128" ph="{...}" />
+                <marker date="1582322782080" expanded="true" signature="1511:1575" ph="{...}" />
+                <marker date="1582322782080" expanded="true" signature="1629:1698" ph="{...}" />
+                <marker date="1582322782080" expanded="true" signature="1747:1809" ph="{...}" />
+                <marker date="1582322782080" expanded="true" signature="1881:1952" ph="{...}" />
+                <marker date="1582322782080" expanded="true" signature="2020:2086" ph="{...}" />
+                <marker date="1582322782080" expanded="true" signature="2173:2378" ph="{...}" />
+                <marker date="1582322782080" expanded="true" signature="2273:2370" ph="{...}" />
+                <marker date="1582322782080" expanded="true" signature="3321:4068" ph="{...}" />
+                <marker date="1582322782080" expanded="true" signature="3418:4008" ph="{...}" />
+                <marker date="1582322782080" expanded="true" signature="3507:3622" ph="{...}" />
+                <marker date="1582322782080" expanded="true" signature="3696:3927" ph="{...}" />
+                <marker date="1582322782080" expanded="true" signature="4108:4852" ph="{...}" />
+                <marker date="1582322782080" expanded="true" signature="4191:4844" ph="{...}" />
+                <marker date="1582322782080" expanded="true" signature="4899:5104" ph="{...}" />
+                <marker date="1582322782080" expanded="true" signature="5016:5066" ph="{...}" />
               </folding>
             </state>
           </provider>
@@ -134,10 +184,10 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/DotNetCoreBuildTools/Model/ProjectFileBase.cs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="551">
+            <state relative-caret-position="-152">
               <caret line="32" selection-start-line="32" selection-end-line="32" />
               <folding>
-                <marker date="1582155280537" expanded="false" signature="6:30" ph="..." />
+                <marker date="1582155280537" expanded="false" signature="6:61" ph="..." />
                 <marker date="1582155280537" expanded="true" signature="91:819" ph="{...}" />
                 <marker date="1582155280537" expanded="true" signature="125:817" ph="{...}" />
                 <marker date="1582155280537" expanded="true" signature="211:311" ph="{...}" />
@@ -154,13 +204,13 @@
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/DotNetCoreBuildTools/DotNetCoreBuildMap.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/DotNetCoreBuildTools/Parsers/SolutionFileParser.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/DotNetCoreBuildTools/Model/ProjectFileBase.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/DotNetCoreBuildTools/Attributes/DisplayInMapAttribute.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/AssemblyVersion.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/DotNetCoreBuildTools/Model/ProjectFile.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/231CAC4C-D307-4AEA-83F1-76589F64BFB3/1a/0c592071/Interop.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -168,8 +218,9 @@
         <option value="$PROJECT_DIR$/AssemblyVersion.cs" />
         <option value="$PROJECT_DIR$/DotNetCoreBuildTools/Attributes/DisplayInMapAttribute.cs" />
         <option value="$PROJECT_DIR$/DotNetCoreBuildTools/Model/ProjectFileBase.cs" />
-        <option value="$PROJECT_DIR$/DotNetCoreBuildTools/Model/ProjectFile.cs" />
         <option value="$PROJECT_DIR$/DotNetCoreBuildTools/DotNetCoreBuildMap.cs" />
+        <option value="$PROJECT_DIR$/DotNetCoreBuildTools/Model/ProjectFile.cs" />
+        <option value="$PROJECT_DIR$/DotNetCoreBuildTools/Parsers/SolutionFileParser.cs" />
       </list>
     </option>
   </component>
@@ -184,7 +235,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="AssemblyExplorer" />
+      <pane id="FileSystemExplorer" />
       <pane id="SolutionExplorer">
         <subPane>
           <expand>
@@ -201,32 +252,23 @@
               <item name="Project" type="784c90a0:SolutionExplorerRootNode" />
               <item name="DotNetCoreBuildTools" type="24d0babc:SolutionExplorerModelNode" />
               <item name="DotNetCoreBuildTools" type="24d0babc:SolutionExplorerModelNode" />
-              <item name="Attributes" type="24d0babc:SolutionExplorerModelNode" />
+              <item name="Parsers" type="24d0babc:SolutionExplorerModelNode" />
             </path>
             <path>
               <item name="Project" type="784c90a0:SolutionExplorerRootNode" />
-              <item name="DotNetCoreBuildTools" type="24d0babc:SolutionExplorerModelNode" />
-              <item name="DotNetCoreBuildTools" type="24d0babc:SolutionExplorerModelNode" />
-              <item name="Helpers" type="24d0babc:SolutionExplorerModelNode" />
+              <item name="Scratches and Consoles" type="1a2a3e82:ScratchProjectViewPane$MyProjectNode" />
             </path>
             <path>
               <item name="Project" type="784c90a0:SolutionExplorerRootNode" />
-              <item name="DotNetCoreBuildTools" type="24d0babc:SolutionExplorerModelNode" />
-              <item name="DotNetCoreBuildTools" type="24d0babc:SolutionExplorerModelNode" />
-              <item name="Model" type="24d0babc:SolutionExplorerModelNode" />
-            </path>
-            <path>
-              <item name="Project" type="784c90a0:SolutionExplorerRootNode" />
-              <item name="DotNetCoreBuildTools" type="24d0babc:SolutionExplorerModelNode" />
-              <item name="DotNetCoreBuildTools" type="24d0babc:SolutionExplorerModelNode" />
-              <item name="Scripts" type="24d0babc:SolutionExplorerModelNode" />
+              <item name="Scratches and Consoles" type="1a2a3e82:ScratchProjectViewPane$MyProjectNode" />
+              <item name="Scratches" type="d62648e6:ScratchProjectViewPane$MyRootNode" />
             </path>
           </expand>
           <select />
         </subPane>
         <option name="show-all-files" value="false" />
       </pane>
-      <pane id="FileSystemExplorer" />
+      <pane id="AssemblyExplorer" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -253,7 +295,7 @@
   <component name="RunManager">
     <configuration name="Default" type="DotNetProject" factoryName=".NET Project">
       <option name="EXE_PATH" value="$PROJECT_DIR$/DotNetCoreBuildTools/bin/Debug/netcoreapp3.1/DotNetCoreBuildTools.dll" />
-      <option name="PROGRAM_PARAMETERS" value="&quot;/Volumes/[C] tistocks-v0/temp/NewProject/NewProjectA/NewProjectA.sln&quot; &quot;/Volumes/[C] tistocks-v0/temp/NewProject/NewProjectB/NewProjectB.sln&quot;" />
+      <option name="PROGRAM_PARAMETERS" value="$USER_HOME$/windev/stor/monolith/Monolith.sln" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/DotNetCoreBuildTools" />
       <option name="PASS_PARENT_ENVS" value="1" />
       <envs>
@@ -285,12 +327,17 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1582075036633</updated>
-      <workItem from="1582075039088" duration="5209000" />
+      <workItem from="1582075039088" duration="5535000" />
+      <workItem from="1582169757883" duration="60000" />
+      <workItem from="1582169861411" duration="166000" />
+      <workItem from="1582170335955" duration="590000" />
+      <workItem from="1582220577708" duration="1369000" />
+      <workItem from="1582253144682" duration="1498000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="5209000" />
+    <option name="totallyTimeSpent" value="9218000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -303,40 +350,60 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="6" y="24" width="3425" height="1375" extended-state="0" />
+    <editor active="true" />
     <layout>
-      <window_info id="Favorites" side_tool="true" />
-      <window_info id="Image Layers" />
-      <window_info id="Capture Tool" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.16494235" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1693763" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="NuGet" />
-      <window_info anchor="bottom" id="Docker" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Version Control" />
-      <window_info anchor="bottom" id="Unit Tests" />
-      <window_info anchor="bottom" id="Terminal" />
-      <window_info anchor="bottom" id="Event Log" side_tool="true" />
-      <window_info anchor="bottom" id="Database Changes" />
-      <window_info anchor="bottom" id="Build" weight="0.32936507" />
+      <window_info id="Image Layers" order="2" />
+      <window_info id="Capture Tool" order="3" />
+      <window_info id="Favorites" order="4" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.32936507" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.32936507" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="right" id="Capture Analysis" />
-      <window_info anchor="right" id="Errors In Solution" />
-      <window_info anchor="right" id="Database" />
+      <window_info anchor="bottom" id="NuGet" order="7" />
+      <window_info anchor="bottom" id="Docker" order="8" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="9" weight="0.32936507" />
+      <window_info anchor="bottom" id="Database Changes" order="10" />
+      <window_info anchor="bottom" id="Unit Tests" order="11" weight="0.32936507" />
+      <window_info anchor="bottom" id="Terminal" order="12" weight="0.32936507" />
+      <window_info anchor="bottom" id="Event Log" order="13" side_tool="true" />
+      <window_info anchor="bottom" id="Build" order="14" weight="0.32936507" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Capture Analysis" order="3" />
+      <window_info anchor="right" id="Errors In Solution" order="4" />
+      <window_info anchor="right" id="Database" order="5" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
-  <component name="UnityProjectConfiguration" hasMinimizedUI="null" />
+  <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="UnityUnitTestConfiguration" currentTestLauncher="NUnit" />
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/DotNetCoreBuildTools/Model/ProjectFile.cs</url>
+          <line>92</line>
+          <properties documentPath="$PROJECT_DIR$/DotNetCoreBuildTools/Model/ProjectFile.cs" initialLine="92">
+            <startOffsets>
+              <option value="3339" />
+            </startOffsets>
+            <endOffsets>
+              <option value="3475" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
   <component name="editorHistoryManager">
     <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch.cs">
       <provider selected="true" editor-type-id="text-editor">
@@ -347,7 +414,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/AssemblyVersion.cs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="247">
+        <state>
           <caret line="13" column="23" selection-start-line="13" selection-start-column="23" selection-end-line="13" selection-end-column="23" />
           <folding>
             <marker date="1582081520220" expanded="true" signature="26:311" ph="/* Version information for an assembly consists of the following four values: ... */" />
@@ -355,61 +422,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/DotNetCoreBuildTools/Attributes/DisplayInMapAttribute.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="114">
-          <caret line="6" column="6" lean-forward="true" selection-start-line="6" selection-start-column="6" selection-end-line="6" selection-end-column="6" />
-          <folding>
-            <marker date="1582155280531" expanded="true" signature="48:119" ph="{...}" />
-            <marker date="1582155280531" expanded="true" signature="100:117" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/DotNetCoreBuildTools/Model/ProjectFile.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="24" column="20" lean-forward="true" selection-start-line="24" selection-start-column="20" selection-end-line="24" selection-end-column="20" />
-          <folding>
-            <marker date="1582155278198" expanded="false" signature="6:172" ph="..." />
-            <marker date="1582155278198" expanded="true" signature="202:3181" ph="{...}" />
-            <marker date="1582155278198" expanded="true" signature="300:3179" ph="{...}" />
-            <marker date="1582155278198" expanded="true" signature="407:509" ph="{...}" />
-            <marker date="1582155278198" expanded="true" signature="705:721" ph="{...}" />
-            <marker date="1582155278198" expanded="true" signature="773:789" ph="{...}" />
-            <marker date="1582155278198" expanded="true" signature="863:879" ph="{...}" />
-            <marker date="1582155278198" expanded="true" signature="1224:2704" ph="{...}" />
-            <marker date="1582155278198" expanded="true" signature="1944:2016" ph="{...}" />
-            <marker date="1582155278198" expanded="true" signature="2131:2204" ph="{...}" />
-            <marker date="1582155278198" expanded="true" signature="2290:2370" ph="{...}" />
-            <marker date="1582155278198" expanded="true" signature="2385:2461" ph="{...}" />
-            <marker date="1582155278198" expanded="true" signature="2515:2696" ph="{...}" />
-            <marker date="1582155278198" expanded="true" signature="2760:3073" ph="{...}" />
-            <marker date="1582155278198" expanded="true" signature="2831:2875" ph="{...}" />
-            <marker date="1582155278198" expanded="true" signature="2939:2984" ph="{...}" />
-            <marker date="1582155278198" expanded="true" signature="3120:3174" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/DotNetCoreBuildTools/Model/ProjectFileBase.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="551">
-          <caret line="32" selection-start-line="32" selection-end-line="32" />
-          <folding>
-            <marker date="1582155280537" expanded="false" signature="6:30" ph="..." />
-            <marker date="1582155280537" expanded="true" signature="91:819" ph="{...}" />
-            <marker date="1582155280537" expanded="true" signature="125:817" ph="{...}" />
-            <marker date="1582155280537" expanded="true" signature="211:311" ph="{...}" />
-            <marker date="1582155280537" expanded="true" signature="367:495" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/DotNetCoreBuildTools/DotNetCoreBuildMap.cs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="530">
-          <caret line="167" column="17" lean-forward="true" selection-start-line="167" selection-start-column="17" selection-end-line="167" selection-end-column="17" />
+        <state relative-caret-position="2698">
+          <caret line="159" column="6" selection-start-line="159" selection-start-column="6" selection-end-line="159" selection-end-column="6" />
           <folding>
             <marker date="1582156037328" expanded="false" signature="6:291" ph="..." />
             <marker date="1582156037328" expanded="true" signature="315:8797" ph="{...}" />
@@ -452,17 +468,113 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/DotNetCoreBuildTools/Scripts/extract-project-parts.sh">
+    <entry file="file://$PROJECT_DIR$/DotNetCoreBuildTools/Scripts/find-project.sh">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="361">
-          <caret line="19" column="27" lean-forward="true" selection-start-line="19" selection-start-column="27" selection-end-line="19" selection-end-column="27" />
+        <state relative-caret-position="570">
+          <caret line="30" column="3" selection-start-line="30" selection-start-column="3" selection-end-line="30" selection-end-column="3" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/DotNetCoreBuildTools/Scripts/find-project.sh">
+    <entry file="file://$PROJECT_DIR$/DotNetCoreBuildTools/Scripts/extract-project-parts.sh">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="513">
-          <caret line="27" column="14" lean-forward="true" selection-start-line="27" selection-start-column="14" selection-end-line="27" selection-end-column="14" />
+        <state relative-caret-position="361">
+          <caret line="19" column="27" selection-start-line="19" selection-start-column="27" selection-end-line="19" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DotNetCoreBuildTools/Attributes/DisplayInMapAttribute.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-19">
+          <caret line="6" column="6" selection-start-line="6" selection-start-column="6" selection-end-line="6" selection-end-column="6" />
+          <folding>
+            <marker date="1582155280531" expanded="true" signature="48:119" ph="{...}" />
+            <marker date="1582155280531" expanded="true" signature="100:117" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DotNetCoreBuildTools/Model/ProjectFileBase.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-152">
+          <caret line="32" selection-start-line="32" selection-end-line="32" />
+          <folding>
+            <marker date="1582155280537" expanded="false" signature="6:61" ph="..." />
+            <marker date="1582155280537" expanded="true" signature="91:819" ph="{...}" />
+            <marker date="1582155280537" expanded="true" signature="125:817" ph="{...}" />
+            <marker date="1582155280537" expanded="true" signature="211:311" ph="{...}" />
+            <marker date="1582155280537" expanded="true" signature="367:495" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/231CAC4C-D307-4AEA-83F1-76589F64BFB3/1a/0c592071/Interop.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="243">
+          <caret line="24" column="56" selection-start-line="24" selection-start-column="52" selection-end-line="24" selection-end-column="56" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DotNetCoreBuildTools/Model/ProjectFile.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1">
+          <caret line="78" column="10" lean-forward="true" selection-start-line="78" selection-start-column="10" selection-end-line="78" selection-end-column="10" />
+          <folding>
+            <marker date="1582221205500" expanded="false" signature="6:172" ph="..." />
+            <marker date="1582221205500" expanded="true" signature="202:4288" ph="{...}" />
+            <marker date="1582221205500" expanded="true" signature="300:4286" ph="{...}" />
+            <marker date="1582221205500" expanded="true" signature="407:509" ph="{...}" />
+            <marker date="1582221205500" expanded="true" signature="540:623" ph="{...}" />
+            <marker date="1582221205500" expanded="true" signature="888:904" ph="{...}" />
+            <marker date="1582221205500" expanded="true" signature="956:972" ph="{...}" />
+            <marker date="1582221205500" expanded="true" signature="1046:1062" ph="{...}" />
+            <marker date="1582221205500" expanded="true" signature="1407:3811" ph="{...}" />
+            <marker date="1582221205500" expanded="true" signature="2576:2648" ph="{...}" />
+            <marker date="1582221205500" expanded="true" signature="2763:2836" ph="{...}" />
+            <marker date="1582221205500" expanded="true" signature="2922:3002" ph="{...}" />
+            <marker date="1582221205500" expanded="true" signature="3017:3093" ph="{...}" />
+            <marker date="1582221205500" expanded="true" signature="3147:3328" ph="{...}" />
+            <marker date="1582221205500" expanded="true" signature="3475:3803" ph="{...}" />
+            <marker date="1582221205500" expanded="true" signature="3584:3686" ph="{...}" />
+            <marker date="1582221205500" expanded="true" signature="3703:3792" ph="{...}" />
+            <marker date="1582221205500" expanded="true" signature="3867:4180" ph="{...}" />
+            <marker date="1582221205500" expanded="true" signature="3938:3982" ph="{...}" />
+            <marker date="1582221205500" expanded="true" signature="4046:4091" ph="{...}" />
+            <marker date="1582221205500" expanded="true" signature="4227:4281" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DotNetCoreBuildTools/Parsers/SolutionFileParser.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="366">
+          <caret line="110" column="22" selection-start-line="110" selection-start-column="22" selection-end-line="110" selection-end-column="22" />
+          <folding>
+            <marker date="1582322782080" expanded="false" signature="6:217" ph="..." />
+            <marker date="1582322782080" expanded="true" signature="249:5111" ph="{...}" />
+            <marker date="1582322782080" expanded="true" signature="286:5109" ph="{...}" />
+            <marker date="1582322782080" expanded="true" signature="316:434" ph="{...}" />
+            <marker date="1582322782080" expanded="true" signature="462:621" ph="{...}" />
+            <marker date="1582322782080" expanded="true" signature="757:1206" ph="{...}" />
+            <marker date="1582322782080" expanded="true" signature="1007:1198" ph="{...}" />
+            <marker date="1582322782080" expanded="true" signature="1058:1187" ph="{...}" />
+            <marker date="1582322782080" expanded="true" signature="1264:1343" ph="{...}" />
+            <marker date="1582322782080" expanded="true" signature="1458:2128" ph="{...}" />
+            <marker date="1582322782080" expanded="true" signature="1511:1575" ph="{...}" />
+            <marker date="1582322782080" expanded="true" signature="1629:1698" ph="{...}" />
+            <marker date="1582322782080" expanded="true" signature="1747:1809" ph="{...}" />
+            <marker date="1582322782080" expanded="true" signature="1881:1952" ph="{...}" />
+            <marker date="1582322782080" expanded="true" signature="2020:2086" ph="{...}" />
+            <marker date="1582322782080" expanded="true" signature="2173:2378" ph="{...}" />
+            <marker date="1582322782080" expanded="true" signature="2273:2370" ph="{...}" />
+            <marker date="1582322782080" expanded="true" signature="3321:4068" ph="{...}" />
+            <marker date="1582322782080" expanded="true" signature="3418:4008" ph="{...}" />
+            <marker date="1582322782080" expanded="true" signature="3507:3622" ph="{...}" />
+            <marker date="1582322782080" expanded="true" signature="3696:3927" ph="{...}" />
+            <marker date="1582322782080" expanded="true" signature="4108:4852" ph="{...}" />
+            <marker date="1582322782080" expanded="true" signature="4191:4844" ph="{...}" />
+            <marker date="1582322782080" expanded="true" signature="4899:5104" ph="{...}" />
+            <marker date="1582322782080" expanded="true" signature="5016:5066" ph="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
