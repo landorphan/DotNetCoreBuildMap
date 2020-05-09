@@ -171,7 +171,7 @@ namespace ProjectOrder
 
         public void DetermineProjectBuildGroups()
         {
-            foreach (var projectFile in MasterProjectList.Values.OrderBy(x => x))
+            foreach (var projectFile in MasterProjectList.Values.OrderBy(x => x.DependentOn.Count))
             {
                 if (projectFile.DependentOn.Any())
                 {
