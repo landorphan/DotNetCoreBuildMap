@@ -46,6 +46,8 @@ namespace ProjectOrder
 
         public static void Main(string[] args)
         {
+            Console.Error.WriteLine("Dot Net Build Mapping Tool");
+            Console.Error.WriteLine($"Version: {Assembly.GetExecutingAssembly().GetName().Version}");
             var me = new CreateOrder();
             var runParameters = new RunParameters();
             foreach (var arg in args)
