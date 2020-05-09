@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ContentModelStore">
-    <e p="$PROJECT_DIR$" t="IncludeFlat">
+    <e p="C:\Users\tstockstill\AppData\local\JetBrains\Rider2020.1\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\tstockstill\AppData\local\JetBrains\Rider2020.1\resharper-host\local\Transient\ReSharperHost\v201\SolutionCaches\_DotNetCoreBuildTools.-733973892.00" t="ExcludeRecursive" />
+    <e p="C:\windev\lndf\DotNetCoreBuildTools" t="IncludeFlat">
       <e p="AssemblyVersion.cs" t="Include" />
       <e p="DotNetCoreBuildTools" t="IncludeRecursive">
         <e p="Attributes" t="Include">
@@ -34,8 +36,5 @@
       <e p="DotNetCoreBuildTools.sln" t="IncludeFlat" />
       <e p="packages" t="ExcludeRecursive" />
     </e>
-    <e p="$USER_HOME$/Library/Caches/Rider2018.3/extResources" t="IncludeRecursive" />
-    <e p="$USER_HOME$/Library/Caches/Rider2018.3/resharper-host/local/Transient/ReSharperHost/v183/SolutionCaches/_DotNetCoreBuildTools.1664503767.00" t="ExcludeRecursive" />
-    <e p="$APPLICATION_CONFIG_DIR$/scratches" t="IncludeRecursive" />
   </component>
 </project>
