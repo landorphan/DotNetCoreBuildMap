@@ -1,23 +1,22 @@
-﻿using System.Collections.Generic;
-using System.Text;
-
-namespace ProjectOrder.Model
+﻿namespace ProjectOrder.Model
 {
-   public class ProjectFileReference : ProjectFileBase
-   {
-      public ProjectFileReference() : base()
-      {
-      }
+    using System.Collections.Generic;
 
-      public ProjectFileReference(string path) : base(path)
-      {
-      }
+    public class ProjectFileReference : ProjectFileBase
+    {
+        public ProjectFileReference()
+        {
+        }
 
-      public ProjectFileReference(ProjectFileReference original) : base(original)
-      {
-         this.DependentOnIds.AddRange(original.DependentOnIds);
-      }
+        public ProjectFileReference(string path) : base(path)
+        {
+        }
 
-      public List<string> DependentOnIds { get; set; } = new List<string>();
-   }
+        public ProjectFileReference(ProjectFileReference original) : base(original)
+        {
+            DependentOnIds.AddRange(original.DependentOnIds);
+        }
+
+        public List<string> DependentOnIds { get; set; } = new List<string>();
+    }
 }

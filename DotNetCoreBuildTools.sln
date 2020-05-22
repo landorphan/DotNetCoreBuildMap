@@ -1,9 +1,36 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26124.0
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetCoreBuildTools", "DotNetCoreBuildTools\DotNetCoreBuildTools.csproj", "{01BD78FE-1E0E-42B1-BFD7-A07BA5853D95}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotNetCoreBuildTools", "DotNetCoreBuildTools\DotNetCoreBuildTools.csproj", "{01BD78FE-1E0E-42B1-BFD7-A07BA5853D95}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DA3D082B-16EC-4DE7-ADAD-6F1DB6C2772C}"
+	ProjectSection(SolutionItems) = preProject
+		.DS_Store = .DS_Store
+		.editorconfig = .editorconfig
+		.gitignore = .gitignore
+		AssemblyVersion.cs = AssemblyVersion.cs
+		azure-pipelines.yml = azure-pipelines.yml
+		Directory.Build.props = Directory.Build.props
+		LICENSE = LICENSE
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{4FEA2035-92FA-4EA1-A8C9-8DAE3D8C8C51}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CodeAnalysis", "CodeAnalysis", "{9B97DA13-A66D-4708-A779-FE02EB6FD69C}"
+	ProjectSection(SolutionItems) = preProject
+		build\CodeAnalysis\AllRules.16.5.WithSonarLint.ruleset = build\CodeAnalysis\AllRules.16.5.WithSonarLint.ruleset
+		build\CodeAnalysis\CustomDictionary.xml = build\CodeAnalysis\CustomDictionary.xml
+		build\CodeAnalysis\Default.Source.16.5.WithSonarLint.ruleset = build\CodeAnalysis\Default.Source.16.5.WithSonarLint.ruleset
+		build\CodeAnalysis\Default.Test.16.5.WithSonarLint.ruleset = build\CodeAnalysis\Default.Test.16.5.WithSonarLint.ruleset
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JetBrains", "JetBrains", "{A3A26E2B-7661-4819-91B7-2669B2EAB7A7}"
+	ProjectSection(SolutionItems) = preProject
+		build\JetBrains\ResharperLayout.Current.xml = build\JetBrains\ResharperLayout.Current.xml
+		build\JetBrains\ResharperLayout.Editing.xml = build\JetBrains\ResharperLayout.Editing.xml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,9 +40,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{01BD78FE-1E0E-42B1-BFD7-A07BA5853D95}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -30,5 +54,15 @@ Global
 		{01BD78FE-1E0E-42B1-BFD7-A07BA5853D95}.Release|x64.Build.0 = Release|Any CPU
 		{01BD78FE-1E0E-42B1-BFD7-A07BA5853D95}.Release|x86.ActiveCfg = Release|Any CPU
 		{01BD78FE-1E0E-42B1-BFD7-A07BA5853D95}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{9B97DA13-A66D-4708-A779-FE02EB6FD69C} = {4FEA2035-92FA-4EA1-A8C9-8DAE3D8C8C51}
+		{A3A26E2B-7661-4819-91B7-2669B2EAB7A7} = {4FEA2035-92FA-4EA1-A8C9-8DAE3D8C8C51}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {92CBFFE7-3870-4BA0-8160-76A5F1C1CE5D}
 	EndGlobalSection
 EndGlobal

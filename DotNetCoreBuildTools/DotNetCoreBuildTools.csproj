@@ -4,13 +4,20 @@
     <OutputType>Exe</OutputType>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <LangVersion>7.2</LangVersion>
     <IsPackable>True</IsPackable>
     <PackageId>Landorphan.DotNetCoreBuildTools</PackageId>
     <Version>$(BUILD_VERSION)</Version>
     <Authors>Timothy Stockstill, Landorphan LLC, Michael Prochaska</Authors>
     <Company>Landorphan LLC</Company>
+    <CodeAnalysisRuleSet>..\build\CodeAnalysis\Default.Source.16.5.WithSonarLint.ruleset</CodeAnalysisRuleSet>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <RootNamespace>ProjectOrder</RootNamespace>
   </PropertyGroup>
+
+  <ItemGroup>
+    <CodeAnalysisDictionary Include="..\build\CodeAnalysis\CustomDictionary.xml" Link="CustomDictionary.xml" />
+  </ItemGroup>
 
   <ItemGroup>
     <None Remove="Scripts\extract-project-parts.sh" />
