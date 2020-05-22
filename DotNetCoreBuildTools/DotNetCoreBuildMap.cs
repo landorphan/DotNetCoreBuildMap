@@ -1,19 +1,21 @@
-using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
-using ProjectOrder.Attributes;
-using ProjectOrder.Helpers;
-using ProjectOrder.Model;
-using ProjectOrder.Parsers;
-
 namespace ProjectOrder
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Reflection;
+    using ProjectOrder.Attributes;
+    using ProjectOrder.Helpers;
+    using ProjectOrder.Model;
+    using ProjectOrder.Parsers;
+
     public class CreateOrder // : IComparer<KeyValuePair<Guid, List<Guid>>>
     {
+        private Dictionary<string, ProjectFile> MasterProjectList = new Dictionary<string, ProjectFile>();
+        private List<ProjectFileReference> ProjectFiles = new List<ProjectFileReference>();
+
+        private List<SolutionFileParser> SolutionFileParsers = new List<SolutionFileParser>();
         //public int InternalCompare(KeyValuePair<Guid, List<Guid>> x, KeyValuePair<Guid, List<Guid>> y)
         //{
         //    if (y.Value.Contains(x.Key))
@@ -65,108 +67,33 @@ namespace ProjectOrder
                     }
                 }
             }
-            
+
             me.Run(runParameters);
         }
 
-        private List<SolutionFileParser> SolutionFileParsers = new List<SolutionFileParser>();
-        private List<ProjectFileReference> ProjectFiles = new List<ProjectFileReference>(); 
-        private Dictionary<string, ProjectFile> MasterProjectList = new Dictionary<string, ProjectFile>();
+        public void AddIndependentProjectFiles()
+        {
+            foreach (var projectFileReference in ProjectFiles)
+            {
+                if (!MasterProjectList.ContainsKey(projectFileReference.FilePath))
+                {
+                    MasterProjectList.Add(projectFileReference.FilePath, new ProjectFile(projectFileReference));
+                }
+            }
+        }
 
         public void AssemblyProjectList(RunParameters runParameters)
         {
             foreach (var path in runParameters.PathList)
             {
-                string workingPath = XPlatHelper.FullyNormalizePath(Directory.GetCurrentDirectory(), path);
+                var workingPath = XPlatHelper.FullyNormalizePath(Directory.GetCurrentDirectory(), path);
                 if (workingPath.EndsWith(".sln", StringComparison.OrdinalIgnoreCase))
                 {
-                    this.SolutionFileParsers.Add(new SolutionFileParser(workingPath));
+                    SolutionFileParsers.Add(new SolutionFileParser(workingPath));
                 }
                 else
                 {
-                    this.ProjectFiles.Add(new ProjectFileReference(workingPath));
-                }
-            }
-        }
-
-        public void AddIndependentProjectFiles()
-        {
-            foreach (var projectFileReference in this.ProjectFiles)
-            {
-                if (!this.MasterProjectList.ContainsKey(projectFileReference.FilePath))
-                {
-                    this.MasterProjectList.Add(projectFileReference.FilePath, new ProjectFile(projectFileReference));
-                }
-            }
-        }
-
-        public void ParseSolutionFiles()
-        {
-            foreach (var parser in SolutionFileParsers)
-            {
-                Dictionary<string, Tuple<ProjectFileReference, ProjectFile>> solutionFilesById = new Dictionary<string, Tuple<ProjectFileReference, ProjectFile>>();
-                var projectFilesInSolution = parser.Parse();
-                // TWO passes are needed here to ensure all dependencies are tracked.
-                // The first pass simply find all projects in the solution by their ID.
-                foreach (var projectFileReference in projectFilesInSolution.ProjectFiles)
-                {
-                    var projectFile = new ProjectFile(projectFileReference) { Solution = parser.SolutionFile.Name};
-                    var tuple = new Tuple<ProjectFileReference, ProjectFile>(projectFileReference, projectFile);
-                    solutionFilesById.Add(projectFileReference.Id, tuple);
-                    this.MasterProjectList.Add(projectFileReference.FilePath, projectFile);
-                }
-                // The second pass creates the solution file object and associates any Solution dependencies
-                foreach (var projectFileTuple in solutionFilesById)
-                {
-                    foreach (var projectId in projectFileTuple.Value.Item1.DependentOnIds)
-                    {
-                        projectFileTuple.Value.Item2.DependentOn.Add(solutionFilesById[projectId].Item2);
-                    }
-                }
-            }
-        }
-
-        public void ResolveAllProjectReferences()
-        {
-            foreach (var projectItem in MasterProjectList)
-            {
-                projectItem.Value.ParseAndResolve(this.MasterProjectList);
-            }
-        }
-
-        public void WriteProjectListOutput()
-        {
-            Type projectFileType = typeof(ProjectFile);
-            var properties = projectFileType.GetProperties().Where(p => p.GetCustomAttribute(typeof(DisplayInMapAttribute)) != null);
-            int i = 0;
-            foreach (var property in properties)
-            {
-                Console.Write($":{i}>{property.Name}<{i++}");
-                Console.WriteLine(":");
-            }
-            foreach (var projectFile in MasterProjectList.Values.OrderBy(x => x.BuildGroup))
-            {
-                i = 0;
-                foreach (var property in properties)
-                {
-                    Console.Write($"|{i}>{property.GetValue(projectFile)}<{i++}");
-                }
-//                Console.Write($"|{i}>{projectFile.Id}<{i++}");
-//                Console.Write($"|{i}>{projectFile.ProjectType}<{i++}");
-//                Console.Write($"|{i}>{projectFile.Name}<{i++}");
-//                Console.Write($"|{i}>{projectFile.Solution}<{i++}");
-//                Console.Write($"|{i}>{projectFile.FilePath}<{i++}");
-                Console.WriteLine("|");
-            }
-
-            foreach (var projectFile in MasterProjectList.Values.OrderBy(x => x.BuildGroup))
-            {
-                if (projectFile.DependentOn?.Count > 0)
-                {
-                    foreach (var dependentOn in projectFile.DependentOn)
-                    {
-                        Console.WriteLine($"*{projectFile.FilePath}|{dependentOn.FilePath}*");
-                    }
+                    ProjectFiles.Add(new ProjectFileReference(workingPath));
                 }
             }
         }
@@ -182,6 +109,41 @@ namespace ProjectOrder
             }
         }
 
+        public void ParseSolutionFiles()
+        {
+            foreach (var parser in SolutionFileParsers)
+            {
+                var solutionFilesById = new Dictionary<string, Tuple<ProjectFileReference, ProjectFile>>();
+                var projectFilesInSolution = parser.Parse();
+                // TWO passes are needed here to ensure all dependencies are tracked.
+                // The first pass simply find all projects in the solution by their ID.
+                foreach (var projectFileReference in projectFilesInSolution.ProjectFiles)
+                {
+                    var projectFile = new ProjectFile(projectFileReference) { Solution = parser.SolutionFile.Name };
+                    var tuple = new Tuple<ProjectFileReference, ProjectFile>(projectFileReference, projectFile);
+                    solutionFilesById.Add(projectFileReference.Id, tuple);
+                    MasterProjectList.Add(projectFileReference.FilePath, projectFile);
+                }
+
+                // The second pass creates the solution file object and associates any Solution dependencies
+                foreach (var projectFileTuple in solutionFilesById)
+                {
+                    foreach (var projectId in projectFileTuple.Value.Item1.DependentOnIds)
+                    {
+                        projectFileTuple.Value.Item2.DependentOn.Add(solutionFilesById[projectId].Item2);
+                    }
+                }
+            }
+        }
+
+        public void ResolveAllProjectReferences()
+        {
+            foreach (var projectItem in MasterProjectList)
+            {
+                projectItem.Value.ParseAndResolve(MasterProjectList);
+            }
+        }
+
         public void Run(RunParameters runParameters)
         {
             AssemblyProjectList(runParameters);
@@ -190,7 +152,7 @@ namespace ProjectOrder
             ResolveAllProjectReferences();
             DetermineProjectBuildGroups();
             WriteProjectListOutput();
-            
+
             //Dictionary<Guid, List<Guid>> orderMap = new Dictionary<Guid, List<Guid>>();
             //using (var stream = File.OpenRead(args[0]))
             //using (var reader = new StreamReader(stream))
@@ -218,6 +180,45 @@ namespace ProjectOrder
             //        Console.WriteLine($"{pair.Key.ToString().ToUpperInvariant()}->{item.ToString().ToUpperInvariant()}");
             //    }
             //}
+        }
+
+        public void WriteProjectListOutput()
+        {
+            var projectFileType = typeof(ProjectFile);
+            var properties = projectFileType.GetProperties().Where(p => p.GetCustomAttribute(typeof(DisplayInMapAttribute)) != null);
+            var i = 0;
+            foreach (var property in properties)
+            {
+                Console.Write($":{i}>{property.Name}<{i++}");
+                Console.WriteLine(":");
+            }
+
+            foreach (var projectFile in MasterProjectList.Values.OrderBy(x => x.BuildGroup))
+            {
+                i = 0;
+                foreach (var property in properties)
+                {
+                    Console.Write($"|{i}>{property.GetValue(projectFile)}<{i++}");
+                }
+
+                //                Console.Write($"|{i}>{projectFile.Id}<{i++}");
+                //                Console.Write($"|{i}>{projectFile.ProjectType}<{i++}");
+                //                Console.Write($"|{i}>{projectFile.Name}<{i++}");
+                //                Console.Write($"|{i}>{projectFile.Solution}<{i++}");
+                //                Console.Write($"|{i}>{projectFile.FilePath}<{i++}");
+                Console.WriteLine("|");
+            }
+
+            foreach (var projectFile in MasterProjectList.Values.OrderBy(x => x.BuildGroup))
+            {
+                if (projectFile.DependentOn?.Count > 0)
+                {
+                    foreach (var dependentOn in projectFile.DependentOn)
+                    {
+                        Console.WriteLine($"*{projectFile.FilePath}|{dependentOn.FilePath}*");
+                    }
+                }
+            }
         }
     }
 }

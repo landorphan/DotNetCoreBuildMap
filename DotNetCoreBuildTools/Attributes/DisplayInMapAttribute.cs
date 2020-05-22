@@ -1,9 +1,8 @@
-using System;
-
 namespace ProjectOrder.Attributes
 {
-   public class DisplayInMapAttribute : Attribute
-   {
-      
-   }
+    using System;
+
+    public class DisplayInMapAttribute : Attribute
+    {
+    }
 }

@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ProjectOrder
+﻿namespace ProjectOrder
 {
-   public class RunParameters
-   {
-      public List<string> PathList { get; set; } = new List<string>();
-   }
+    using System.Collections.Generic;
+
+    public class RunParameters
+    {
+        public List<string> PathList { get; set; } = new List<string>();
+    }
 }

@@ -1,22 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-
-namespace ProjectOrder.Model
+﻿namespace ProjectOrder.Model
 {
-   public  class VisualStudioSolutionFile
-   {
-      public string FilePath { get; set; }
+    using System.Collections.Generic;
+    using System.IO;
 
-      public string Directory => Path.GetDirectoryName(this.FilePath);
+    public class VisualStudioSolutionFile
+    {
+        public string Directory => Path.GetDirectoryName(FilePath);
+        public string FilePath { get; set; }
 
-      public string Name => Path.GetFileName(this.FilePath);
+        public string Name => Path.GetFileName(FilePath);
 
-      // This is held as a list of strings because it makes the file easier to parse
-      // given the nature of SLN files. 
-      public List<string> RawFileText { get; set; } = new List<string>();
+        public List<ProjectFileReference> ProjectFiles { get; set; } = new List<ProjectFileReference>();
 
-      public List<ProjectFileReference> ProjectFiles { get; set; } = new List<ProjectFileReference>();
-   }
+        // This is held as a list of strings because it makes the file easier to parse
+        // given the nature of SLN files. 
+        public List<string> RawFileText { get; set; } = new List<string>();
+    }
 }

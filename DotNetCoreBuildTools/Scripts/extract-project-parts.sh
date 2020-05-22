@@ -4,7 +4,7 @@ function writeUsage() {
     echo "Usage:"
     echo "    extract-project-parts.sh -h                   Display this help message"
     echo "    extract-project-parts.sh -?                   Display this help message"
-    echo "    extract-project-parts.sh -p {parts}           Comma seperated parts list"
+    echo "    extract-project-parts.sh -p {parts}           Comma separated parts list"
     exit 0;
 }
 
