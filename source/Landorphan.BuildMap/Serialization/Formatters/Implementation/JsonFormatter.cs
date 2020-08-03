@@ -15,6 +15,11 @@ namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
             return JsonConvert.SerializeObject(map, settings);
         }
 
+        public bool SniffValidFormat(string text)
+        {
+            return text.StartsWith("{");
+        }
+
         public Map Read(string text)
         {
             return JsonConvert.DeserializeObject<Map>(text);

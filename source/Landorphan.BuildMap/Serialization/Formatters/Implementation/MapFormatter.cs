@@ -238,7 +238,12 @@ namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
                 property.SetValue(obj, rawValue);
             }
         }
-        
+
+        public bool SniffValidFormat(string text)
+        {
+            return text.StartsWith("##### BUILDMAP", StringComparison.Ordinal);
+        }
+
         public Map Read(string text)
         {
             var lines = text.Replace("\r", "").Split("\n");

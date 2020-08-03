@@ -12,6 +12,11 @@ namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
             return serializer.Serialize(map);
         }
 
+        public bool SniffValidFormat(string text)
+        {
+            return true;
+        }
+
         public Map Read(string text)
         {
             var deserializer = new Deserializer();

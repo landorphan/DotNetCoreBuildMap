@@ -26,6 +26,11 @@ namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
             return result;
         }
 
+        public bool SniffValidFormat(string text)
+        {
+            return text.StartsWith("<");
+        }
+
         public Map Read(string text)
         {
             Map result;

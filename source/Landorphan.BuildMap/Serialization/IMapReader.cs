@@ -5,6 +5,6 @@ namespace Landorphan.BuildMap.Serialization
 {
     public interface IMapReader
     {
-        Map Read(Stream stream, Format formatHint = Format.Map);
+        Map Read(Stream stream, ReadFormat formatHint = ReadFormat.Map);
     }
 }
