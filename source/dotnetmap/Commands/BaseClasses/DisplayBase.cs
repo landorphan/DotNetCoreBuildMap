@@ -1,13 +1,15 @@
 using System.CommandLine;
 using System.ComponentModel;
+using System.IO;
 using Landorphan.BuildMap.Serialization;
 
 namespace dotnetmap.Commands
 {
-    public abstract class DisplayBase : MapBase
+    public abstract class DisplayBase : ActUponBase
     {
         protected Option<Format> OutputFormat;
         protected Option<string[]> ItemsToDisplay;
+        protected Option<FileInfo> OutputFile; 
 
         protected override string DescriptionMapFile => "The path to the map file to display.";
 
@@ -23,6 +25,10 @@ namespace dotnetmap.Commands
                 "The items to display in the output.  This is only utilized for the Text or Table formats.");
             ItemsToDisplay.Argument.SetDefaultValue("All");
             this.AddOption(ItemsToDisplay);
+            
+            OutputFile = new Option<FileInfo>(new[] { "--output", "-o", },
+                "The output location (if not specified output will go to standard out.");
+            this.AddOption(OutputFile);
         }
     }
 }

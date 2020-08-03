@@ -13,9 +13,8 @@ namespace dotnetmap.Commands
         {
             MapFileArgument = new Option<FileInfo>(new[] {"--map", "-m"}, DescriptionMapFile)
             {
-                IsRequired = true
+                IsRequired = true,
             };
-            this.AddOption(MapFileArgument);
         }
     }
 }
