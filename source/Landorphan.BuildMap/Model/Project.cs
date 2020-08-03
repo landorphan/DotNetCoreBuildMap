@@ -1,6 +1,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Xml.Serialization;
+using Landorphan.BuildMap.Model.Support;
 using Landorphan.BuildMap.Serialization.Attributes;
 using Newtonsoft.Json;
 

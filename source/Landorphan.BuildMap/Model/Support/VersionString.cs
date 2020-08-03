@@ -1,7 +1,5 @@
 using System;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Runtime.Serialization;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
@@ -14,7 +12,7 @@ using YamlDotNet.Core.Events;
 using YamlDotNet.Serialization;
 using Version = System.Version;
 
-namespace Landorphan.BuildMap.Model
+namespace Landorphan.BuildMap.Model.Support
 {
     [Serializable]
     [JsonConverter(typeof(VersionStringJsonConverter))]

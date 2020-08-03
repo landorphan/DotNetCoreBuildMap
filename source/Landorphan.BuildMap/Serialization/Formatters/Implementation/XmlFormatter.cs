@@ -1,10 +1,11 @@
-using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Xml;
 using Landorphan.BuildMap.Model;
+using Landorphan.BuildMap.Model.Support;
+using Landorphan.BuildMap.Serialization.Formatters.Interfaces;
 
-namespace Landorphan.BuildMap.Serialization.Formatters
+namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
 {
     public class XmlFormatter : IFormatter
     {

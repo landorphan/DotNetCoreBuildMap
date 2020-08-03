@@ -5,9 +5,11 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using Landorphan.BuildMap.Model;
+using Landorphan.BuildMap.Model.Support;
+using Landorphan.BuildMap.Serialization.Formatters.Interfaces;
 using Newtonsoft.Json;
 
-namespace Landorphan.BuildMap.Serialization.Formatters
+namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
 {
     public class MapFormatter : IFormatter
     {

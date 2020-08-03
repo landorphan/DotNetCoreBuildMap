@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace Landorphan.BuildMap.Serialization.Formatters
+namespace Landorphan.BuildMap.Serialization.Formatters.Helpers
 {
     public class ColumnInfo
     {

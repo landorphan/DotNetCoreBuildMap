@@ -4,9 +4,10 @@ using System.Reflection;
 using System.Text;
 using Landorphan.BuildMap.Model;
 using Landorphan.BuildMap.Serialization.Attributes;
+using Landorphan.BuildMap.Serialization.Formatters.Interfaces;
 using Newtonsoft.Json;
 
-namespace Landorphan.BuildMap.Serialization.Formatters
+namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
 {
     public class TextFormatter : IFormatWriter
     {

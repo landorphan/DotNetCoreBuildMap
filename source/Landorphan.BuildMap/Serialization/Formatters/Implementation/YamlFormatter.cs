@@ -1,8 +1,8 @@
-using System.Collections.Generic;
 using Landorphan.BuildMap.Model;
+using Landorphan.BuildMap.Serialization.Formatters.Interfaces;
 using YamlDotNet.Serialization;
 
-namespace Landorphan.BuildMap.Serialization.Formatters
+namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
 {
     public class YamlFormatter : IFormatter
     {

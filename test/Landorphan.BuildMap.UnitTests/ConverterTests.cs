@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using Landorphan.BuildMap.Model;
 using Landorphan.BuildMap.Serialization.Formatters;
+using Landorphan.BuildMap.Serialization.Formatters.Implementation;
 using Newtonsoft.Json;
 using NUnit.Framework;
 

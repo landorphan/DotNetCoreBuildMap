@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Landorphan.BuildMap.Model
+namespace Landorphan.BuildMap.Model.Support
 {
     public class StringList : List<string>
     {
