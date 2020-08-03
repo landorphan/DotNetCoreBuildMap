@@ -4,7 +4,7 @@ using System.IO;
 
 namespace dotnetmap.Commands
 {
-    public class CreateCommand : MapCommand
+    public class CreateCommand : MapBase
     {
         protected Option<IEnumerable<FileInfo>> InputFiles;
         

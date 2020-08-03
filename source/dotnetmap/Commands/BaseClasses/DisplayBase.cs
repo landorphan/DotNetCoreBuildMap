@@ -1,33 +1,17 @@
 using System.CommandLine;
 using System.ComponentModel;
+using Landorphan.BuildMap.Serialization;
 
 namespace dotnetmap.Commands
 {
-    public enum Format
-    {
-        [Description("Internal Map format designed to be easy to manipulate with command line tools " +
-                     "such as grep, sed, awk.")]
-        Map,
-        [Description("A Json serialized form that provides easier programmatic manipulation.")]
-        Json,
-        [Description("A Yaml serialized form that is easier to manually edit.")]
-        Yaml,
-        [Description("A text based table display that is easier to quickly read.")]
-        Table,
-        [Description("Similar to the Table format, but with no headers.  This is useful to pass values from " +
-                     "one command into another, such as if you only need the paths to the projects for another" +
-                     "command line task.")]
-        Text
-    }
-    
-    public abstract class DisplayCommand : MapCommand
+    public abstract class DisplayBase : MapBase
     {
         protected Option<Format> OutputFormat;
         protected Option<string[]> ItemsToDisplay;
 
         protected override string DescriptionMapFile => "The path to the map file to display.";
 
-        protected DisplayCommand(string name, string description = null) : base(name, description)
+        protected DisplayBase(string name, string description = null) : base(name, description)
         {
             OutputFormat = new Option<Format>("--format",
                 "The format to use when outputting the map. " +

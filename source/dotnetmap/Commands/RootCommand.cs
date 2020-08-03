@@ -15,6 +15,10 @@ namespace dotnetmap.Commands
             AddCommand(new CreateCommand());
             AddCommand(new ListCommand());
             AddCommand(new SelectCommand());
+            AddCommand(new RestoreCommand());
+            AddCommand(new BuildCommand());
+            AddCommand(new TestCommand());
+            AddCommand(new PackageCommand());
         }
     }
 }

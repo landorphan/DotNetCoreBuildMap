@@ -35,7 +35,7 @@ namespace dotnetmap.Commands
     }
     
     
-    public class SelectCommand : DisplayCommand
+    public class SelectCommand : DisplayBase
     {
         private Option<FilterPair[]> FilterPair;
         
@@ -43,7 +43,12 @@ namespace dotnetmap.Commands
             "Search the map for given value combinations.")
         {
             FilterPair = new Option<FilterPair[]>(new[] { "--filter", "-f" }, 
-                "A set of filters to apply to the map before displaying.");
+                "A set of filters to apply to the map before displaying.  The syntax fo a filter is: " +
+                "Name=Pattern where 'Pattern' is a GLOB pattern to mach a property of the object map.  When " +
+                "a map property supports multiple values (such as project type) then a mach will succeed if " +
+                "any of the values mach the pattern.");
+            FilterPair.IsRequired = true;
+            AddOption(FilterPair);
         }
     }
 }

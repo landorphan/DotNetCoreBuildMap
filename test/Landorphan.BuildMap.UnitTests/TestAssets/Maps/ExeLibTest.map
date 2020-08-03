@@ -1,0 +1,10 @@
+##### BUILDMAP 1.0 #####
+# SchemaVersion = 1.0 #
+# ToolVersion = 1.0.0.0 #
+##########
++ BuildVersion = 1.1 +
++ RelativeRoot = /repo/macos/per/DotNetCoreBuildTools +
+:0>Group<0:1>Item<1:2>Types<2:3>Language<3:4>Name<4:5>Solutions<5:6>Id<6:7>RelativePath<7:8>AbsolutePath<8:9>RealPath<9:10>Dependencies<10:
+|0>0<0|1>0<1|2>Library<2|3>CSharp<3|4>Landorphan.BuildMap<4|5>Landorphan.BuildMap.csproj<5|6>67de1d30-9cbe-41fd-ac4f-c7736878b93d<6|7>source/Landorphan.BuildMap/Landorphan.BuildMap.csproj<7|8>/repo/macos/per/DotNetCoreBuildTools/source/Landorphan.BuildMap/Landorphan.BuildMap.csproj<8|9>/repo/macos/per/DotNetCoreBuildTools/source/Landorphan.BuildMap/Landorphan.BuildMap.csproj<9|10><10|
+|0>1<0|1>1<1|2>Executable<2|3>CSharp<3|4>dotnetmap<4|5>dotnetmap.sln<5|6>e99e218e-61a3-4062-bb6e-1993ad0bdaf9<6|7>source/dotnet/dotnetmap.csproj<7|8>/repo/macos/per/DotNetCoreBuildTools/source/dotnetmap/dotnetmap.csproj<8|9>/repo/macos/per/DotNetCoreBuildTools/source/dotnetmap/dotnetmap.csproj<9|10>67de1d30-9cbe-41fd-ac4f-c7736878b93d<10|
+|0>2<0|1>2<1|2>Library;Test<2|3>CSharp<3|4>Landorphan.BuildMap.UnitTests<4|5>dotnetmap.sln<5|6>b1227083-a60b-4fb7-91b1-7553bf4e1303<6|7>test/Landorphan.BuildMap.UnitTests/Landorphan.BuildMap.UnitTests.csproj<7|8>/repo/macos/per/DotNetCoreBuildTools/test/Landorphan.BuildMap.UnitTests/Landorphan.BuildMap.UnitTests.csproj<8|9>/repo/macos/per/DotNetCoreBuildTools/test/Landorphan.BuildMap.UnitTests/Landorphan.BuildMap.UnitTests.csproj<9|10>67de1d30-9cbe-41fd-ac4f-c7736878b93d;e99e218e-61a3-4062-bb6e-1993ad0bdaf9<10|
