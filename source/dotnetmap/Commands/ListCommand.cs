@@ -14,9 +14,11 @@ namespace dotnetmap.Commands
     {
         public ListCommand() : base("list", "Lists the projects in the map.")
         {
-            Handler = CommandHandler.Create<FileInfo, WriteFormat, List<string>, FileInfo>((FileInfo map, 
-                WriteFormat format, List<string> items, FileInfo output) =>
-            {
+            Handler = CommandHandler.Create<FileInfo, WriteFormat, List<string>, FileInfo>(ListMap);
+        }
+
+        public void ListMap(FileInfo map, WriteFormat format, List<string> items, FileInfo output)
+        {
                 Console.Error.WriteLine("Listing projects...");
                 IMapReader reader = new MapReader();
                 IMapWritter writer = new MapWritter();
@@ -84,7 +86,6 @@ namespace dotnetmap.Commands
                 // Console.WriteLine($"  --format = {format}");
                 // Console.WriteLine($"   --items = {string.Join(" + ", items)}");
                 // Console.WriteLine($"  --output = {output}");
-            });
         }
     }
 }

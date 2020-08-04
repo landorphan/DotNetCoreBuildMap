@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text;
 
 namespace Landorphan.BuildMap.Model.Support
 {
@@ -15,6 +16,22 @@ namespace Landorphan.BuildMap.Model.Support
         public static implicit operator StringList(string[] strings)
         {
             return new StringList(strings);
+        }
+
+        public override string ToString()
+        {
+            StringBuilder output = new StringBuilder();
+            int item = 0;
+            foreach (var str in this)
+            {
+                if (item++ > 0)
+                {
+                    output.Append(';');
+                }
+                output.Append(str);
+            }
+
+            return output.ToString();
         }
     }
 }

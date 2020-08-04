@@ -39,7 +39,8 @@ namespace Landorphan.BuildMap.Serialization
             string content = writer.Write(map);
             // Create a writer which will not close the stream.
             // The stream is owned by the caller.
-            using (StreamWriter streamWriter = new StreamWriter(stream, Encoding.UTF8, -1, true))
+            var encoding = new UTF8Encoding(false);
+            using (StreamWriter streamWriter = new StreamWriter(stream, encoding, -1, true))
             {
                 streamWriter.WriteLine(content);
             }
