@@ -12,7 +12,7 @@ namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
 {
     public class TextFormatter : IFormatWriter
     {
-        public string[] DefaultItems { get; private set; } =
+        public IReadOnlyList<string> DefaultItems { get; private set; } =
             (from p in typeof(Project).GetProperties()
               let o = p.GetCustomAttribute<JsonPropertyAttribute>()
               let d = p.GetCustomAttribute<TextDefaultDisplayAttribute>()
