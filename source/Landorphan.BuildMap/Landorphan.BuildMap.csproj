@@ -2,11 +2,24 @@
 
     <PropertyGroup>
         <TargetFramework>netstandard2.1</TargetFramework>
+      <CodeAnalysisRuleSet>..\..\CodeAnalysis\Default.Source.16.5.WithSonarLint.ruleset</CodeAnalysisRuleSet>
     </PropertyGroup>
+
+  <ItemGroup>
+    <CodeAnalysisDictionary Include="..\..\CodeAnalysis\CustomDictionary.xml" Link="CustomDictionary.xml" />
+  </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="DotNet.Glob" Version="3.0.9" />
+      <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.0.0">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
       <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+      <PackageReference Include="SonarAnalyzer.CSharp" Version="8.10.0.19839">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
       <PackageReference Include="YamlDotNet" Version="8.1.2" />
     </ItemGroup>
 
