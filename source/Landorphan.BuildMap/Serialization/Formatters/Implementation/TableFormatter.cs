@@ -13,25 +13,27 @@ using Newtonsoft.Json;
 
 namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
 {
+    using Landorphan.Common;
+
     public class TableFormatter : IFormatWriter
     {
         public IEnumerable<string> Items { get; private set; }
 
         public static IReadOnlyList<string> DefaultItems =>
             (from p in typeof(Project).GetProperties()
-              let o = p.GetCustomAttribute<JsonPropertyAttribute>()
-              let d = p.GetCustomAttribute<TableDefaultDisplayAttribute>()
-            where o != null
-               && d != null
-          orderby o.Order
-           select p.Name).ToArray();
+             let o = p.GetCustomAttribute<JsonPropertyAttribute>()
+             let d = p.GetCustomAttribute<TableDefaultDisplayAttribute>()
+             where o != null
+                && d != null
+             orderby o.Order
+             select p.Name).ToArray();
 
         public static IReadOnlyList<string> AllItems => (
-             from p in typeof(Project).GetProperties() 
-              let o = p.GetCustomAttribute<JsonPropertyAttribute>()
-            where o != null
-          orderby o.Order
-           select p.Name).ToArray(); 
+             from p in typeof(Project).GetProperties()
+             let o = p.GetCustomAttribute<JsonPropertyAttribute>()
+             where o != null
+             orderby o.Order
+             select p.Name).ToArray();
 
         public TableFormatter(IEnumerable<string> itemHints)
         {
@@ -45,20 +47,22 @@ namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
 
         public IDictionary<string, ColumnInfo> ComputeColumns(Map map)
         {
+            map.ArgumentNotNull(nameof(map));
+
             Build build = map.Build;
-            
+
             var projectProperties = new Dictionary<string, ColumnInfo>(
                 (from p in typeof(Project).GetProperties()
-                  let o = p.GetCustomAttribute<JsonPropertyAttribute>()
-                  let m = p.Name.Length < 8 ? 8 : p.Name.Length
-                where Items.Contains(p.Name)
-               select new KeyValuePair<string, ColumnInfo>(p.Name, new ColumnInfo()
-               {
-                   Property = p,
-                   Order = o?.Order,
-                   MinWidth = m,
-                   MaxWidth = m,
-               })));
+                 let o = p.GetCustomAttribute<JsonPropertyAttribute>()
+                 let m = p.Name.Length < 8 ? 8 : p.Name.Length
+                 where Items.Contains(p.Name)
+                 select new KeyValuePair<string, ColumnInfo>(p.Name, new ColumnInfo()
+                 {
+                     Property = p,
+                     Order = o?.Order,
+                     MinWidth = m,
+                     MaxWidth = m,
+                 })));
 
             var columnInfos = new Dictionary<string, ColumnInfo>(projectProperties);
 
@@ -74,65 +78,70 @@ namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
 
                 item++;
             }
-            
+
             return columnInfos;
         }
 
         public void SetColumnValueForMultiRow(ColumnInfo column, int item, object obj)
         {
+            column.ArgumentNotNull(nameof(column));
+
             if (typeof(StringList).IsAssignableFrom(column.Property.PropertyType))
             {
-                List<string> asStringList = new List<string>((StringList) obj);
+                List<string> asStringList = new List<string>((StringList)obj);
                 var itemCount = asStringList.Count;
                 column.RowValues[item].AddRange(asStringList);
                 asStringList = asStringList.ToArray().ToList();
                 asStringList.Add(column.Property.Name);
-                
+
                 int maxLength =
                     (from i in asStringList
-                   select i.Length).Max();
+                     select i.Length).Max();
 
                 UpdateColumnWidth(column, maxLength);
             }
             else if (typeof(GuidList).IsAssignableFrom(column.Property.PropertyType))
             {
-                GuidList asGuidList = (GuidList) obj;
+                GuidList asGuidList = (GuidList)obj;
                 List<string> asStringList = new List<string>(
                     (from g in asGuidList
-                   select g.ToString().Substring(0, 8)));
+                     select g.ToString().Substring(0, 8)));
                 column.RowValues[item].AddRange(asStringList);
                 asStringList = asStringList.ToArray().ToList();
                 asStringList.Add(column.Property.Name);
-                
+
                 int maxLength =
                     (from i in asStringList
-                   select i.Length).Max();
+                     select i.Length).Max();
 
                 UpdateColumnWidth(column, maxLength);
             }
         }
-        
+
         public void SetColumnValueForItemRow(ColumnInfo column, int item, object obj)
         {
+            column.ArgumentNotNull(nameof(column));
+            obj.ArgumentNotNull(nameof(obj));
+
             if (typeof(VersionString).IsAssignableFrom(column.Property.PropertyType))
             {
-                VersionString asVersionString = (VersionString) obj;
+                VersionString asVersionString = (VersionString)obj;
                 string str = GetVersionStringText(column, asVersionString);
-                column.RowValues[item].Add(str);                            
+                column.RowValues[item].Add(str);
                 UpdateColumnWidth(column, str.Length);
             }
             else if (typeof(Guid) == column.Property.PropertyType)
             {
-                Guid guid = (Guid) obj;
+                Guid guid = (Guid)obj;
                 string str = GetGuidText(column, guid);
-                column.RowValues[item].Add(str);                            
+                column.RowValues[item].Add(str);
                 UpdateColumnWidth(column, str.Length);
             }
             else if (typeof(int) == column.Property.PropertyType)
             {
-                int integer = (int) obj;
+                int integer = (int)obj;
                 string str = integer.ToString();
-                column.RowValues[item].Add(str);                            
+                column.RowValues[item].Add(str);
                 UpdateColumnWidth(column, str.Length);
             }
             else if (typeof(StringList).IsAssignableFrom(column.Property.PropertyType) ||
@@ -142,7 +151,7 @@ namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
             }
             else if (column.Property.Name == nameof(Project.Name))
             {
-                string str = ConvertPathToLinuxStyle((string) obj, false);
+                string str = ConvertPathToLinuxStyle((string)obj, false);
                 column.RowValues[item].Add(str);
                 UpdateColumnWidth(column, str.Length);
             }
@@ -178,6 +187,8 @@ namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
 
         public void UpdateColumnWidth(ColumnInfo column, int length)
         {
+            column.ArgumentNotNull(nameof(column));
+
             if (length > column.MaxWidth)
             {
                 column.MaxWidth = length;
@@ -205,6 +216,9 @@ namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
 
         public void WriteFooter(Map map, IDictionary<string, ColumnInfo> columns, StringBuilder builder)
         {
+            columns.ArgumentNotNull(nameof(columns));
+            builder.ArgumentNotNull(nameof(builder));
+
             builder.Append("=");
             foreach (var column in columns)
             {
@@ -214,9 +228,12 @@ namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
 
             builder.AppendLine();
         }
-        
+
         public void WriteHeaders(Map map, IDictionary<string, ColumnInfo> columns, StringBuilder builder)
         {
+            columns.ArgumentNotNull(nameof(columns));
+            builder.ArgumentNotNull(nameof(builder));
+
             builder.Append("=");
             foreach (var column in columns)
             {
@@ -244,12 +261,16 @@ namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
 
         public void WriteData(Map map, IDictionary<string, ColumnInfo> columns, StringBuilder builder)
         {
+            map.ArgumentNotNull(nameof(map));
+            columns.ArgumentNotNull(nameof(columns));
+            builder.ArgumentNotNull(nameof(builder));
+
             int item = 0;
             foreach (var project in map.Build.Projects)
             {
                 int maxRows =
-                    (from c in columns 
-                   select c.Value.RowValues[item].Count).Max();
+                    (from c in columns
+                     select c.Value.RowValues[item].Count).Max();
                 for (int row = 0; row < maxRows; row++)
                 {
                     builder.Append("|");
@@ -277,7 +298,7 @@ namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
                 item++;
             }
         }
-        
+
         public string Write(Map map)
         {
             StringBuilder builder = new StringBuilder();

@@ -5,10 +5,13 @@ using System.Text;
 
 namespace Landorphan.BuildMap.Abstractions
 {
+    using Landorphan.Common;
+
     public class FileSystemAbstraction : IFileSystem
     {
         public string NormalizePath(string path)
         {
+            path.ArgumentNotNull(nameof(path));
             return path.Replace("\\", "/").TrimEnd(
                 Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
         }
@@ -21,8 +24,8 @@ namespace Landorphan.BuildMap.Abstractions
         public string[] GetFiles(string path)
         {
             var baseFilePaths =
-                (from p in Directory.GetFiles(NormalizePath(path), "*.*", SearchOption.AllDirectories) 
-               select NormalizePath(p));
+                (from p in Directory.GetFiles(NormalizePath(path), "*.*", SearchOption.AllDirectories)
+                 select NormalizePath(p));
             return baseFilePaths.ToArray();
         }
 

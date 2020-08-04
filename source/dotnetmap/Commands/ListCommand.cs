@@ -10,6 +10,8 @@ using Landorphan.BuildMap.Serialization.Formatters.Implementation;
 
 namespace dotnetmap.Commands
 {
+    using Landorphan.Common;
+
     public class ListCommand : DisplayBase
     {
         public ListCommand() : base("list", "Lists the projects in the map.")
@@ -19,73 +21,75 @@ namespace dotnetmap.Commands
 
         public void ListMap(FileInfo map, WriteFormat format, List<string> items, FileInfo output)
         {
-                Console.Error.WriteLine("Listing projects...");
-                IMapReader reader = new MapReader();
-                IMapWritter writer = new MapWritter();
-                Map mapObject = null;
-                ReadFormat formatHint = ReadFormat.Map;
+            map.ArgumentNotNull(nameof(map));
 
-                Console.Error.WriteLine("Determining map structure...");
-                switch (map.Extension)
-                {
-                    case ".yml":
-                    case ".yaml":
-                        formatHint = ReadFormat.Yaml;
-                        break;
-                    case ".json":
-                        formatHint = ReadFormat.Json;
-                        break;
-                    case ".xml":
-                        formatHint = ReadFormat.Xml;
-                        break;
-                }
-                Console.Error.WriteLine($"Map Structure is {formatHint}...");
-                
-                Console.Error.WriteLine($"Reading Input...");
-                using (var stream = map.OpenRead())
-                {
-                    mapObject = reader.Read(stream, formatHint);
-                }
+            Console.Error.WriteLine("Listing projects...");
+            IMapReader reader = new MapReader();
+            IMapWritter writer = new MapWritter();
+            Map mapObject = null;
+            ReadFormat formatHint = ReadFormat.Map;
 
-                if (mapObject != null)
+            Console.Error.WriteLine("Determining map structure...");
+            switch (map.Extension)
+            {
+                case ".yml":
+                case ".yaml":
+                    formatHint = ReadFormat.Yaml;
+                    break;
+                case ".json":
+                    formatHint = ReadFormat.Json;
+                    break;
+                case ".xml":
+                    formatHint = ReadFormat.Xml;
+                    break;
+            }
+            Console.Error.WriteLine($"Map Structure is {formatHint}...");
+
+            Console.Error.WriteLine($"Reading Input...");
+            using (var stream = map.OpenRead())
+            {
+                mapObject = reader.Read(stream, formatHint);
+            }
+
+            if (mapObject != null)
+            {
+                Console.Error.WriteLine($"Map successfully read ... ");
+                byte[] data;
+                using (var memstream = new MemoryStream())
                 {
-                    Console.Error.WriteLine($"Map successfully read ... ");
-                    byte[] data;
-                    using (var memstream = new MemoryStream())
+                    Console.Error.WriteLine("Writing output");
+                    writer.Write(memstream, mapObject, format, items);
+                    data = memstream.GetBuffer();
+                }
+                Stream outputStream = null;
+                try
+                {
+                    if (output != null)
                     {
-                        Console.Error.WriteLine("Writing output");
-                        writer.Write(memstream, mapObject, format, items);
-                        data = memstream.GetBuffer();
+                        outputStream = output.OpenWrite();
                     }
-                    Stream outputStream = null;
-                    try
+                    else
                     {
-                        if (output != null)
-                        {
-                            outputStream = output.OpenWrite();
-                        }
-                        else
-                        {
-                            outputStream = Console.OpenStandardOutput();
-                        }
-                        outputStream.Write(data);
+                        outputStream = Console.OpenStandardOutput();
                     }
-                    finally
+                    outputStream.Write(data);
+                }
+                finally
+                {
+                    // Only close a supplied file...
+                    // Do not close StandardOutput!
+                    if (output != null)
                     {
-                        // Only close a supplied file...
-                        // Do not close StandardOutput!
-                        if (output != null)
-                        {
-                            outputStream.Close();
-                        }
+                        outputStream.Close();
                     }
                 }
+            }
 
-                // Console.WriteLine("Called with following arguments:");
-                // Console.WriteLine($"     --map = {map}");
-                // Console.WriteLine($"  --format = {format}");
-                // Console.WriteLine($"   --items = {string.Join(" + ", items)}");
-                // Console.WriteLine($"  --output = {output}");
+            // Console.WriteLine("Called with following arguments:");
+            // Console.WriteLine($"     --map = {map}");
+            // Console.WriteLine($"  --format = {format}");
+            // Console.WriteLine($"   --items = {string.Join(" + ", items)}");
+            // Console.WriteLine($"  --output = {output}");
         }
     }
 }

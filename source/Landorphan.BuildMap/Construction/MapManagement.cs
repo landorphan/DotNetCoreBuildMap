@@ -12,6 +12,8 @@ using Landorphan.BuildMap.Model;
 
 namespace Landorphan.BuildMap.Construction
 {
+    using Landorphan.Common;
+
     public class MapManagement
     {
         public IEnumerable<string> LocateFiles(string workingDirectory, IEnumerable<string> globPatterns)
@@ -24,7 +26,7 @@ namespace Landorphan.BuildMap.Construction
             List<string> retval = new List<string>();
             var globs =
                 (from g in globPatterns
-               select Glob.Parse(g));
+                 select Glob.Parse(g));
             var files = fs.GetFiles(workingDirectory);
             foreach (var file in files)
             {
@@ -70,6 +72,7 @@ namespace Landorphan.BuildMap.Construction
 
         public ProjectFile LoadProjectFileContents(SuppliedFile suppliedFile)
         {
+            suppliedFile.ArgumentNotNull(nameof(suppliedFile));
             ProjectFile retval = new ProjectFile(suppliedFile);
             XmlDocument document = new XmlDocument();
             using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(suppliedFile.RawText)))
@@ -85,6 +88,7 @@ namespace Landorphan.BuildMap.Construction
         public const string SolutionFileHeader = "Microsoft Visual Studio Solution File";
         public bool IsSolutionFile(SuppliedFile suppliedFile)
         {
+            suppliedFile.ArgumentNotNull(nameof(suppliedFile));
             return suppliedFile.RawText.Contains(SolutionFileHeader);
         }
 
@@ -97,7 +101,7 @@ namespace Landorphan.BuildMap.Construction
             {
                 if (IsSolutionFile(suppliedFile))
                 {
-                    
+
                 }
                 else
                 {
@@ -105,10 +109,10 @@ namespace Landorphan.BuildMap.Construction
                     mapFiles.SafeAddFile(projectFile);
                 }
             }
-            
+
             return mapFiles;
         }
-        
+
         public Map Create(string workingDirectory, IEnumerable<string> globPatterns)
         {
             IEnumerable<string> locatedFiles = LocateFiles(workingDirectory, globPatterns);

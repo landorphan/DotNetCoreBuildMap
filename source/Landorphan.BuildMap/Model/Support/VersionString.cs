@@ -14,6 +14,8 @@ using Version = System.Version;
 
 namespace Landorphan.BuildMap.Model.Support
 {
+    using Landorphan.Common;
+
     [Serializable]
     [JsonConverter(typeof(VersionStringJsonConverter))]
     public class VersionString : IYamlConvertible, IXmlSerializable
@@ -36,6 +38,8 @@ namespace Landorphan.BuildMap.Model.Support
 
         public static implicit operator VersionString(Version version)
         {
+            version.ArgumentNotNull(nameof(version));
+
             VersionString retval = new VersionString();
             retval.Major = version.Major;
             retval.Minor = version.Minor;
@@ -46,15 +50,17 @@ namespace Landorphan.BuildMap.Model.Support
 
         public static implicit operator Version(VersionString versionString)
         {
+            versionString.ArgumentNotNull(nameof(versionString));
+
             Version retval;
             if (versionString.Revision.HasValue && versionString.Build.HasValue)
             {
-                retval = new Version(versionString.Major, versionString.Minor, 
+                retval = new Version(versionString.Major, versionString.Minor,
                                      versionString.Build.Value, versionString.Revision.Value);
             }
             else if (versionString.Build.HasValue)
             {
-                retval = new Version(versionString.Major, versionString.Minor, 
+                retval = new Version(versionString.Major, versionString.Minor,
                                      versionString.Build.Value);
             }
             else
@@ -71,9 +77,9 @@ namespace Landorphan.BuildMap.Model.Support
 
         public VersionString(string version)
         {
-            this.SetFromString(version);            
+            this.SetFromString(version);
         }
-        
+
         private void SetFromString(string version)
         {
             var match = parsePattern.Match(version);
@@ -127,8 +133,8 @@ namespace Landorphan.BuildMap.Model.Support
             this.Moniker = moniker;
             this.Hash = hash;
         }
-        
-        public VersionString(int major, int minor = 0, int? build = null, 
+
+        public VersionString(int major, int minor = 0, int? build = null,
                              int? revision = null, string moniker = null, string hash = null)
         {
             this.SetValues(major, minor, build, revision, moniker, hash);
@@ -175,7 +181,8 @@ namespace Landorphan.BuildMap.Model.Support
 
         public void Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
         {
-            emitter.Emit(new YamlDotNet.Core.Events.Scalar(null, null, this.ToString(), 
+            emitter.ArgumentNotNull(nameof(emitter));
+            emitter.Emit(new YamlDotNet.Core.Events.Scalar(null, null, this.ToString(),
                          ScalarStyle.Any, true, false));
         }
 
@@ -186,11 +193,13 @@ namespace Landorphan.BuildMap.Model.Support
 
         public void ReadXml(XmlReader reader)
         {
+            reader.ArgumentNotNull(nameof(reader));
             this.SetFromString(reader.ReadString());
         }
 
         public void WriteXml(XmlWriter writer)
         {
+            writer.ArgumentNotNull(nameof(writer));
             writer.WriteString(this.ToString());
         }
     }

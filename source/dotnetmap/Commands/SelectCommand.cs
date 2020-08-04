@@ -5,7 +5,9 @@ using System.Linq;
 
 namespace dotnetmap.Commands
 {
-    public class FilterPair 
+    using Landorphan.Common;
+
+    public class FilterPair
     {
         public FilterPair(string item, string pattern)
         {
@@ -15,6 +17,7 @@ namespace dotnetmap.Commands
 
         public FilterPair(string filterPair)
         {
+            filterPair.ArgumentNotNull(nameof(filterPair));
             var items = filterPair.Split("=");
             if (items.Length > 1)
             {
@@ -29,20 +32,20 @@ namespace dotnetmap.Commands
                 throw new InvalidOperationException($"Unable to parse the supplied filter ({filterPair})");
             }
         }
-        
+
         public string Item { get; set; }
         public string Pattern { get; set; }
     }
-    
-    
+
+
     public class SelectCommand : DisplayBase
     {
         private Option<FilterPair[]> FilterPair;
-        
-        public SelectCommand() : base("select", 
+
+        public SelectCommand() : base("select",
             "Search the map for given value combinations.")
         {
-            FilterPair = new Option<FilterPair[]>(new[] { "--filter", "-f" }, 
+            FilterPair = new Option<FilterPair[]>(new[] { "--filter", "-f" },
                 "A set of filters to apply to the map before displaying.  The syntax fo a filter is: " +
                 "Name=Pattern where 'Pattern' is a GLOB pattern to mach a property of the object map.  When " +
                 "a map property supports multiple values (such as project type) then a mach will succeed if " +
