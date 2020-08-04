@@ -5,6 +5,7 @@ using System.Linq;
 
 namespace dotnetmap.Commands
 {
+    using Landorphan.Common;
     public class FilterPair 
     {
         public FilterPair(string item, string pattern)
@@ -15,7 +16,7 @@ namespace dotnetmap.Commands
 
         public FilterPair(string filterPair)
         {
-            
+            filterPair.ArgumentNotNull(nameof(filterPair));
             var items = filterPair.Split("=");
             if (items.Length > 1)
             {

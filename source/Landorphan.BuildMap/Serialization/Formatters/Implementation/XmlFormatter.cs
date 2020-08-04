@@ -7,6 +7,8 @@ using Landorphan.BuildMap.Serialization.Formatters.Interfaces;
 
 namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
 {
+    using Landorphan.Common;
+
     public class XmlFormatter : IFormatter
     {
         private readonly System.Xml.Serialization.XmlSerializer serializer = new System.Xml.Serialization.XmlSerializer(
@@ -28,6 +30,7 @@ namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
 
         public bool SniffValidFormat(string text)
         {
+            text.ArgumentNotNull(nameof(text));
             return text.StartsWith("<");
         }
 

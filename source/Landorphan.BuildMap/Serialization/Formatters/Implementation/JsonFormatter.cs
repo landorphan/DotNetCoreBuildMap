@@ -5,6 +5,8 @@ using Newtonsoft.Json;
 
 namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
 {
+    using Landorphan.Common;
+
     public class JsonFormatter : IFormatter
     {
         public string Write(Map map)
@@ -17,6 +19,7 @@ namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
 
         public bool SniffValidFormat(string text)
         {
+            text.ArgumentNotNull(nameof(text));
             return text.StartsWith("{");
         }
 

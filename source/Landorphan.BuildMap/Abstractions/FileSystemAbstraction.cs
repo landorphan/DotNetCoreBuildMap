@@ -4,10 +4,12 @@ using System.Linq;
 
 namespace Landorphan.BuildMap.Abstractions
 {
+    using Landorphan.Common;
     public class FileSystemAbstraction : IFileSystem
     {
         public string NormalizePath(string path)
         {
+            path.ArgumentNotNull(nameof(path));
             return path.Replace("\\", "/", StringComparison.InvariantCulture).TrimEnd(
                 Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
         }

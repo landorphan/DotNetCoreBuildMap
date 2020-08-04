@@ -12,10 +12,14 @@ using Newtonsoft.Json;
 
 namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
 {
+    using Landorphan.Common;
     public class MapFormatter : IFormatter
     {
         public void WriteHeader(Map map, StringBuilder builder)
         {
+            map.ArgumentNotNull(nameof(map));
+            builder.ArgumentNotNull(nameof(builder));
+
             builder.AppendLine($"##### BUILDMAP {map.SchemaVersion} #####");
             builder.AppendLine($"# {nameof(Map.SchemaVersion)} = {map.SchemaVersion} #");
             builder.AppendLine($"# {nameof(Map.ToolVersion)} = {map.ToolVersion} #");
@@ -24,6 +28,9 @@ namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
 
         public void WriteBuildInfo(Build build, StringBuilder builder)
         {
+            build.ArgumentNotNull(nameof(build));
+            builder.ArgumentNotNull(nameof(builder));
+
             builder.AppendLine($"+ {nameof(Build.BuildVersion)} = {build.BuildVersion} +");
             builder.AppendLine($"+ {nameof(Build.RelativeRoot)} = {build.RelativeRoot} +");
         }
@@ -40,6 +47,8 @@ namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
 
         public void WriteList<T>(IEnumerable<T> list, StringBuilder builder)
         {
+            list.ArgumentNotNull(nameof(list));
+            builder.ArgumentNotNull(nameof(builder));
             int count = 0;
             foreach (var item in list)
             {
@@ -53,6 +62,7 @@ namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
 
         public StringList GetStringList(string items)
         {
+            items.ArgumentNotNull(nameof(items));
             StringList retval = new StringList(items.Split(";"));
             return retval;
         }
@@ -84,9 +94,10 @@ namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
                 builder.Append(property.GetValue(project));
             }
         }
-        
+
         public void WriteProjectHeaders(StringBuilder builder)
         {
+            builder.ArgumentNotNull(nameof(builder));
             var properties = GetProjectProperties();
             foreach (var property in properties)
             {
@@ -100,6 +111,8 @@ namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
 
         public void WriteProjectInfo(Project project, StringBuilder builder)
         {
+            builder.ArgumentNotNull(nameof(builder));
+
             var properties = GetProjectProperties();
             foreach (var property in properties)
             {
@@ -110,24 +123,28 @@ namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
 
             builder.AppendLine("|");
         }
-        
+
         public void WriteProjectInfo(Build build, StringBuilder builder)
         {
+            build.ArgumentNotNull(nameof(build));
+
             WriteProjectHeaders(builder);
             foreach (var project in build.Projects)
             {
                 WriteProjectInfo(project, builder);
             }
         }
-        
+
         public string Write(Map map)
         {
+            map.ArgumentNotNull(nameof(map));
+
             StringBuilder builder = new StringBuilder();
 
             WriteHeader(map, builder);
             WriteBuildInfo(map.Build, builder);
             WriteProjectInfo(map.Build, builder);
-            
+
             return builder.ToString();
         }
 
@@ -158,14 +175,16 @@ namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
         private readonly Regex buildParse = new Regex($@"\+\s+(?<{nameof(PropertyInfo.Name)}>[^ =]+)\s*=\s*(?<{nameof(PropertyInfo.SetValue)}>[^+]+)");
         public void SetFromBuildLines(string[] lines, Map map)
         {
+            map.ArgumentNotNull(nameof(map));
+
             var propertyEntries =
                 (from p in typeof(Build).GetProperties()
-               select new KeyValuePair<string,PropertyInfo>(p.Name, p));
+                 select new KeyValuePair<string, PropertyInfo>(p.Name, p));
             var properties = new Dictionary<string, PropertyInfo>(propertyEntries);
             var workingSet =
                 (from l in lines
-                where l.StartsWith("+", StringComparison.OrdinalIgnoreCase)
-               select l);
+                 where l.StartsWith("+", StringComparison.OrdinalIgnoreCase)
+                 select l);
             foreach (var line in workingSet)
             {
                 var match = buildParse.Match(line);
@@ -182,18 +201,20 @@ namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
         private readonly Regex columnParse = new Regex($@"(?<{ColumnId}>\d+)>(?<{ColumnValue}>.*)<\d+");
         public void SetFromProjectLines(string[] lines, Map map)
         {
+            map.ArgumentNotNull(nameof(map));
+
             var properties = GetProjectProperties();
             var workingSet =
-                (from l in lines 
-                where l.StartsWith("|", StringComparison.OrdinalIgnoreCase)
-               select l);
+                (from l in lines
+                 where l.StartsWith("|", StringComparison.OrdinalIgnoreCase)
+                 select l);
             foreach (var line in workingSet)
             {
                 Project project = new Project();
-                var columns = 
+                var columns =
                     (from c in line.Split("|")
-                    where !string.IsNullOrWhiteSpace(c)
-                   select c);
+                     where !string.IsNullOrWhiteSpace(c)
+                     select c);
                 foreach (var column in columns)
                 {
                     var match = columnParse.Match(column);
@@ -211,6 +232,8 @@ namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
 
         public void SetPropertyValue(object obj, PropertyInfo property, string rawValue)
         {
+            property.ArgumentNotNull(nameof(property));
+
             if (property.PropertyType == typeof(int))
             {
                 property.SetValue(obj, int.Parse(rawValue, CultureInfo.InvariantCulture));
@@ -243,18 +266,21 @@ namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
 
         public bool SniffValidFormat(string text)
         {
+            text.ArgumentNotNull(nameof(text));
             return text.StartsWith("##### BUILDMAP", StringComparison.Ordinal);
         }
 
         public Map Read(string text)
         {
+            text.ArgumentNotNull(nameof(text));
+
             var lines = text.Replace("\r", "",
                 StringComparison.OrdinalIgnoreCase).Split("\n");
             Map map = new Map();
             SetFromHeaderLines(lines, map);
             SetFromBuildLines(lines, map);
             SetFromProjectLines(lines, map);
-            
+
             return map;
         }
     }

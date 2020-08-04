@@ -13,6 +13,7 @@ using Landorphan.BuildMap.Model;
 
 namespace Landorphan.BuildMap.Construction
 {
+    using Landorphan.Common;
     public class MapManagement
     {
         public IEnumerable<string> LocateFiles(string workingDirectory, IEnumerable<string> globPatterns)
@@ -78,6 +79,7 @@ namespace Landorphan.BuildMap.Construction
 
         public ProjectFile LoadProjectFileContents(SuppliedFile suppliedFile)
         {
+            suppliedFile.ArgumentNotNull(nameof(suppliedFile));
             ProjectFile retval = new ProjectFile(suppliedFile);
             XmlDocument document = new XmlDocument();
             using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(suppliedFile.RawText)))
@@ -93,6 +95,7 @@ namespace Landorphan.BuildMap.Construction
         public const string SolutionFileHeader = "Microsoft Visual Studio Solution File";
         public bool IsSolutionFile(SuppliedFile suppliedFile)
         {
+            suppliedFile.ArgumentNotNull(nameof(suppliedFile));
             return suppliedFile.RawText.Contains(SolutionFileHeader, StringComparison.InvariantCultureIgnoreCase);
         }
 
