@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Xml.Linq;
+using System.Xml;
 
 namespace Landorphan.BuildMap.Construction.SolutionModel
 {
@@ -14,7 +14,7 @@ namespace Landorphan.BuildMap.Construction.SolutionModel
         {
         }
         
-        public XDocument ProjectContents { get; set; }
+        public XmlDocument ProjectContents { get; set; }
         public List<SolutionFile> SolutionFiles { get; set; } = new List<SolutionFile>();
     }
 }

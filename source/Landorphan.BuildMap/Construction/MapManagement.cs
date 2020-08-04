@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -47,7 +48,7 @@ namespace Landorphan.BuildMap.Construction
             return retval;
         }
 
-        public List<SuppliedFile> GetSuppliedFiles(List<string> locatedFiles)
+        public List<SuppliedFile> GetSuppliedFiles(IEnumerable<string> locatedFiles)
         {
             var fs = AbstractionManager.GetFileSystem();
             List<SuppliedFile> retval = new List<SuppliedFile>();
@@ -69,21 +70,50 @@ namespace Landorphan.BuildMap.Construction
 
         public ProjectFile LoadProjectFileContents(SuppliedFile suppliedFile)
         {
-            return null;
+            ProjectFile retval = new ProjectFile(suppliedFile);
+            XmlDocument document = new XmlDocument();
+            using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(suppliedFile.RawText)))
+            using (var reader = new XmlTextReader(stream))
+            {
+                document.Load(reader);
+            }
+
+            retval.ProjectContents = document;
+            return retval;
         }
 
-        public MapFiles PreprocessList(List<string> locatedFiles)
+        public const string SolutionFileHeader = "Microsoft Visual Studio Solution File";
+        public bool IsSolutionFile(SuppliedFile suppliedFile)
+        {
+            return suppliedFile.RawText.Contains(SolutionFileHeader);
+        }
+
+        public MapFiles PreprocessList(IEnumerable<string> locatedFiles)
         {
             MapFiles mapFiles = new MapFiles();
-            mapFiles.LocatedFiles = locatedFiles;
+            mapFiles.LocatedFiles = locatedFiles.ToList();
             mapFiles.SuppliedFiles = GetSuppliedFiles(locatedFiles);
+            foreach (var suppliedFile in mapFiles.SuppliedFiles)
+            {
+                if (IsSolutionFile(suppliedFile))
+                {
+                    
+                }
+                else
+                {
+                    ProjectFile projectFile = LoadProjectFileContents(suppliedFile);
+                    mapFiles.SafeAddFile(projectFile);
+                }
+            }
             
             return mapFiles;
         }
         
-        public Map Create(List<string> globPatterns)
+        public Map Create(string workingDirectory, IEnumerable<string> globPatterns)
         {
-            throw new NotImplementedException();
+            IEnumerable<string> locatedFiles = LocateFiles(workingDirectory, globPatterns);
+            MapFiles mapFiles = PreprocessList(locatedFiles);
+            return null;
         }
     }
 }
