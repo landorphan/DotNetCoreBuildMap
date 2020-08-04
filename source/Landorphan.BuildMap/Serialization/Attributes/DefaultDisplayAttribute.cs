@@ -2,7 +2,8 @@ using System;
 
 namespace Landorphan.BuildMap.Serialization.Attributes
 {
-    public class DefaultDisplayAttribute : Attribute
+    [AttributeUsage(AttributeTargets.Property)]
+    public abstract class DefaultDisplayAttribute : Attribute
     {
     }
 }

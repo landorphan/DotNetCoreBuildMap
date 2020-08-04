@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace Landorphan.BuildMap.Abstractions
 {
@@ -9,7 +8,7 @@ namespace Landorphan.BuildMap.Abstractions
     {
         public string NormalizePath(string path)
         {
-            return path.Replace("\\", "/").TrimEnd(
+            return path.Replace("\\", "/", StringComparison.InvariantCulture).TrimEnd(
                 Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
         }
 

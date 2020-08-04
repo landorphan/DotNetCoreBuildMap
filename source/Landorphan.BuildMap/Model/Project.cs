@@ -1,5 +1,6 @@
 using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 using Landorphan.BuildMap.Model.Support;
 using Landorphan.BuildMap.Serialization.Attributes;
@@ -8,6 +9,8 @@ using Newtonsoft.Json;
 namespace Landorphan.BuildMap.Model
 {
     [Serializable]
+    [SuppressMessage("CodeSmell", "S109", 
+        Justification = "The 'magic' values here are order instructions and it's beter to keep them as a number (tistocks - 2020-08-03)")]
     public class Project
     {
         [JsonProperty(Order = 0)]

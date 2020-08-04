@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -52,7 +53,7 @@ namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
                   let o = p.GetCustomAttribute<JsonPropertyAttribute>()
                   let m = p.Name.Length < 8 ? 8 : p.Name.Length
                 where Items.Contains(p.Name)
-               select new KeyValuePair<string, ColumnInfo>(p.Name, new ColumnInfo()
+               select new KeyValuePair<string, ColumnInfo>(p.Name, new ColumnInfo
                {
                    Property = p,
                    Order = o?.Order,
@@ -83,9 +84,8 @@ namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
             if (typeof(StringList).IsAssignableFrom(column.Property.PropertyType))
             {
                 List<string> asStringList = new List<string>((StringList) obj);
-                var itemCount = asStringList.Count;
                 column.RowValues[item].AddRange(asStringList);
-                asStringList = asStringList.ToArray().ToList();
+                asStringList = asStringList.ToList();
                 asStringList.Add(column.Property.Name);
                 
                 int maxLength =
@@ -101,7 +101,7 @@ namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
                     (from g in asGuidList
                    select g.ToString().Substring(0, 8)));
                 column.RowValues[item].AddRange(asStringList);
-                asStringList = asStringList.ToArray().ToList();
+                asStringList = asStringList.ToList();
                 asStringList.Add(column.Property.Name);
                 
                 int maxLength =
@@ -131,7 +131,7 @@ namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
             else if (typeof(int) == column.Property.PropertyType)
             {
                 int integer = (int) obj;
-                string str = integer.ToString();
+                string str = integer.ToString(CultureInfo.InvariantCulture);
                 column.RowValues[item].Add(str);                            
                 UpdateColumnWidth(column, str.Length);
             }
@@ -188,9 +188,9 @@ namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
             }
         }
 
-        public string GetGuidText(ColumnInfo column, Guid guid)
+        public string GetGuidText(ColumnInfo column, Guid value)
         {
-            var str = guid.ToString().Substring(0, 8);
+            var str = value.ToString().Substring(0, 8);
 
             var length = str.Length;
             UpdateColumnWidth(column, length);
@@ -203,12 +203,14 @@ namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
             return asVersion.ToString();
         }
 
+        public const int ColumnSpacingPadding = 2;
+        
         public void WriteFooter(Map map, IDictionary<string, ColumnInfo> columns, StringBuilder builder)
         {
             builder.Append("=");
             foreach (var column in columns)
             {
-                builder.Append(string.Empty.PadRight(column.Value.MaxWidth + 2, '='));
+                builder.Append(string.Empty.PadRight(column.Value.MaxWidth + ColumnSpacingPadding, '='));
                 builder.Append("=");
             }
 
@@ -220,7 +222,7 @@ namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
             builder.Append("=");
             foreach (var column in columns)
             {
-                builder.Append(string.Empty.PadRight(column.Value.MaxWidth + 2, '='));
+                builder.Append(string.Empty.PadRight(column.Value.MaxWidth + ColumnSpacingPadding, '='));
                 builder.Append("=");
             }
             builder.AppendLine();
@@ -236,7 +238,7 @@ namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
             builder.Append("=");
             foreach (var column in columns)
             {
-                builder.Append(string.Empty.PadRight(column.Value.MaxWidth + 2, '='));
+                builder.Append(string.Empty.PadRight(column.Value.MaxWidth + ColumnSpacingPadding, '='));
                 builder.Append("=");
             }
             builder.AppendLine();

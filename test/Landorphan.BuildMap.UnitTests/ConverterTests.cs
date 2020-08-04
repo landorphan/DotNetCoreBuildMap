@@ -14,6 +14,7 @@ namespace Landorphan.BuildMap.UnitTests
         [SetUp]
         public void Setup()
         {
+            // Reserved for future needs.
         }
 
         [Test]

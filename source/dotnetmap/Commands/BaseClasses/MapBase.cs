@@ -6,7 +6,7 @@ namespace dotnetmap.Commands
 {
     public abstract class MapBase : Command
     {
-        protected Option<FileInfo> MapFileArgument;
+        protected Option<FileInfo> MapFileArgument { get; set; }
         protected virtual string DescriptionMapFile { get; private set; } = "The path to the map file to create.";
 
         protected MapBase(string name, string description = null) : base(name, description)

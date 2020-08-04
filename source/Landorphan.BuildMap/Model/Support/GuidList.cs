@@ -4,6 +4,7 @@ using System.Text;
 
 namespace Landorphan.BuildMap.Model.Support
 {
+    [Serializable]
     public class GuidList : List<Guid>
     {
         public GuidList()

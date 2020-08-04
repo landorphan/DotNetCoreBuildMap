@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -140,8 +141,8 @@ namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
             var properties = new Dictionary<string, PropertyInfo>(propertyEntries);
             var workingSet = 
                 (from l in lines 
-                where l.StartsWith("#") &&
-                     !l.StartsWith("##")
+                where l.StartsWith("#", StringComparison.OrdinalIgnoreCase) &&
+                     !l.StartsWith("##", StringComparison.OrdinalIgnoreCase)
                select l);
             foreach (var line in workingSet)
             {
@@ -163,7 +164,7 @@ namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
             var properties = new Dictionary<string, PropertyInfo>(propertyEntries);
             var workingSet =
                 (from l in lines
-                where l.StartsWith("+")
+                where l.StartsWith("+", StringComparison.OrdinalIgnoreCase)
                select l);
             foreach (var line in workingSet)
             {
@@ -184,7 +185,7 @@ namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
             var properties = GetProjectProperties();
             var workingSet =
                 (from l in lines 
-                where l.StartsWith("|")
+                where l.StartsWith("|", StringComparison.OrdinalIgnoreCase)
                select l);
             foreach (var line in workingSet)
             {
@@ -198,7 +199,8 @@ namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
                     var match = columnParse.Match(column);
                     if (match.Success)
                     {
-                        var property = properties[int.Parse(match.Groups[ColumnId].Value)];
+                        var property = properties[int.Parse(match.Groups[ColumnId].Value,
+                            CultureInfo.InvariantCulture)];
                         var rawValue = match.Groups[ColumnValue].Value;
                         SetPropertyValue(project, property.Value, rawValue);
                     }
@@ -211,7 +213,7 @@ namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
         {
             if (property.PropertyType == typeof(int))
             {
-                property.SetValue(obj, int.Parse(rawValue));
+                property.SetValue(obj, int.Parse(rawValue, CultureInfo.InvariantCulture));
             }
             else if (property.PropertyType == typeof(VersionString))
             {
@@ -246,7 +248,8 @@ namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
 
         public Map Read(string text)
         {
-            var lines = text.Replace("\r", "").Split("\n");
+            var lines = text.Replace("\r", "",
+                StringComparison.OrdinalIgnoreCase).Split("\n");
             Map map = new Map();
             SetFromHeaderLines(lines, map);
             SetFromBuildLines(lines, map);

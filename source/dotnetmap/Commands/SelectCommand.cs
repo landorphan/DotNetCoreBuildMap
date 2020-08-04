@@ -15,6 +15,7 @@ namespace dotnetmap.Commands
 
         public FilterPair(string filterPair)
         {
+            
             var items = filterPair.Split("=");
             if (items.Length > 1)
             {
@@ -37,7 +38,7 @@ namespace dotnetmap.Commands
     
     public class SelectCommand : DisplayBase
     {
-        private Option<FilterPair[]> FilterPair;
+        private readonly Option<FilterPair[]> FilterPair;
         
         public SelectCommand() : base("select", 
             "Search the map for given value combinations.")

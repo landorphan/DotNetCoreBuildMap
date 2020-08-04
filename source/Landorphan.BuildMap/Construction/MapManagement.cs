@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -40,10 +41,17 @@ namespace Landorphan.BuildMap.Construction
             return retval;
         }
 
+        [SuppressMessage("CodeSmell", "S2070",
+            Justification = "This is not being used for crypto purposes, MD5 is the correct algorithm to use for this case (tistocks - 2020-08-03)")]
+        [SuppressMessage("Unknown", "CA5351", 
+            Justification = "This is not being used for crypto purposes, MD5 is the correct algorithm to use for this case (tistocks - 2020-08-03)")]
         public Guid ComputeId(byte[] rawData)
         {
-            MD5 hasher = MD5.Create();
-            byte[] hash = hasher.ComputeHash(rawData);
+            byte[] hash = null;
+            using (MD5 hasher = MD5.Create())
+            {
+                hash = hasher.ComputeHash(rawData);
+            }
             Guid retval = new Guid(hash.Take(16).ToArray());
             return retval;
         }
@@ -85,7 +93,7 @@ namespace Landorphan.BuildMap.Construction
         public const string SolutionFileHeader = "Microsoft Visual Studio Solution File";
         public bool IsSolutionFile(SuppliedFile suppliedFile)
         {
-            return suppliedFile.RawText.Contains(SolutionFileHeader);
+            return suppliedFile.RawText.Contains(SolutionFileHeader, StringComparison.InvariantCultureIgnoreCase);
         }
 
         public MapFiles PreprocessList(IEnumerable<string> locatedFiles)

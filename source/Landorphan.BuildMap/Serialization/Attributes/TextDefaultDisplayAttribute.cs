@@ -1,6 +1,9 @@
+using System;
+
 namespace Landorphan.BuildMap.Serialization.Attributes
 {
-    public class TextDefaultDisplayAttribute : DefaultDisplayAttribute
+    [AttributeUsage(AttributeTargets.Property)]
+    public sealed class TextDefaultDisplayAttribute : DefaultDisplayAttribute
     {
         
     }

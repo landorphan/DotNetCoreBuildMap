@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Landorphan.BuildMap.Model.Support
 {
+    [Serializable]
     public class StringList : List<string>
     {
         public StringList()

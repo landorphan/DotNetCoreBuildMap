@@ -9,7 +9,7 @@ namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
 {
     public class XmlFormatter : IFormatter
     {
-        private System.Xml.Serialization.XmlSerializer serializer = new System.Xml.Serialization.XmlSerializer(
+        private readonly System.Xml.Serialization.XmlSerializer serializer = new System.Xml.Serialization.XmlSerializer(
             typeof(Map), new[] { typeof(Project), typeof(VersionString), typeof(Build) }); 
         
         public string Write(Map map)

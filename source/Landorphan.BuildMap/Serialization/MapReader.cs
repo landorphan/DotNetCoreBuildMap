@@ -12,8 +12,8 @@ namespace Landorphan.BuildMap.Serialization
 {
     public class MapReader : IMapReader
     {
-        private Queue<IFormatReader> orderedReaders = new Queue<IFormatReader>();
-        private Dictionary<ReadFormat, IFormatReader> organizedReaders = new Dictionary<ReadFormat, IFormatReader>();
+        private readonly Queue<IFormatReader> orderedReaders = new Queue<IFormatReader>();
+        private readonly Dictionary<ReadFormat, IFormatReader> organizedReaders = new Dictionary<ReadFormat, IFormatReader>();
         public MapReader()
         {
             IFormatReader reader = new MapFormatter();
@@ -71,6 +71,9 @@ namespace Landorphan.BuildMap.Serialization
                     return true;
                 }
             }
+            // TODO: Need to catch a more general exception .. to do that (see below)
+            // We ned to run through all the parsers and find out what exception they will through
+            // if the format can't be read.
             catch (Exception e)
             {
                 Console.Error.WriteLine(e.ToString());

@@ -10,9 +10,9 @@ namespace dotnetmap.Commands
 {
     public class CreateCommand : MapBase
     {
-        protected Option<IEnumerable<string>> InputFiles;
+        protected Option<IEnumerable<string>> InputFiles { get; set; }
 
-        protected Option<string> WorkingDirectory;
+        protected Option<string> WorkingDirectory { get; set; }
         
         public CreateCommand() : base("create", "Creates a build map of a set of dotnet projects.")
         {

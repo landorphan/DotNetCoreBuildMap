@@ -7,7 +7,7 @@ using Landorphan.BuildMap.Abstractions;
 
 namespace dotnetmap
 {
-    class Program
+    internal static class Program
     {
         static void Main(string[] args)
         {

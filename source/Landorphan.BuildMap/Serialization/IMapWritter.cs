@@ -7,6 +7,6 @@ namespace Landorphan.BuildMap.Serialization
     public interface IMapWritter
     {
         void Write(Stream stream, Map map, WriteFormat writeFormat = WriteFormat.Map, 
-            List<string> items = null);
+            IEnumerable<string> items = null);
     }
 }

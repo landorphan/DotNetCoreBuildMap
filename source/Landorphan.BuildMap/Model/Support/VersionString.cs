@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -25,15 +26,15 @@ namespace Landorphan.BuildMap.Model.Support
 
         private const string regexPattern = @"(?<Major>\d+)(?:\.(?<Minor>\d+))?(?:\.(?<Build>\d+))?(?:\.(?<Revision>\d+))?(?:-(?<Moniker>[a-zA-Z0-9_-]+))?(?:\:(?<Hash>[0-9A-Fa-f]+))?";
 
-        protected readonly Regex parsePattern = new Regex(regexPattern, RegexOptions.Compiled);
+        private readonly Regex parsePattern = new Regex(regexPattern, RegexOptions.Compiled);
 
-        public int Major { get; set; } = 0;
-        public int Minor { get; set; } = 0;
+        public int Major { get; set; }
+        public int Minor { get; set; }
         public int? Build { get; set; }
         public int? Revision { get; set; }
         public string Moniker { get; set; }
         public string Hash { get; set; }
-
+        
         public static implicit operator VersionString(Version version)
         {
             VersionString retval = new VersionString();
@@ -82,21 +83,21 @@ namespace Landorphan.BuildMap.Model.Support
                 switch (group.Name)
                 {
                     case nameof(Major):
-                        Major = int.Parse(group.Value);
+                        Major = int.Parse(group.Value, CultureInfo.InvariantCulture);
                         break;
                     case nameof(Minor):
-                        Minor = int.Parse(group.Value);
+                        Minor = int.Parse(group.Value, CultureInfo.InvariantCulture);
                         break;
                     case nameof(Build):
                         if (group.Captures.Any())
                         {
-                            Build = int.Parse(group.Value);
+                            Build = int.Parse(group.Value, CultureInfo.InvariantCulture);
                         }
                         break;
                     case nameof(Revision):
                         if (group.Captures.Any())
                         {
-                            Revision = int.Parse(group.Value);
+                            Revision = int.Parse(group.Value, CultureInfo.InvariantCulture);
                         }
                         break;
                     case nameof(Moniker):

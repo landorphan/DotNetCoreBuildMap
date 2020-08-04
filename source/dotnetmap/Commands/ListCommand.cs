@@ -14,16 +14,16 @@ namespace dotnetmap.Commands
     {
         public ListCommand() : base("list", "Lists the projects in the map.")
         {
-            Handler = CommandHandler.Create<FileInfo, WriteFormat, List<string>, FileInfo>(ListMap);
+            Handler = CommandHandler.Create<FileInfo, WriteFormat, IEnumerable<string>, FileInfo>(ListMap);
         }
 
-        public void ListMap(FileInfo map, WriteFormat format, List<string> items, FileInfo output)
+        public void ListMap(FileInfo map, WriteFormat format, IEnumerable<string> items, FileInfo output)
         {
                 Console.Error.WriteLine("Listing projects...");
                 IMapReader reader = new MapReader();
                 IMapWritter writer = new MapWritter();
                 Map mapObject = null;
-                ReadFormat formatHint = ReadFormat.Map;
+                ReadFormat formatHint;
 
                 Console.Error.WriteLine("Determining map structure...");
                 switch (map.Extension)
@@ -37,6 +37,9 @@ namespace dotnetmap.Commands
                         break;
                     case ".xml":
                         formatHint = ReadFormat.Xml;
+                        break;
+                    default:
+                        formatHint = ReadFormat.Map;
                         break;
                 }
                 Console.Error.WriteLine($"Map Structure is {formatHint}...");

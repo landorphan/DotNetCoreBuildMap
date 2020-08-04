@@ -8,9 +8,9 @@ namespace dotnetmap.Commands
 {
     public abstract class DisplayBase : ActUponBase
     {
-        protected Option<WriteFormat> OutputFormat;
-        protected Option<List<string>> ItemsToDisplay;
-        protected Option<FileInfo> OutputFile; 
+        protected Option<WriteFormat> OutputFormat { get; set; }
+        protected Option<List<string>> ItemsToDisplay { get; set; }
+        protected Option<FileInfo> OutputFile { get; set; } 
 
         protected override string DescriptionMapFile => "The path to the map file to display.";
 
