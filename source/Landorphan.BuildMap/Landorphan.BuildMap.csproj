@@ -24,4 +24,13 @@
       <PackageReference Include="YamlDotNet" Version="8.1.2" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Remove="Construction\Parsers\SolutionFileParser.cs" />
+      <Compile Remove="Construction\Parsers\VisualStudioSolutionFile.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Construction\Parsers" />
+    </ItemGroup>
+
 </Project>

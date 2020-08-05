@@ -21,7 +21,7 @@
                 <RelativePath>source/Landorphan.BuildMap/Landorphan.BuildMap.csproj</RelativePath>
                 <AbsolutePath>/repo/macos/per/DotNetCoreBuildTools/source/Landorphan.BuildMap/Landorphan.BuildMap.csproj</AbsolutePath>
                 <RealPath>/repo/macos/per/DotNetCoreBuildTools/source/Landorphan.BuildMap/Landorphan.BuildMap.csproj</RealPath>
-                <Dependencies />
+                <DependentOn />
             </Project>
             <Project>
                 <Group>1</Group>
@@ -38,9 +38,9 @@
                 <RelativePath>source/dotnet/dotnetmap.csproj</RelativePath>
                 <AbsolutePath>/repo/macos/per/DotNetCoreBuildTools/source/dotnetmap/dotnetmap.csproj</AbsolutePath>
                 <RealPath>/repo/macos/per/DotNetCoreBuildTools/source/dotnetmap/dotnetmap.csproj</RealPath>
-                <Dependencies>
+                <DependentOn>
                     <Id>a9e28afa-3d43-4bb7-90af-e7d5c16e3b1d</Id>
-                </Dependencies>
+                </DependentOn>
             </Project>
             <Project>
                 <Group>2</Group>
@@ -58,10 +58,10 @@
                 <RelativePath>test/Landorphan.BuildMap.UnitTests/Landorphan.BuildMap.UnitTests.csproj</RelativePath>
                 <AbsolutePath>/repo/macos/per/DotNetCoreBuildTools/test/Landorphan.BuildMap.UnitTests/Landorphan.BuildMap.UnitTests.csproj</AbsolutePath>
                 <RealPath>/repo/macos/per/DotNetCoreBuildTools/test/Landorphan.BuildMap.UnitTests/Landorphan.BuildMap.UnitTests.csproj</RealPath>
-                <Dependencies>
+                <DependentOn>
                     <Id>a9e28afa-3d43-4bb7-90af-e7d5c16e3b1d</Id>
                     <Id>4524116f-89bf-4084-b5ce-717a8cd34a82</Id>
-                </Dependencies>
+                </DependentOn>
             </Project>
         </Projects>
     </Build>

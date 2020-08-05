@@ -33,7 +33,9 @@ namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
               let o = p.GetCustomAttribute<JsonPropertyAttribute>()
             where o != null
           orderby o.Order
-           select p.Name).ToArray(); 
+           select p.Name).ToArray();
+
+        public TableFormatter() : this(null) { }
 
         public TableFormatter(IEnumerable<string> itemHints)
         {

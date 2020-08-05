@@ -1,9 +1,10 @@
 namespace Landorphan.BuildMap.Model
 {
-    public enum Language
+    public static class Language
     {
-        VisualBasic,
-        CSharp,
-        FSharp,
+        public const string VisualBasic = "VisualBasic";
+        public const string CSharp = "CSharp";
+        public const string FSharp = "FSharp";
+        public const string Unknown = "Unknown";
     }
 }

@@ -246,10 +246,10 @@ namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
             {
                 property.SetValue(obj, new Guid(rawValue));
             }
-            else if (property.PropertyType == typeof(Language))
-            {
-                property.SetValue(obj, Enum.Parse<Language>(rawValue));
-            }
+            // else if (property.PropertyType == typeof(Language))
+            // {
+            //     property.SetValue(obj, Enum.Parse<Language>(rawValue));
+            // }
             else if (property.PropertyType == typeof(StringList))
             {
                 property.SetValue(obj, GetStringList(rawValue));

@@ -13,17 +13,23 @@ using Landorphan.BuildMap.Model;
 
 namespace Landorphan.BuildMap.Construction
 {
+    using System.Xml.Linq;
+    using System.Xml.XPath;
     using Landorphan.Common;
+    using Onion.SolutionParser.Parser;
+    using Onion.SolutionParser.Parser.Model;
+    using YamlDotNet.Core.Tokens;
+
     public class MapManagement
     {
-        public IEnumerable<string> LocateFiles(string workingDirectory, IEnumerable<string> globPatterns)
+        public IEnumerable<FilePaths> LocateFiles(string workingDirectory, IEnumerable<string> globPatterns)
         {
             var fs = AbstractionManager.GetFileSystem();
             if (string.IsNullOrWhiteSpace(workingDirectory))
             {
                 workingDirectory = fs.GetWorkingDirectory();
             }
-            List<string> retval = new List<string>();
+            List<FilePaths> retval = new List<FilePaths>();
             var globs =
                 (from g in globPatterns
                select Glob.Parse(g));
@@ -32,99 +38,185 @@ namespace Landorphan.BuildMap.Construction
             {
                 foreach (var glob in globs)
                 {
-                    if (glob.IsMatch(file))
+                    if (glob.IsMatch(file.Absolute))
                     {
                         retval.Add(file);
-                        continue;
+                        break;
                     }
                 }
             }
             return retval;
         }
 
-        [SuppressMessage("CodeSmell", "S2070",
-            Justification = "This is not being used for crypto purposes, MD5 is the correct algorithm to use for this case (tistocks - 2020-08-03)")]
-        [SuppressMessage("Unknown", "CA5351", 
-            Justification = "This is not being used for crypto purposes, MD5 is the correct algorithm to use for this case (tistocks - 2020-08-03)")]
-        public Guid ComputeId(byte[] rawData)
-        {
-            byte[] hash = null;
-            using (MD5 hasher = MD5.Create())
-            {
-                hash = hasher.ComputeHash(rawData);
-            }
-            Guid retval = new Guid(hash.Take(16).ToArray());
-            return retval;
-        }
+        // public List<SuppliedFile> GetSuppliedFiles(IEnumerable<string> locatedFiles)
+        // {
+        //     List<SuppliedFile> retval = new List<SuppliedFile>();
+        //     foreach (var file in locatedFiles)
+        //     {
+        //         var suppliedFile = GetSuppliedFile(file);
+        //         retval.Add(suppliedFile);
+        //     }
+        //
+        //     return retval;
+        // }
 
-        public List<SuppliedFile> GetSuppliedFiles(IEnumerable<string> locatedFiles)
+        private readonly Guid SolutionFolderGuid = new Guid("2150E333-8FDC-42A3-9474-1A3956D46DE8");
+//        private readonly Guid SharedProjectGuid = new Guid("D954291E-2A0B-460D-934E-DC6B0785DB48");
+        
+        public void IncorporateSolutionFileProjects(MapFiles mapFiles)
         {
             var fs = AbstractionManager.GetFileSystem();
-            List<SuppliedFile> retval = new List<SuppliedFile>();
-            Encoding utf8 = new UTF8Encoding(false);
-            foreach (var file in locatedFiles)
+            foreach (var solutionFile in mapFiles.GetAllSolutionFiles().Where(sf => sf.Status == FileStatus.Valid))
             {
-                var content = fs.ReadFileContents(file);
-                byte[] buffer = utf8.GetBytes(content);
-                Guid id = ComputeId(buffer);
-                SuppliedFile item = new SuppliedFile();
-                item.Id = id;
-                item.Paths.Add(file);
-                item.RawText = content;
-                retval.Add(item);
-            }
-
-            return retval;
-        }
-
-        public ProjectFile LoadProjectFileContents(SuppliedFile suppliedFile)
-        {
-            suppliedFile.ArgumentNotNull(nameof(suppliedFile));
-            ProjectFile retval = new ProjectFile(suppliedFile);
-            XmlDocument document = new XmlDocument();
-            using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(suppliedFile.RawText)))
-            using (var reader = new XmlTextReader(stream))
-            {
-                document.Load(reader);
-            }
-
-            retval.ProjectContents = document;
-            return retval;
-        }
-
-        public const string SolutionFileHeader = "Microsoft Visual Studio Solution File";
-        public bool IsSolutionFile(SuppliedFile suppliedFile)
-        {
-            suppliedFile.ArgumentNotNull(nameof(suppliedFile));
-            return suppliedFile.RawText.Contains(SolutionFileHeader, StringComparison.InvariantCultureIgnoreCase);
-        }
-
-        public MapFiles PreprocessList(IEnumerable<string> locatedFiles)
-        {
-            MapFiles mapFiles = new MapFiles();
-            mapFiles.LocatedFiles = locatedFiles.ToList();
-            mapFiles.SuppliedFiles = GetSuppliedFiles(locatedFiles);
-            foreach (var suppliedFile in mapFiles.SuppliedFiles)
-            {
-                if (IsSolutionFile(suppliedFile))
+                Dictionary<Guid, Project> solutionProjects = new Dictionary<Guid, Project>(
+                (   from sp in solutionFile.SolutionContents.Projects
+                   where sp.TypeGuid != SolutionFolderGuid 
+                  select new KeyValuePair<Guid, Project>(sp.Guid, sp)));
+                // First pass through ... create the ProjectFile entries and map
+                // sln guids to HashGuids.
+                foreach (var projectReference in solutionProjects)
                 {
-                    
+                    var slnGuid = projectReference.Key;
+                    var projectReferencePath = fs.CombinePaths(solutionFile.Directory, projectReference.Value.Path);
+                    if (mapFiles.TryGetProjectFileBySafePath(projectReferencePath, out var projectFile))
+                    {
+                        solutionFile.SlnGuidToHashGuidLookup.Add(slnGuid, projectFile.Id);
+                        projectFile.SolutionFiles.Add(solutionFile);
+                    }
                 }
-                else
+                // Second pass through ... map dependency projects.
+                foreach (var projectReference in solutionProjects)
                 {
-                    ProjectFile projectFile = LoadProjectFileContents(suppliedFile);
-                    mapFiles.SafeAddFile(projectFile);
+                    var currentProjectHashGuid = solutionFile.SlnGuidToHashGuidLookup[projectReference.Value.Guid];
+                    if (mapFiles.TryGetProjectFileByHashId(currentProjectHashGuid, out var currentProjectFile))
+                    {
+                        if (projectReference.Value.ProjectSection != null)
+                        {
+                            foreach (var dependentOnSlnEntry in projectReference.Value.ProjectSection.Entries)
+                            {
+                                var dependencySlnGuid = new Guid(dependentOnSlnEntry.Key
+                                    .Replace("{", string.Empty, StringComparison.Ordinal)
+                                    .Replace("}", string.Empty, StringComparison.Ordinal));
+                                var dependentOnHashGuid = solutionFile.SlnGuidToHashGuidLookup[dependencySlnGuid];
+                                if (mapFiles.TryGetProjectFileByHashId(dependentOnHashGuid, out var dependentOnProject))
+                                {
+                                    if (!currentProjectFile.DependentOn.TryGetValue(dependentOnHashGuid, out _))
+                                    {
+                                        currentProjectFile.DependentOn.Add(dependentOnHashGuid, dependentOnProject);
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
-            
-            return mapFiles;
         }
-        
+
+        public const string ProjectReferenceXPath = "/Project/ItemGroup/ProjectReference/@Include";
+
+        public void MapProjectLevelDependenciesForProjectFile(MapFiles mapFiles, ProjectFile projectFile)
+        {
+            var fs = AbstractionManager.GetFileSystem();
+            var projectReferences = (projectFile.ProjectContents.XPathEvaluate(ProjectReferenceXPath) 
+                as IEnumerable<object>)?.Cast<XAttribute>();
+            foreach (var include in projectReferences)
+            {
+                var includePath = fs.GetAbsolutePath(fs.CombinePaths(projectFile.Directory, include.Value));
+                ProjectFile includedProjectFile;
+                // Guid includedProjectHashGuid;
+                // First attempt to lookup the project based on the "safe path".
+                if (mapFiles.TryGetProjectFileBySafePath(includePath, out includedProjectFile) && 
+                    !projectFile.DependentOn.TryGetValue(includedProjectFile.Id, out _))
+                {
+                    projectFile.DependentOn.Add(includedProjectFile.Id, includedProjectFile);
+                }
+                // I think after refactor this is no longer necissary but keeping the code until we test ... just in case.
+                // else
+                // {
+                //     // The Safe path did not work ... attempt to resolve via hashGuid.
+                //     var suppliedFile = GetSuppliedFile(includePath);
+                //     includedProjectHashGuid = suppliedFile.Id;
+                //     if (!mapFiles.ProjectFiles.TryGetValue(includedProjectHashGuid, out includedProjectFile))
+                //     {
+                //         // Finally try to load the project file
+                //         includedProjectFile = LoadProjectFileContents(suppliedFile);
+                //         mapFiles.SafeAddFile(includedProjectFile);
+                //     }
+                // }
+            }
+        }
+
+        public void MapProjectLevelDependencies(MapFiles mapFiles)
+        {
+            foreach (var projectFile in mapFiles.GetAllProjectFiles())
+            {
+                if (projectFile.Status == FileStatus.Valid)
+                {
+                    MapProjectLevelDependenciesForProjectFile(mapFiles, projectFile);
+                }
+            }
+        }
+
+        // TODO: This needs to be moved to the extension system once its in place.
+        public string DetermineProjectLanguage(ProjectFile projectFile)
+        {
+            var fs = AbstractionManager.GetFileSystem();
+            var extension = fs.GetExtension(projectFile.Path);
+            switch (extension)
+            {
+                case ".csproj":
+                    return Language.CSharp;
+                case ".fsproj":
+                    return Language.FSharp;
+                case ".vbproj":
+                    return Language.VisualBasic;
+                default:
+                    return Language.Unknown;
+            }
+        }
+
+        public Map ConvertMapFilesToMap(string workingDirectory, MapFiles mapFiles)
+        {
+            var fs = AbstractionManager.GetFileSystem();
+            Map map = new Map();
+            map.Build.RelativeRoot = workingDirectory;
+            var projectFiles = mapFiles.GetAllProjectFiles();
+            foreach (var projectFile in projectFiles)
+            {
+                var project = new Model.Project();
+                project.Id = projectFile.Id;
+                project.Language = DetermineProjectLanguage(projectFile);
+                project.Name = fs.GetFileNameWithoutExtension(projectFile.Path);
+                var solutionNames =
+                (     from s in projectFile.SolutionFiles
+                    select fs.GetFileName(s.Path));
+                project.Solutions.AddRange(solutionNames);
+                project.RelativePath = projectFile.Path;
+                project.AbsolutePath = projectFile.AbsolutePath;
+                project.RealPath = "TODO: ADD THIS";
+                project.Status = projectFile.Status;
+                project.DependentOn.AddRange(projectFile.DependentOn.Keys);
+                map.Build.Projects.Add(project);
+            }
+
+            return map;
+        }
+
         public Map Create(string workingDirectory, IEnumerable<string> globPatterns)
         {
-            IEnumerable<string> locatedFiles = LocateFiles(workingDirectory, globPatterns);
-            MapFiles mapFiles = PreprocessList(locatedFiles);
-            return null;
+            workingDirectory.ArgumentNotNullNorEmptyNorWhiteSpace(nameof(workingDirectory));
+            
+            var fs = AbstractionManager.GetFileSystem();
+            workingDirectory = fs.NormalizePath(workingDirectory);
+            IEnumerable<FilePaths> locatedFiles = LocateFiles(workingDirectory, globPatterns);
+            MapFiles mapFiles = new MapFiles(workingDirectory); 
+            mapFiles.PreprocessList(locatedFiles);
+
+            IncorporateSolutionFileProjects(mapFiles);
+            
+            MapProjectLevelDependencies(mapFiles);
+            
+            return ConvertMapFilesToMap(workingDirectory, mapFiles);
         }
     }
 }

@@ -29,34 +29,38 @@ namespace Landorphan.BuildMap.Model
 
         [JsonProperty(Order = 3)]
         [TableDefaultDisplay]
-        public Language Language { get; set; }
+        public string Language { get; set; }
 
         [JsonProperty(Order = 4)]
         [TableDefaultDisplay]
         public string Name { get; set; }
 
-        [XmlArrayItem("Solution")]
         [JsonProperty(Order = 5)]
+        [TableDefaultDisplay]
+        public FileStatus Status { get; set; }
+
+        [XmlArrayItem("Solution")]
+        [JsonProperty(Order = 6)]
         [TableDefaultDisplay]
         public StringList Solutions { get; set; } = new StringList();
 
-        [JsonProperty(Order = 6)]
+        [JsonProperty(Order = 7)]
         [TableDefaultDisplay]
         public Guid Id { get; set; } = Guid.NewGuid();
 
-        [JsonProperty(Order = 7)]
+        [JsonProperty(Order = 8)]
         public string RelativePath { get; set; }
 
-        [JsonProperty(Order = 8)]
+        [JsonProperty(Order = 9)]
         [TextDefaultDisplay]
         public string AbsolutePath { get; set; }
 
-        [JsonProperty(Order = 9)]
+        [JsonProperty(Order = 10)]
         public string RealPath { get; set; }
 
         [XmlArrayItem("Id")]
-        [JsonProperty(Order = 10)]
+        [JsonProperty(Order = 11)]
         [TableDefaultDisplay]
-        public GuidList Dependencies { get; set; } = new GuidList();
+        public GuidList DependentOn { get; set; } = new GuidList();
     }
 }

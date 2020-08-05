@@ -16,7 +16,7 @@ Build:
       RelativePath: source/Landorphan.BuildMap/Landorphan.BuildMap.csproj
       AbsolutePath: /repo/macos/per/DotNetCoreBuildTools/source/Landorphan.BuildMap/Landorphan.BuildMap.csproj
       RealPath: /repo/macos/per/DotNetCoreBuildTools/source/Landorphan.BuildMap/Landorphan.BuildMap.csproj
-      Dependencies: []
+      DependentOn: []
     - Group: 1
       Item: 1
       Types:
@@ -29,7 +29,7 @@ Build:
       RelativePath: source/dotnet/dotnetmap.csproj
       AbsolutePath: /repo/macos/per/DotNetCoreBuildTools/source/dotnetmap/dotnetmap.csproj
       RealPath: /repo/macos/per/DotNetCoreBuildTools/source/dotnetmap/dotnetmap.csproj
-      Dependencies:
+      DependentOn:
         - 3d8e45d2-dafe-417d-8125-317f5111a4ec
     - Group: 2
       Item: 2
@@ -44,6 +44,6 @@ Build:
       RelativePath: test/Landorphan.BuildMap.UnitTests/Landorphan.BuildMap.UnitTests.csproj
       AbsolutePath: /repo/macos/per/DotNetCoreBuildTools/test/Landorphan.BuildMap.UnitTests/Landorphan.BuildMap.UnitTests.csproj
       RealPath: /repo/macos/per/DotNetCoreBuildTools/test/Landorphan.BuildMap.UnitTests/Landorphan.BuildMap.UnitTests.csproj
-      Dependencies:
+      DependentOn:
         - 3d8e45d2-dafe-417d-8125-317f5111a4ec
         - 110016c6-f8fe-4b62-b946-953f4b4a1f8e

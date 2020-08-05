@@ -15,6 +15,7 @@ using Version = System.Version;
 
 namespace Landorphan.BuildMap.Model.Support
 {
+    using System.Diagnostics.CodeAnalysis;
     using Landorphan.Common;
 
     [Serializable]
@@ -81,6 +82,8 @@ namespace Landorphan.BuildMap.Model.Support
             this.SetFromString(version);
         }
 
+        [SuppressMessage("CodeSmell", "S1541: Reduce Cyclomatic Complexity",
+            Justification = "Cyclomatic Complexity for this methid is as low as posible.  (tistocks - 2020-08-05)")]
         private void SetFromString(string version)
         {
             var match = parsePattern.Match(version);

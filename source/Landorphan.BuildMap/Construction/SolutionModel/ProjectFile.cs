@@ -4,17 +4,16 @@ using System.Xml;
 
 namespace Landorphan.BuildMap.Construction.SolutionModel
 {
+    using System.Xml.Linq;
+
     public class ProjectFile : SuppliedFile
     {
-        public ProjectFile()
-        {
-        }
-
         public ProjectFile(SuppliedFile original) : base(original)
         {
         }
         
-        public XmlDocument ProjectContents { get; set; }
+        public XDocument ProjectContents { get; set; }
         public List<SolutionFile> SolutionFiles { get; set; } = new List<SolutionFile>();
+        public Dictionary<Guid, ProjectFile> DependentOn { get; private set; } = new Dictionary<Guid, ProjectFile>();
     }
 }
