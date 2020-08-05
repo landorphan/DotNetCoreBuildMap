@@ -118,14 +118,12 @@ namespace Landorphan.BuildMap.Model.Support
                             Hash = group.Value;
                         }
                         break;
-                    default:
-                        break;
                 }
             }
         }
 
-        private void SetValues(int major, int minor = 0, int? build = null,
-                               int? revision = null, string moniker = null, string hash = null)
+        private void SetValues(int major, int minor, int? build,
+                               int? revision, string moniker, string hash)
         {
             this.Major = major;
             this.Minor = minor;
@@ -135,8 +133,17 @@ namespace Landorphan.BuildMap.Model.Support
             this.Hash = hash;
         }
 
-        public VersionString(int major, int minor = 0, int? build = null,
-                             int? revision = null, string moniker = null, string hash = null)
+        public VersionString(int major) : this(major, 0, null, null, null, null) { }
+
+        public VersionString(int major, int minor) : this(major, minor, null, null, null, null) { }
+
+        public VersionString(int major, int minor, int build) : this(major, minor, build, null, null, null) { }
+
+        public VersionString(int major, int minor, int build, int revision) : this (major, minor, build, revision, null, null) { }
+
+        public VersionString(int major, int minor, int build, int revision, string moniker) : this (major, minor, build, revision, moniker, null) { }
+
+        public VersionString(int major, int minor, int? build, int? revision, string moniker, string hash)
         {
             this.SetValues(major, minor, build, revision, moniker, hash);
         }

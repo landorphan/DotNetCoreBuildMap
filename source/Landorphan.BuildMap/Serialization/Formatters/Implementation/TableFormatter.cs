@@ -19,7 +19,7 @@ namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
     {
         public IEnumerable<string> Items { get; private set; }
 
-        public static IReadOnlyList<string> DefaultItems =>
+        public static IReadOnlyList<string> GetDefaultItems() =>
             (from p in typeof(Project).GetProperties()
               let o = p.GetCustomAttribute<JsonPropertyAttribute>()
               let d = p.GetCustomAttribute<TableDefaultDisplayAttribute>()
@@ -27,8 +27,8 @@ namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
                && d != null
           orderby o.Order
            select p.Name).ToArray();
-
-        public static IReadOnlyList<string> AllItems => (
+         
+        public static IReadOnlyList<string> GetAllItems() => (
              from p in typeof(Project).GetProperties() 
               let o = p.GetCustomAttribute<JsonPropertyAttribute>()
             where o != null
@@ -37,7 +37,7 @@ namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
 
         public TableFormatter(IEnumerable<string> itemHints)
         {
-            this.Items = DefaultItems;
+            this.Items = GetDefaultItems();
             if (itemHints != null &&
                 itemHints.Any())
             {
@@ -125,7 +125,7 @@ namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
             if (typeof(VersionString).IsAssignableFrom(column.Property.PropertyType))
             {
                 VersionString asVersionString = (VersionString)obj;
-                string str = GetVersionStringText(column, asVersionString);
+                string str = GetVersionStringText(asVersionString);
                 column.RowValues[item].Add(str);
                 UpdateColumnWidth(column, str.Length);
             }
@@ -207,7 +207,7 @@ namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
             return str;
         }
 
-        public string GetVersionStringText(ColumnInfo column, VersionString versionString)
+        public string GetVersionStringText(VersionString versionString)
         {
             Version asVersion = versionString;
             return asVersion.ToString();
@@ -215,7 +215,7 @@ namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
 
         public const int ColumnSpacingPadding = 2;
 
-        public void WriteFooter(Map map, IDictionary<string, ColumnInfo> columns, StringBuilder builder)
+        public void WriteFooter(IDictionary<string, ColumnInfo> columns, StringBuilder builder)
         {
             columns.ArgumentNotNull(nameof(columns));
             builder.ArgumentNotNull(nameof(builder));
@@ -230,7 +230,7 @@ namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
             builder.AppendLine();
         }
 
-        public void WriteHeaders(Map map, IDictionary<string, ColumnInfo> columns, StringBuilder builder)
+        public void WriteHeaders(IDictionary<string, ColumnInfo> columns, StringBuilder builder)
         {
             columns.ArgumentNotNull(nameof(columns));
             builder.ArgumentNotNull(nameof(builder));
@@ -304,9 +304,9 @@ namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
         {
             StringBuilder builder = new StringBuilder();
             var columns = ComputeColumns(map);
-            WriteHeaders(map, columns, builder);
+            WriteHeaders(columns, builder);
             WriteData(map, columns, builder);
-            WriteFooter(map, columns, builder);
+            WriteFooter(columns, builder);
             return builder.ToString();
         }
     }

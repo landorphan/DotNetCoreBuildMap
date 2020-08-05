@@ -9,7 +9,7 @@ namespace dotnetmap.Commands
         protected Option<FileInfo> MapFileArgument { get; set; }
         protected virtual string DescriptionMapFile { get; private set; } = "The path to the map file to create.";
 
-        protected MapBase(string name, string description = null) : base(name, description)
+        protected MapBase(string name, string description) : base(name, description)
         {
             MapFileArgument = new Option<FileInfo>(new[] {"--map", "-m"}, DescriptionMapFile)
             {

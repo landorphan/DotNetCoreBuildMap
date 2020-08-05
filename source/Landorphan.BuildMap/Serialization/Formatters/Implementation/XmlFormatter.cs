@@ -7,6 +7,7 @@ using Landorphan.BuildMap.Serialization.Formatters.Interfaces;
 
 namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
 {
+    using System;
     using Landorphan.Common;
 
     public class XmlFormatter : IFormatter
@@ -31,7 +32,7 @@ namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
         public bool SniffValidFormat(string text)
         {
             text.ArgumentNotNull(nameof(text));
-            return text.StartsWith("<");
+            return text.StartsWith("<", StringComparison.OrdinalIgnoreCase);
         }
 
         public Map Read(string text)

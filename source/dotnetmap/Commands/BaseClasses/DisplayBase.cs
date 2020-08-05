@@ -14,7 +14,7 @@ namespace dotnetmap.Commands
 
         protected override string DescriptionMapFile => "The path to the map file to display.";
 
-        protected DisplayBase(string name, string description = null) : base(name, description)
+        protected DisplayBase(string name, string description) : base(name, description)
         {
             OutputFormat = new Option<WriteFormat>("--format",
                 "The format to use when outputting the map. " +

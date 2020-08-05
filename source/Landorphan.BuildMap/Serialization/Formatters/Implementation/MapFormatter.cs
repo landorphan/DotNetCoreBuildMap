@@ -35,7 +35,7 @@ namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
             builder.AppendLine($"+ {nameof(Build.RelativeRoot)} = {build.RelativeRoot} +");
         }
 
-        public List<KeyValuePair<int, PropertyInfo>> GetProjectProperties()
+        public IEnumerable<KeyValuePair<int, PropertyInfo>> GetProjectProperties()
         {
             var projectType = typeof(Project);
             var properties = (from p in projectType.GetProperties()
@@ -203,7 +203,7 @@ namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
         {
             map.ArgumentNotNull(nameof(map));
 
-            var properties = GetProjectProperties();
+            var properties = GetProjectProperties().ToList();
             var workingSet =
                 (from l in lines
                  where l.StartsWith("|", StringComparison.OrdinalIgnoreCase)

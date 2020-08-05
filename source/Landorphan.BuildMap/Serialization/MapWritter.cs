@@ -10,8 +10,18 @@ namespace Landorphan.BuildMap.Serialization
 {
     public class MapWritter : IMapWritter
     {
-        public void Write(Stream stream, Map map, WriteFormat writeFormat = WriteFormat.Map,
-            IEnumerable<string> items = null)
+        public void Write(Stream stream, Map map)
+        {
+            Write(stream, map, WriteFormat.Map, null);
+        }
+
+        public void Write(Stream stream, Map map, WriteFormat writeFormat)
+        {
+            Write(stream, map, writeFormat, null);
+        }
+
+        public void Write(Stream stream, Map map, WriteFormat writeFormat,
+            IEnumerable<string> items)
         {
             IFormatWriter writer = null;
             switch (writeFormat)

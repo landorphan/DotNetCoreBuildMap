@@ -56,7 +56,7 @@ namespace Landorphan.BuildMap.UnitTests
                 map = formatter.Read(json);
             }
 
-            string[] items = TableFormatter.AllItems.ToArray();
+            string[] items = TableFormatter.GetAllItems().ToArray();
             var tableFormatter = new TableFormatter(null);
             string table = tableFormatter.Write(map);
             Console.WriteLine(table);

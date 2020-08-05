@@ -29,8 +29,13 @@ namespace Landorphan.BuildMap.Serialization
             orderedReaders.Enqueue(reader);
             organizedReaders.Add(ReadFormat.Yaml, reader);
         }
+
+        public Map Read(Stream stream)
+        {
+            return Read(stream, ReadFormat.Map);
+        }
         
-        public Map Read(Stream stream, ReadFormat formatHint = ReadFormat.Map)
+        public Map Read(Stream stream, ReadFormat formatHint)
         {
             Map map = null;
             string contents;

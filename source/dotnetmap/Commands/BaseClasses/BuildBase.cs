@@ -4,7 +4,7 @@ namespace dotnetmap.Commands
 {
     public abstract class BuildBase : Command
     {
-        protected BuildBase(string name, string description = null) : base(name, description)
+        protected BuildBase(string name, string description) : base(name, description)
         {
         }
     }
