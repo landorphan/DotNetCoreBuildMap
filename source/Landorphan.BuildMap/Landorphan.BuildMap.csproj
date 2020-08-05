@@ -11,6 +11,7 @@
 
     <ItemGroup>
       <PackageReference Include="DotNet.Glob" Version="3.0.9" />
+      <PackageReference Include="Microsoft.Build" Version="16.6.0" />
       <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.0.0">
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -20,17 +21,12 @@
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
-      <PackageReference Include="Onion.SolutionParser.Parser.Standard" Version="1.0.0" />
       <PackageReference Include="YamlDotNet" Version="8.1.2" />
     </ItemGroup>
 
     <ItemGroup>
       <Compile Remove="Construction\Parsers\SolutionFileParser.cs" />
       <Compile Remove="Construction\Parsers\VisualStudioSolutionFile.cs" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Construction\Parsers" />
     </ItemGroup>
 
 </Project>

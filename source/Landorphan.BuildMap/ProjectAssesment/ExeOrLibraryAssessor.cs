@@ -7,7 +7,7 @@ namespace Landorphan.BuildMap.ProjectAssesment
         public const string Library = "Library";
         public const string Executable = "Executable";
         
-        public string AssesProjectType(ProjectFile projectFile)
+        public string AssesProjectType(SuppliedProjectFile suppliedProjectFile)
         {
             return Library;
         }

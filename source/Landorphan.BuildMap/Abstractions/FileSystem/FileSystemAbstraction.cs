@@ -1,10 +1,10 @@
-using System;
-using System.IO;
-using System.Linq;
-
-namespace Landorphan.BuildMap.Abstractions
+namespace Landorphan.BuildMap.Abstractions.FileSystem
 {
+    using System;
+    using System.IO;
+    using System.Linq;
     using Landorphan.Common;
+
     public class FileSystemAbstraction : IFileSystem
     {
         public string NormalizePath(string path)

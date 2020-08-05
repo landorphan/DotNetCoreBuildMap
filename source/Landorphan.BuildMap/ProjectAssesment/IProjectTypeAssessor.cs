@@ -4,6 +4,6 @@ namespace Landorphan.BuildMap.ProjectAssesment
 {
     public interface IProjectTypeAssessor
     {
-        string AssesProjectType(ProjectFile projectFile);
+        string AssesProjectType(SuppliedProjectFile suppliedProjectFile);
     }
 }

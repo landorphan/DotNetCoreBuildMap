@@ -11,11 +11,13 @@ namespace Landorphan.BuildMap.Construction.SolutionModel
     using System.Xml;
     using System.Xml.Linq;
     using Landorphan.BuildMap.Abstractions;
+    using Landorphan.BuildMap.Abstractions.FileSystem;
+    using Landorphan.BuildMap.Abstractions.VisualStudioSolutionFile;
     using Landorphan.BuildMap.Model;
     using Landorphan.BuildMap.Serialization;
     using Landorphan.Common;
-    using Onion.SolutionParser.Parser;
-    using Onion.SolutionParser.Parser.Model;
+    using Microsoft.Build.Construction;
+    using Microsoft.Build.Exceptions;
 
     public class MapFiles
     {
@@ -30,8 +32,8 @@ namespace Landorphan.BuildMap.Construction.SolutionModel
 
         private Dictionary<Guid, SuppliedFile> FilesByHashId { get; } = new Dictionary<Guid, SuppliedFile>();
 
-        private Dictionary<Guid, ProjectFile> ProjectFiles { get; } = new Dictionary<Guid, ProjectFile>();
-        private Dictionary<Guid, SolutionFile> SolutionFiles { get; } = new Dictionary<Guid, SolutionFile>();
+        private Dictionary<Guid, SuppliedProjectFile> ProjectFiles { get; } = new Dictionary<Guid, SuppliedProjectFile>();
+        private Dictionary<Guid, SuppliedSolutionFile> SolutionFiles { get; } = new Dictionary<Guid, SuppliedSolutionFile>();
 
         [SuppressMessage("CodeSmell", "S2070",
             Justification = "This is not being used for crypto purposes, MD5 is the correct algorithm to use for this case (tistocks - 2020-08-03)")]
@@ -103,44 +105,44 @@ namespace Landorphan.BuildMap.Construction.SolutionModel
         {
             if (IsSolutionFile(suppliedFile))
             {
-                SolutionFile solutionFile = new SolutionFile(suppliedFile);
+                SuppliedSolutionFile suppliedSolutionFile = new SuppliedSolutionFile(suppliedFile);
                 TextReader reader = new StringReader(suppliedFile.RawText);
-                SolutionParser slnParser = new SolutionParser(reader);
                 // This parser doesn't seem to throw an exception for an invalid .sln file.
                 // it simply interprets all the contents of the file as a header.
                 try
                 {
-                    ISolution sln = slnParser.Parse();
-                    solutionFile.SolutionContents = sln;
-                    if (sln.Projects != null && sln.Projects.Count > 0)
+                    ISolutionFile sln = AbstractionManager.ParseSolutionFile(suppliedFile);
+                    suppliedSolutionFile.SolutionContents = sln;
+                    var projects = sln.GetAllProjects();
+                    if (projects != null && projects.Any())
                     {
-                        solutionFile.Status = FileStatus.Valid;
+                        suppliedSolutionFile.Status = FileStatus.Valid;
                     }
                     else
                     {
-                        solutionFile.Status = FileStatus.Empty;
+                        suppliedSolutionFile.Status = FileStatus.Empty;
                     }
                 }
-                catch (Exception ex)
+                catch (InvalidProjectFileException ex)
                 {
-                    solutionFile.Status = FileStatus.Malformed;
+                    suppliedSolutionFile.Status = FileStatus.Malformed;
                 }
 
-                SafeAddFile(solutionFile);
-                return solutionFile;
+                SafeAddFile(suppliedSolutionFile);
+                return suppliedSolutionFile;
             }
             else
             {
-                ProjectFile projectFile = LoadProjectFileContents(suppliedFile);
-                SafeAddFile(projectFile);
-                return projectFile;
+                SuppliedProjectFile suppliedProjectFile = LoadProjectFileContents(suppliedFile);
+                SafeAddFile(suppliedProjectFile);
+                return suppliedProjectFile;
             }
         }
         
-        public ProjectFile LoadProjectFileContents(SuppliedFile suppliedFile)
+        public SuppliedProjectFile LoadProjectFileContents(SuppliedFile suppliedFile)
         {
             suppliedFile.ArgumentNotNull(nameof(suppliedFile));
-            ProjectFile retval = new ProjectFile(suppliedFile);
+            SuppliedProjectFile retval = new SuppliedProjectFile(suppliedFile);
             XDocument document;
             using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(suppliedFile.RawText)))
             using (var reader = new XmlTextReader(stream))
@@ -159,12 +161,12 @@ namespace Landorphan.BuildMap.Construction.SolutionModel
             return retval;
         }
 
-        public bool TryGetProjectFileByHashId(Guid id, out ProjectFile projectFile)
+        public bool TryGetProjectFileByHashId(Guid id, out SuppliedProjectFile suppliedProjectFile)
         {
-            return ProjectFiles.TryGetValue(id, out projectFile);
+            return ProjectFiles.TryGetValue(id, out suppliedProjectFile);
         }
 
-        public bool TryGetProjectFileBySafePath(string path, out ProjectFile projectFile)
+        public bool TryGetProjectFileBySafePath(string path, out SuppliedProjectFile suppliedProjectFile)
         {
             var fs = AbstractionManager.GetFileSystem();
             SuppliedFile suppliedFile;
@@ -175,11 +177,11 @@ namespace Landorphan.BuildMap.Construction.SolutionModel
             };
             if (FilesBySafePath.TryGetValue(path, out suppliedFile))
             {
-                return (projectFile = suppliedFile as ProjectFile) != null;
+                return (suppliedProjectFile = suppliedFile as SuppliedProjectFile) != null;
             }
             else
             {
-                return (projectFile = GetSuppliedFile(paths) as ProjectFile) != null;
+                return (suppliedProjectFile = GetSuppliedFile(paths) as SuppliedProjectFile) != null;
             }
         }
 
@@ -192,51 +194,51 @@ namespace Landorphan.BuildMap.Construction.SolutionModel
             }
         }
 
-        public List<SolutionFile> GetAllSolutionFiles()
+        public List<SuppliedSolutionFile> GetAllSolutionFiles()
         {
             return this.SolutionFiles.Values.ToList();
         }
 
-        public List<ProjectFile> GetAllProjectFiles()
+        public List<SuppliedProjectFile> GetAllProjectFiles()
         {
             return this.ProjectFiles.Values.ToList();
         }
 
-        public void SafeAddFile(ProjectFile projectFile)
+        public void SafeAddFile(SuppliedProjectFile suppliedProjectFile)
         {
-            projectFile.ArgumentNotNull(nameof(projectFile));
-            if (!FilesBySafePath.TryGetValue(projectFile.Path, out _))
+            suppliedProjectFile.ArgumentNotNull(nameof(suppliedProjectFile));
+            if (!FilesBySafePath.TryGetValue(suppliedProjectFile.Path, out _))
             {
-                FilesBySafePath.Add(projectFile.Path, projectFile);
+                FilesBySafePath.Add(suppliedProjectFile.Path, suppliedProjectFile);
             }
 
-            if (!FilesByHashId.TryGetValue(projectFile.Id, out _))
+            if (!FilesByHashId.TryGetValue(suppliedProjectFile.Id, out _))
             {
-                FilesByHashId.Add(projectFile.Id, projectFile);
+                FilesByHashId.Add(suppliedProjectFile.Id, suppliedProjectFile);
             }
 
-            if (!ProjectFiles.TryGetValue(projectFile.Id, out _))
+            if (!ProjectFiles.TryGetValue(suppliedProjectFile.Id, out _))
             {
-                ProjectFiles.Add(projectFile.Id, projectFile);
+                ProjectFiles.Add(suppliedProjectFile.Id, suppliedProjectFile);
             }
         }
 
-        public void SafeAddFile(SolutionFile solutionFile)
+        public void SafeAddFile(SuppliedSolutionFile suppliedSolutionFile)
         {
-            solutionFile.ArgumentNotNull(nameof(solutionFile));
-            if (!FilesBySafePath.TryGetValue(solutionFile.Path, out _))
+            suppliedSolutionFile.ArgumentNotNull(nameof(suppliedSolutionFile));
+            if (!FilesBySafePath.TryGetValue(suppliedSolutionFile.Path, out _))
             {
-                FilesBySafePath.Add(solutionFile.Path, solutionFile);
+                FilesBySafePath.Add(suppliedSolutionFile.Path, suppliedSolutionFile);
             }
 
-            if (!FilesByHashId.TryGetValue(solutionFile.Id, out _))
+            if (!FilesByHashId.TryGetValue(suppliedSolutionFile.Id, out _))
             {
-                FilesByHashId.Add(solutionFile.Id, solutionFile);
+                FilesByHashId.Add(suppliedSolutionFile.Id, suppliedSolutionFile);
             }
 
-            if (!SolutionFiles.TryGetValue(solutionFile.Id, out _))
+            if (!SolutionFiles.TryGetValue(suppliedSolutionFile.Id, out _))
             {
-                SolutionFiles.Add(solutionFile.Id, solutionFile);
+                SolutionFiles.Add(suppliedSolutionFile.Id, suppliedSolutionFile);
             }
         }
     }

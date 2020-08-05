@@ -1,4 +1,4 @@
-namespace Landorphan.BuildMap.Abstractions
+namespace Landorphan.BuildMap.Abstractions.FileSystem
 {
     public class FilePaths
     {

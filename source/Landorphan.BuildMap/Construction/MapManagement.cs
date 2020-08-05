@@ -15,9 +15,10 @@ namespace Landorphan.BuildMap.Construction
 {
     using System.Xml.Linq;
     using System.Xml.XPath;
+    using Landorphan.BuildMap.Abstractions.FileSystem;
+    using Landorphan.BuildMap.Abstractions.VisualStudioSolutionFile;
     using Landorphan.Common;
-    using Onion.SolutionParser.Parser;
-    using Onion.SolutionParser.Parser.Model;
+    using Microsoft.Build.Construction;
     using YamlDotNet.Core.Tokens;
 
     public class MapManagement
@@ -68,16 +69,16 @@ namespace Landorphan.BuildMap.Construction
             var fs = AbstractionManager.GetFileSystem();
             foreach (var solutionFile in mapFiles.GetAllSolutionFiles().Where(sf => sf.Status == FileStatus.Valid))
             {
-                Dictionary<Guid, Project> solutionProjects = new Dictionary<Guid, Project>(
-                (   from sp in solutionFile.SolutionContents.Projects
-                   where sp.TypeGuid != SolutionFolderGuid 
-                  select new KeyValuePair<Guid, Project>(sp.Guid, sp)));
+                Dictionary<Guid, IProjectInSoltuion> solutionProjects = new Dictionary<Guid, IProjectInSoltuion>(
+                (   from sp in solutionFile.SolutionContents.GetAllProjects()
+                   where sp.ProjectType != SolutionProjectType.SolutionFolder 
+                  select new KeyValuePair<Guid, IProjectInSoltuion>(sp.SlnGuid, sp)));
                 // First pass through ... create the ProjectFile entries and map
                 // sln guids to HashGuids.
                 foreach (var projectReference in solutionProjects)
                 {
                     var slnGuid = projectReference.Key;
-                    var projectReferencePath = fs.CombinePaths(solutionFile.Directory, projectReference.Value.Path);
+                    var projectReferencePath = fs.NormalizePath(projectReference.Value.AbsolutePath);
                     if (mapFiles.TryGetProjectFileBySafePath(projectReferencePath, out var projectFile))
                     {
                         solutionFile.SlnGuidToHashGuidLookup.Add(slnGuid, projectFile.Id);
@@ -87,23 +88,17 @@ namespace Landorphan.BuildMap.Construction
                 // Second pass through ... map dependency projects.
                 foreach (var projectReference in solutionProjects)
                 {
-                    var currentProjectHashGuid = solutionFile.SlnGuidToHashGuidLookup[projectReference.Value.Guid];
+                    var currentProjectHashGuid = solutionFile.SlnGuidToHashGuidLookup[projectReference.Value.SlnGuid];
                     if (mapFiles.TryGetProjectFileByHashId(currentProjectHashGuid, out var currentProjectFile))
                     {
-                        if (projectReference.Value.ProjectSection != null)
+                        foreach (var dependentOnSlnGuid in projectReference.Value.GetProjectsThisProjectDependsOn())
                         {
-                            foreach (var dependentOnSlnEntry in projectReference.Value.ProjectSection.Entries)
+                            var dependentOnHashGuid = solutionFile.SlnGuidToHashGuidLookup[dependentOnSlnGuid];
+                            if (mapFiles.TryGetProjectFileByHashId(dependentOnHashGuid, out var dependentOnProject))
                             {
-                                var dependencySlnGuid = new Guid(dependentOnSlnEntry.Key
-                                    .Replace("{", string.Empty, StringComparison.Ordinal)
-                                    .Replace("}", string.Empty, StringComparison.Ordinal));
-                                var dependentOnHashGuid = solutionFile.SlnGuidToHashGuidLookup[dependencySlnGuid];
-                                if (mapFiles.TryGetProjectFileByHashId(dependentOnHashGuid, out var dependentOnProject))
+                                if (!currentProjectFile.DependentOn.TryGetValue(dependentOnHashGuid, out _))
                                 {
-                                    if (!currentProjectFile.DependentOn.TryGetValue(dependentOnHashGuid, out _))
-                                    {
-                                        currentProjectFile.DependentOn.Add(dependentOnHashGuid, dependentOnProject);
-                                    }
+                                    currentProjectFile.DependentOn.Add(dependentOnHashGuid, dependentOnProject);
                                 }
                             }
                         }
@@ -114,21 +109,21 @@ namespace Landorphan.BuildMap.Construction
 
         public const string ProjectReferenceXPath = "/Project/ItemGroup/ProjectReference/@Include";
 
-        public void MapProjectLevelDependenciesForProjectFile(MapFiles mapFiles, ProjectFile projectFile)
+        public void MapProjectLevelDependenciesForProjectFile(MapFiles mapFiles, SuppliedProjectFile suppliedProjectFile)
         {
             var fs = AbstractionManager.GetFileSystem();
-            var projectReferences = (projectFile.ProjectContents.XPathEvaluate(ProjectReferenceXPath) 
+            var projectReferences = (suppliedProjectFile.ProjectContents.XPathEvaluate(ProjectReferenceXPath) 
                 as IEnumerable<object>)?.Cast<XAttribute>();
             foreach (var include in projectReferences)
             {
-                var includePath = fs.GetAbsolutePath(fs.CombinePaths(projectFile.Directory, include.Value));
-                ProjectFile includedProjectFile;
+                var includePath = fs.GetAbsolutePath(fs.CombinePaths(suppliedProjectFile.Directory, include.Value));
+                SuppliedProjectFile includedSuppliedProjectFile;
                 // Guid includedProjectHashGuid;
                 // First attempt to lookup the project based on the "safe path".
-                if (mapFiles.TryGetProjectFileBySafePath(includePath, out includedProjectFile) && 
-                    !projectFile.DependentOn.TryGetValue(includedProjectFile.Id, out _))
+                if (mapFiles.TryGetProjectFileBySafePath(includePath, out includedSuppliedProjectFile) && 
+                    !suppliedProjectFile.DependentOn.TryGetValue(includedSuppliedProjectFile.Id, out _))
                 {
-                    projectFile.DependentOn.Add(includedProjectFile.Id, includedProjectFile);
+                    suppliedProjectFile.DependentOn.Add(includedSuppliedProjectFile.Id, includedSuppliedProjectFile);
                 }
                 // I think after refactor this is no longer necissary but keeping the code until we test ... just in case.
                 // else
@@ -158,10 +153,10 @@ namespace Landorphan.BuildMap.Construction
         }
 
         // TODO: This needs to be moved to the extension system once its in place.
-        public string DetermineProjectLanguage(ProjectFile projectFile)
+        public string DetermineProjectLanguage(SuppliedProjectFile suppliedProjectFile)
         {
             var fs = AbstractionManager.GetFileSystem();
-            var extension = fs.GetExtension(projectFile.Path);
+            var extension = fs.GetExtension(suppliedProjectFile.Path);
             switch (extension)
             {
                 case ".csproj":
