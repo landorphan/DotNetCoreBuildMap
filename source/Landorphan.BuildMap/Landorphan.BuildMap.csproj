@@ -11,6 +11,7 @@
 
     <ItemGroup>
       <PackageReference Include="DotNet.Glob" Version="3.0.9" />
+      <PackageReference Include="Emet.FileSystems" Version="0.0.3" />
       <PackageReference Include="Microsoft.Build" Version="16.6.0" />
       <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.0.0">
         <PrivateAssets>all</PrivateAssets>

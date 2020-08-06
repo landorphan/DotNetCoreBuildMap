@@ -1,8 +1,10 @@
 namespace Landorphan.BuildMap.Abstractions.FileSystem
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using Emet.FileSystems;
     using Landorphan.Common;
 
     public class FileSystemAbstraction : IFileSystem
@@ -26,6 +28,7 @@ namespace Landorphan.BuildMap.Abstractions.FileSystem
                select new FilePaths() {
                    Absolute = NormalizePath(p),
                    Relative = p.Length > path.Length ? p.Substring(path.Length + 1) : p,
+                   Real = GetRealPath(NormalizePath(p))
                });
             return baseFilePaths.ToArray();
         }
@@ -52,7 +55,24 @@ namespace Landorphan.BuildMap.Abstractions.FileSystem
 
         public string GetParentDirectory(string path)
         {
-            return Path.GetDirectoryName(path);
+            // return Path.GetDirectoryName(path);
+            path = NormalizePath(path);
+            if (path == "//" || path == "/")
+            {
+                return path;
+            }
+
+            int index = path.LastIndexOf('/');
+            if (index > 0)
+            {
+                return path.Substring(0, index);
+            }
+            else
+            {
+                return "/";
+            }
+
+            return path;
         }
 
         public string GetExtension(string path)
@@ -60,16 +80,31 @@ namespace Landorphan.BuildMap.Abstractions.FileSystem
             return Path.GetExtension(path);
         }
 
-        public string GetFileNameWithoutExtension(string path)
+        public string GetNameWithoutExtension(string path)
         {
-            return Path.GetFileNameWithoutExtension(path);
+            path.ArgumentNotNull(nameof(path));
+            var name = GetName(path);
+            int index = name.LastIndexOf('.');
+            if (index > 1)
+            {
+                return name.Substring(0, index);
+            }
+
+            return name;
         }
 
-        public string GetFileName(string path)
+        public string GetName(string path)
         {
-            return Path.GetFileName(path);
-        }
+            path.ArgumentNotNull(nameof(path));
+            path = NormalizePath(path);
+            int index = path.LastIndexOf('/');
+            if (index > 1)
+            {
+                return path.Substring(index + 1);
+            }
 
+            return path;
+        }
         public bool FileExists(string path)
         {
             return File.Exists(path);
@@ -78,6 +113,44 @@ namespace Landorphan.BuildMap.Abstractions.FileSystem
         public string GetAbsolutePath(string path)
         {
             return NormalizePath(Path.GetFullPath(path));
+        }
+
+        public string GetRealPath(string path)
+        {
+            Stack<string> fileParts = new Stack<string>(); 
+            while (path.Length > 0)
+            {
+                var dirInfo = new DirectoryInfo(path);
+                if (path == "//" || path == "/")
+                {
+                    break;
+                }
+
+                if (((int) dirInfo.Attributes != -1) &&
+                    (dirInfo.Attributes & FileAttributes.ReparsePoint) == FileAttributes.ReparsePoint)
+                {
+                    try
+                    {
+                        path = FileSystem.ReadLink(path);
+                        if (!path.StartsWith('/'))
+                        {
+                            path = $"/{path}";
+                        }
+                    }
+                    catch (FileNotFoundException e)
+                    {
+                        break;
+                    }
+                    catch (DirectoryNotFoundException e)
+                    {
+                        break;
+                    }
+                }
+                fileParts.Push(GetName(path));
+                path = GetParentDirectory(path);
+            }
+
+            return string.Join('/', fileParts);
         }
     }
 }

@@ -67,7 +67,8 @@ namespace Landorphan.BuildMap.Construction
         public void IncorporateSolutionFileProjects(MapFiles mapFiles)
         {
             var fs = AbstractionManager.GetFileSystem();
-            foreach (var solutionFile in mapFiles.GetAllSolutionFiles().Where(sf => sf.Status == FileStatus.Valid))
+            var slnFiles = mapFiles.GetAllSolutionFiles().Where(sf => sf.Status == FileStatus.Valid);
+            foreach (var solutionFile in slnFiles)
             {
                 Dictionary<Guid, IProjectInSoltuion> solutionProjects = new Dictionary<Guid, IProjectInSoltuion>(
                 (   from sp in solutionFile.SolutionContents.GetAllProjects()
@@ -156,7 +157,7 @@ namespace Landorphan.BuildMap.Construction
         public string DetermineProjectLanguage(SuppliedProjectFile suppliedProjectFile)
         {
             var fs = AbstractionManager.GetFileSystem();
-            var extension = fs.GetExtension(suppliedProjectFile.Path);
+            var extension = fs.GetExtension(suppliedProjectFile.Paths.Relative);
             switch (extension)
             {
                 case ".csproj":
@@ -181,14 +182,14 @@ namespace Landorphan.BuildMap.Construction
                 var project = new Model.Project();
                 project.Id = projectFile.Id;
                 project.Language = DetermineProjectLanguage(projectFile);
-                project.Name = fs.GetFileNameWithoutExtension(projectFile.Path);
+                project.Name = fs.GetNameWithoutExtension(projectFile.Paths.Relative);
                 var solutionNames =
                 (     from s in projectFile.SolutionFiles
-                    select fs.GetFileName(s.Path));
+                    select fs.GetName(s.Paths.Relative));
                 project.Solutions.AddRange(solutionNames);
-                project.RelativePath = projectFile.Path;
-                project.AbsolutePath = projectFile.AbsolutePath;
-                project.RealPath = "TODO: ADD THIS";
+                project.RelativePath = projectFile.Paths.Relative;
+                project.AbsolutePath = projectFile.Paths.Absolute;
+                project.RealPath = projectFile.Paths.Real;
                 project.Status = projectFile.Status;
                 project.DependentOn.AddRange(projectFile.DependentOn.Keys);
                 map.Build.Projects.Add(project);

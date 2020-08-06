@@ -65,8 +65,7 @@ namespace Landorphan.BuildMap.Construction.SolutionModel
                 {
                     item.Id = ComputeId(utf8.GetBytes(locatedFile.Absolute));
                     item.Directory = directory;
-                    item.Path = locatedFile.Relative;
-                    item.AbsolutePath = absolutPath;
+                    item.Paths = locatedFile;
                     item.Status = FileStatus.Missing;
                     item.RawText = string.Empty;
                 }
@@ -76,8 +75,7 @@ namespace Landorphan.BuildMap.Construction.SolutionModel
                     byte[] buffer = utf8.GetBytes(content);
                     Guid id = ComputeId(buffer);
                     item.Id = id;
-                    item.Path = locatedFile.Relative;
-                    item.AbsolutePath = absolutPath;
+                    item.Paths = locatedFile;
                     item.RawText = content;
                     item.Directory = directory;
                     item.Status = FileStatus.Unknown;
@@ -96,7 +94,7 @@ namespace Landorphan.BuildMap.Construction.SolutionModel
             suppliedFile.ArgumentNotNull(nameof(suppliedFile));
             if (suppliedFile.Status == FileStatus.Missing)
             {
-                return fs.GetExtension(suppliedFile.Path).Equals(SlnExtension, StringComparison.OrdinalIgnoreCase);
+                return fs.GetExtension(suppliedFile.Paths.Absolute).Equals(SlnExtension, StringComparison.OrdinalIgnoreCase);
             }
             return suppliedFile.RawText.Contains(SolutionFileHeader, StringComparison.InvariantCultureIgnoreCase);
         }
@@ -143,19 +141,29 @@ namespace Landorphan.BuildMap.Construction.SolutionModel
         {
             suppliedFile.ArgumentNotNull(nameof(suppliedFile));
             SuppliedProjectFile retval = new SuppliedProjectFile(suppliedFile);
-            XDocument document;
-            using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(suppliedFile.RawText)))
-            using (var reader = new XmlTextReader(stream))
+            if (retval.Status != FileStatus.Missing)
             {
-                try
+                if (!string.IsNullOrWhiteSpace(retval.RawText))
                 {
-                    document = XDocument.Load(reader);
-                    retval.ProjectContents = document;
-                    retval.Status = FileStatus.Valid;
+                    XDocument document;
+                    using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(retval.RawText)))
+                    using (var reader = new XmlTextReader(stream))
+                    {
+                        try
+                        {
+                            document = XDocument.Load(reader);
+                            retval.ProjectContents = document;
+                            retval.Status = FileStatus.Valid;
+                        }
+                        catch (XmlException ex) 
+                        {
+                            retval.Status = FileStatus.Malformed;
+                        }
+                    }
                 }
-                catch (XmlException ex) 
+                else
                 {
-                    retval.Status = FileStatus.Malformed;
+                    retval.Status = FileStatus.Empty;
                 }
             }
             return retval;
@@ -173,7 +181,8 @@ namespace Landorphan.BuildMap.Construction.SolutionModel
             FilePaths paths = new FilePaths()
             {
                 Relative = path,
-                Absolute = fs.GetAbsolutePath(path)
+                Absolute = fs.GetAbsolutePath(path),
+                Real = fs.GetRealPath(path)
             };
             if (FilesBySafePath.TryGetValue(path, out suppliedFile))
             {
@@ -207,9 +216,9 @@ namespace Landorphan.BuildMap.Construction.SolutionModel
         public void SafeAddFile(SuppliedProjectFile suppliedProjectFile)
         {
             suppliedProjectFile.ArgumentNotNull(nameof(suppliedProjectFile));
-            if (!FilesBySafePath.TryGetValue(suppliedProjectFile.Path, out _))
+            if (!FilesBySafePath.TryGetValue(suppliedProjectFile.Paths.Absolute, out _))
             {
-                FilesBySafePath.Add(suppliedProjectFile.Path, suppliedProjectFile);
+                FilesBySafePath.Add(suppliedProjectFile.Paths.Absolute, suppliedProjectFile);
             }
 
             if (!FilesByHashId.TryGetValue(suppliedProjectFile.Id, out _))
@@ -226,9 +235,9 @@ namespace Landorphan.BuildMap.Construction.SolutionModel
         public void SafeAddFile(SuppliedSolutionFile suppliedSolutionFile)
         {
             suppliedSolutionFile.ArgumentNotNull(nameof(suppliedSolutionFile));
-            if (!FilesBySafePath.TryGetValue(suppliedSolutionFile.Path, out _))
+            if (!FilesBySafePath.TryGetValue(suppliedSolutionFile.Paths.Absolute, out _))
             {
-                FilesBySafePath.Add(suppliedSolutionFile.Path, suppliedSolutionFile);
+                FilesBySafePath.Add(suppliedSolutionFile.Paths.Absolute, suppliedSolutionFile);
             }
 
             if (!FilesByHashId.TryGetValue(suppliedSolutionFile.Id, out _))

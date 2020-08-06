@@ -167,7 +167,7 @@ namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
         public string ConvertPathToLinuxStyle(string path, bool keepExtension)
         {
             Stack<string> pathStack = new Stack<string>();
-            if (keepExtension)
+            if (!keepExtension)
             {
                 pathStack.Push(Path.GetFileNameWithoutExtension(path));
             }

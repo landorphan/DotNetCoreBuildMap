@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace Landorphan.BuildMap.Construction.SolutionModel
 {
+    using Landorphan.BuildMap.Abstractions.FileSystem;
     using Landorphan.BuildMap.Model;
     using Landorphan.Common;
 
@@ -17,16 +18,15 @@ namespace Landorphan.BuildMap.Construction.SolutionModel
             original.ArgumentNotNull(nameof(original));
             this.Id = original.Id;
             this.RawText = original.RawText;
-            this.Path = original.Path;
+            this.Paths = original.Paths;
             this.Directory = original.Directory;
-            this.AbsolutePath = original.AbsolutePath;
             this.Status = original.Status;
         }
 
         public Guid Id { get; set; }
         public string RawText { get; set; }
-        public string Path { get; set; }
-        public string AbsolutePath { get; set; }
+
+        public FilePaths Paths {  get; set; }
         public string Directory { get; set; }
 
         public FileStatus Status { get; set; }

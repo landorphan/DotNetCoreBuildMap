@@ -4,6 +4,8 @@ namespace Landorphan.BuildMap.Abstractions.FileSystem
     {
         public string Relative { get; set; }
         public string Absolute { get; set; }
+        
+        public string Real { get; set; }
     }
 
     public interface IFileSystem
@@ -21,12 +23,14 @@ namespace Landorphan.BuildMap.Abstractions.FileSystem
 
         public string GetExtension(string path);
 
-        public string GetFileNameWithoutExtension(string path);
+        public string GetNameWithoutExtension(string path);
 
-        public string GetFileName(string path);
+        public string GetName(string path);
 
         public bool FileExists(string path);
 
         public string GetAbsolutePath(string path);
+
+        public string GetRealPath(string path);
     }
 }

@@ -26,7 +26,7 @@ namespace Landorphan.BuildMap.Abstractions
         public static ISolutionFile InternalParseSolutionFile(SuppliedFile suppliedFile)
         {
             suppliedFile.ArgumentNotNull(nameof(suppliedFile));
-            var slnFile = SolutionFile.Parse(suppliedFile.AbsolutePath);
+            var slnFile = SolutionFile.Parse(suppliedFile.Paths.Absolute);
             return new SolutionFileAbstraction(slnFile);
         }
 
