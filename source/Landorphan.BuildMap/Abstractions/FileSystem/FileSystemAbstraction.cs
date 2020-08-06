@@ -117,6 +117,7 @@ namespace Landorphan.BuildMap.Abstractions.FileSystem
 
         public string GetRealPath(string path)
         {
+            return path;
             Stack<string> fileParts = new Stack<string>(); 
             while (path.Length > 0)
             {
