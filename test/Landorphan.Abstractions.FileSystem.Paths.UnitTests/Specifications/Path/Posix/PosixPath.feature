@@ -16,15 +16,17 @@ Scenario Outline: Drive Rooted Paths
 	  And the path should be anchored to <Anchor>
 	  And the parse status should be <Status>
 	  And the segment length should be <Length>
+# NOTE: Due to Gherkin parsing rules, \ needs to be escaped.  In order to avoid that necissity and
+# make the following examples easier to read (`) will be used in place of the (\) character
+#
 # NOTES:
 # Per the spec, the following characters are illegal (anywere in the path)
-# ILLEGAL CHARACTERS: Less Than (<), Greater Than (>), Double Quote ("), Pipe (|), Asterisk (*)
+# ILLEGAL CHARACTERS: 0x00
 # 
 # Per the spec, the following characters always represent a Path Separator regarless of location and can not be part of the path
-# Foward Slash (/), Back Slash (\)
+# Foward Slash (/)
 #
-# Per the spec, the following characters are reserved and have special meaning.  They are only legal in or before the first segmant
-# Colon (:) - Legal in first segment, Question Mark (?) - Legal only before the first segment (when using "long" sentax)
+# Per the spec, the following characters are reserved and have special meaning: No such characters for Posix paths  
 #
 # Path Segment Type Shorthand:
 # {N} = NullSegment, {E} = EmptySegment, {R} = RootSegment, {D} = DeviceSegment, {/} = VolumelessRootSegment

@@ -16,6 +16,9 @@ Scenario Outline: Drive Rooted Paths
 	  And the path should be anchored to <Anchor>
 	  And the parse status should be <Status>
 	  And the segment length should be <Length>
+# NOTE: Due to Gherkin parsing rules, \ needs to be escaped.  In order to avoid that necissity and
+# make the following examples easier to read (`) will be used in place of the (\) character
+#
 # NOTES:
 # Per the spec, the following characters are illegal (anywere in the path)
 # ILLEGAL CHARACTERS: Less Than (<), Greater Than (>), Double Quote ("), Pipe (|), Asterisk (*)
