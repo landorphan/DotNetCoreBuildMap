@@ -30,7 +30,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.UnitTests.Specifications.Path
         private string[] _featureTags = new string[] {
                 "Check-In"};
         
-#line 1 "WindowsPaths.feature"
+#line 1 "WindowsPath.feature"
 #line hidden
         
         [NUnit.Framework.OneTimeSetUpAttribute()]

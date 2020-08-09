@@ -1,39 +1,86 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Landorphan.Abstractions.NIO.Paths
+namespace Landorphan.Abstractions.FileSystem.Paths.Internal
 {
-   using System.Net.Http.Headers;
-   using Landorphan.Abstractions.NIO.Paths.Internal;
+    using System;
+    using System.Runtime.CompilerServices;
+    using Landorphan.Abstractions.FileSystem.Paths.Internal.Posix;
+    using Landorphan.Abstractions.FileSystem.Paths.Internal.Windows;
 
-   public class ParsedPath : IPath
-   {
-      internal static IPath CreateFromSegments(string suppliedPath, WindowsSegment[] segments)
-      {
-         WindowsSegment lastSegment = null;
-         foreach (var segment in segments)
-         {
-            if (lastSegment != null)
+    public abstract class ParsedPath : IPath
+    {
+        internal static IPath CreateFromSegments(PathType type, string suppliedPath, Segment[] segments)
+        {
+            Segment lastSegment = null;
+            foreach (var segment in segments)
             {
-               lastSegment.NextSegment = segment;
+                if (lastSegment != null)
+                {
+                    lastSegment.NextSegment = segment;
+                }
+
+                lastSegment = segment;
             }
 
-            lastSegment = segment;
-         }
+            ParsedPath retval = null;
+            if (Paths.PathType.Windows == type)
+            {
+                retval = new WindowsPath();
+            }
+            else
+            {
+                retval = new PostixPath();
+            }
 
-         ParsedPath retval = new ParsedPath();
-         retval.Segments = segments;
-         retval.LeadingSegment = segments[0];
-         retval.Status = PathStatus.Undetermined;
-         return retval;
-      }
+            retval.Segments = segments;
+            retval.LeadingSegment = segments[0];
+            retval.Status = PathStatus.Undetermined;
+            retval.SetStatus();
 
-      public String SuppliedPathString { get; private set; }
-      public ISegment LeadingSegment { get; private set; }
-      public PathStatus Status { get; internal set; }
-      public ISegment[] Segments { get; private set; }
+            //if (PathAnchor.Absolute == retval.Anchor)
+            //{
+            //    if (retval.NormalizationLevel < 0)
+            //    {
+            //        retval.Status = PathStatus.Illegal;
+            //    }
+            //}
+            return retval;
+        }
 
-      public IPath SuppliedPath => this;
-   }
+        protected abstract void SetStatus();
+
+        public String SuppliedPathString { get; private set; }
+        public ISegment LeadingSegment { get; private set; }
+        public PathStatus Status { get; internal set; }
+        public abstract PathType PathType { get; }
+        public ISegment[] Segments { get; private set; }
+        public abstract PathAnchor Anchor { get; }
+        public IPath SuppliedPath => this;
+        public long NormalizationLevel 
+        { 
+            get
+            {
+                int normalizationLevel = 0;
+                foreach (var segment in Segments)
+                {
+                    switch (segment.SegmentType)
+                    {
+                        case SegmentType.DeviceSegment:
+                            return 0;
+                        case SegmentType.ParentSegment:
+                            normalizationLevel--;
+                            break;
+                        case SegmentType.VolumeRelativeSegment:
+                        case SegmentType.GenericSegment:
+                            normalizationLevel++;
+                            break;
+                        default:
+                            // DO NOTHING TO normalization level 
+                            break;
+                    }
+                }
+
+                return normalizationLevel;
+            }
+        }
+        public bool IsNormalized => NormalizationLevel < 0;
+    }
 }

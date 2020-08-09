@@ -1,27 +1,43 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Landorphan.Abstractions.NIO.Paths
+namespace Landorphan.Abstractions.FileSystem.Paths
 {
-   public enum PathStatus
-   {
-      Undetermined,
-      Legal,
-      Discouraged,
-      Illegal
-   }
+    public enum PathStatus
+    {
+        Undetermined,
+        Legal,
+        Discouraged,
+        Illegal
+    }
 
-   public interface IPath
-   {
-      string SuppliedPathString { get; }
+    public enum PathType
+    {
+        Windows,
+        Posix,
+    }
 
-      ISegment LeadingSegment { get; }
+    public enum PathAnchor
+    {
+        Absolute,
+        Relative
+    }
 
-      PathStatus Status { get; }
+    public interface IPath
+    {
+        string SuppliedPathString { get; }
 
-      ISegment[] Segments { get; }
+        ISegment LeadingSegment { get; }
 
-      IPath SuppliedPath { get; }
-   }
+        PathStatus Status { get; }
+
+        PathType PathType { get; }
+
+        PathAnchor Anchor { get; }
+
+        ISegment[] Segments { get; }
+
+        IPath SuppliedPath { get; }
+
+        long NormalizationLevel { get; }
+
+        bool IsNormalized { get; }
+    }
 }

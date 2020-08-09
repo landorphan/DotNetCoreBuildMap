@@ -1,30 +1,27 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Landorphan.Abstractions.NIO.Paths.Internal
+namespace Landorphan.Abstractions.FileSystem.Paths.Internal
 {
-   using System.Linq;
+    using System;
+    using System.Linq;
 
-   public abstract class PathTokenizer
-   {
-      private readonly string[] tokens;
+    public abstract class PathTokenizer
+    {
+        private readonly string[] tokens;
 
-      protected PathTokenizer(string path)
-      {
-         if (path == null)
-         {
-            tokens = Array.Empty<string>();
-         }
-         else
-         {
-            tokens = path.Split('/');
-         }
-      }
+        protected PathTokenizer(string path)
+        {
+            if (path == null)
+            {
+                tokens = Array.Empty<string>();
+            }
+            else
+            {
+                tokens = path.Split('/');
+            }
+        }
 
-      public string[] GetTokens()
-      {
-         return tokens.ToArray();
-      }
-   }
+        public string[] GetTokens()
+        {
+            return tokens.ToArray();
+        }
+    }
 }

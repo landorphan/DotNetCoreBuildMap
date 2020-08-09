@@ -1,13 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Landorphan.Abstractions.NIO.Paths
+namespace Landorphan.Abstractions.FileSystem.Paths
 {
-   using System.Runtime.InteropServices;
-
-   public interface IPathParser
-   {
-      IPath Parse(string pathString, OSPlatform platform);
-   }
+    public interface IPathParser
+    {
+        IPath Parse(string pathString);
+        IPath Parse(string pathString, PathType pathType);
+    }
 }
