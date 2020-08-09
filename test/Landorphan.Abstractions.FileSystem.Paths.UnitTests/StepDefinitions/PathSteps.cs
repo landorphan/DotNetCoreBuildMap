@@ -27,6 +27,10 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
         [Given(@"I have the following path: (.*)")]
         public void GivenIHaveTheFollowingPath(string path)
         {
+            for (int i = 0; i < WindowsRelevantPathCharacters.Space; i++)
+            {
+                path = path.Replace($"%{i:D2}", ((char)i).ToString());
+            }
             if (path == "(null)")
             {
                 suppliedPath = null;
@@ -64,6 +68,11 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
         [Then(@"segment '(.*)' should be: (.*)")]
         public void ThenSegmentShouldBeNull(int segment, string value)
         {
+            for (int i = 0; i < WindowsRelevantPathCharacters.Space; i++)
+            {
+                value = value.Replace($"%{i:D2}", ((char)i).ToString());
+            }
+//            value = value.Replace("%00", ((char)0x00).ToString());
             ISegment expected = null;
             if (value == "{N} (null)" || segment > segments.Length)
             {

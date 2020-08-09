@@ -1,6 +1,6 @@
 ﻿namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
 {
-    internal static class WindowsRelevantPathCharacters
+    public static class WindowsRelevantPathCharacters
     {
         public const char Null = (char)0x00;
         public const char StartOfHeader = (char)0x01;

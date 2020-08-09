@@ -93,22 +93,23 @@ Examples:
 | Long LPT7          | //?/LPT7                          | 2      | {U} ?       | {G} LPT7              | {N} (null)   | {N} (null)   | Absolute | Legal       |
 | Long LPT8          | //?/LPT8                          | 2      | {U} ?       | {G} LPT8              | {N} (null)   | {N} (null)   | Absolute | Legal       |
 | Long LPT9          | //?/LPT9                          | 2      | {U} ?       | {G} LPT9              | {N} (null)   | {N} (null)   | Absolute | Legal       |
-## Using a device path as a relitive path is actually legal (all device paths are absolute)
-## NOTE: Unlike all other paths, Device Paths only ever have one segment regardless of what was provided
-## Most other paths will keep unecissary components (example {E}) unless they are "explicitly" normalized to have those removed
-#| Rel CON            | ..`.`CON                          | 3      | {..} ..     | {.} .                 | {D} CON      | {N} (null)   | Absolute | Legal       |
-## Using a device path as an absolute path is actually legal (all device paths are absolute)
-#| Abs Con            | C:`CON                            | 2      | {R} C:      | {D} CON               | {N} (null)   | {N} (null)   | Absolute | Legal       |
-## Using a device path with a colon is in fact leagal
-#| Volume CON         | CON:                              | 1      | {D} CON     | {N} (null)            | {N} (null)   | {N} (null)   | Absolute | Legal       |
-## Using a device path with an extention (as in a file name) is legal but highly discurouged (note this is a relative path because it is not a device path)
-#| Discuraged Rel NUL | .`NUL.txt                         | 2      | {.} .       | {G} NUL.txt           | {N} (null)   | {N} (null)   | Relative | Discouraged |
-## Using an illegal character in a path is illegal
-#| Illegal Rel Astr   | .`foo*bar.txt                     | 2      | {.} .       | {G} foo*bar.txt       | {N} (null)   | {N} (null)   | Relative | Illegal     |
-## After the long sentax, a question mark is illegal
-#| Illegal Rel Ques   | .`foo?bar.txt                     | 2      | {.} .       | {G} foo?bar.txt       | {N} (null)   | {N} (null)   | Relative | Illegal     |
-## After the volume sentax, a colon is illegal
-#| Illegal Rel Colon  | .`foo:bar.txt                     | 2      | {.} .       | {G} foo:bar.txt       | {N} (null)   | {N} (null)   | Relative | Illegal     |
+
+# Per previous tests, device path's have no special meaning in Posix
+| Rel CON            | .././CON                          | 3      | {..} ..     | {.} .                 | {G} CON      | {N} (null)   | Relative | Legal       |
+# Per previous tests, device path's have no special meaning in Posix
+| Abs Con            | C:/CON                            | 2      | {G} C:      | {G} CON               | {N} (null)   | {N} (null)   | Relative | Legal       |
+# Per previous tests, device path's have no special meaning in Posix
+| Volume CON         | CON:                              | 1      | {G} CON:    | {N} (null)            | {N} (null)   | {N} (null)   | Relative | Legal       |
+# Per previous tests, device path's have no special meaning in Posix (NOTE: This is NOT Discouraged on Posix) 
+| Discuraged Rel NUL | ./NUL.txt                         | 2      | {.} .       | {G} NUL.txt           | {N} (null)   | {N} (null)   | Relative | Legal       |
+# Nonprintable charachters are legal but Discuraged 
+| Illegal Rel Astr   | ./start-%03-end.txt               | 2      | {.} .       | {G} start-%03-end.txt | {N} (null)   | {N} (null)   | Relative | Discouraged |
+# Using an illegal character in a path is illegal
+| Illegal Rel Astr   | ./start-%00-end.txt               | 2      | {.} .       | {G} start-%00-end.txt | {N} (null)   | {N} (null)   | Relative | Illegal     |
+# Question mark is legal any place on Posix
+| Illegal Rel Ques   | ./foo?bar.txt                     | 2      | {.} .       | {G} foo?bar.txt       | {N} (null)   | {N} (null)   | Relative | Legal       |
+# Colon is legaln any place on Posix
+| Illegal Rel Colon  | ./foo:bar.txt                     | 2      | {.} .       | {G} foo:bar.txt       | {N} (null)   | {N} (null)   | Relative | Legal       |
 ## NOTE: There are no pipe test cases here (because Gherkin uses that for the table, we will have to test those in scenarios and not ountlines)
 
 

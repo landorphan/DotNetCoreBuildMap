@@ -134,6 +134,14 @@ namespace Landorphan.Abstractions.FileSystem.Paths.UnitTests.Specifications.Path
         [NUnit.Framework.TestCaseAttribute("Long LPT7", "//?/LPT7", "2", "{U} ?", "{G} LPT7", "{N} (null)", "{N} (null)", "Absolute", "Legal", null)]
         [NUnit.Framework.TestCaseAttribute("Long LPT8", "//?/LPT8", "2", "{U} ?", "{G} LPT8", "{N} (null)", "{N} (null)", "Absolute", "Legal", null)]
         [NUnit.Framework.TestCaseAttribute("Long LPT9", "//?/LPT9", "2", "{U} ?", "{G} LPT9", "{N} (null)", "{N} (null)", "Absolute", "Legal", null)]
+        [NUnit.Framework.TestCaseAttribute("Rel CON", ".././CON", "3", "{..} ..", "{.} .", "{G} CON", "{N} (null)", "Relative", "Legal", null)]
+        [NUnit.Framework.TestCaseAttribute("Abs Con", "C:/CON", "2", "{G} C:", "{G} CON", "{N} (null)", "{N} (null)", "Relative", "Legal", null)]
+        [NUnit.Framework.TestCaseAttribute("Volume CON", "CON:", "1", "{G} CON:", "{N} (null)", "{N} (null)", "{N} (null)", "Relative", "Legal", null)]
+        [NUnit.Framework.TestCaseAttribute("Discuraged Rel NUL", "./NUL.txt", "2", "{.} .", "{G} NUL.txt", "{N} (null)", "{N} (null)", "Relative", "Legal", null)]
+        [NUnit.Framework.TestCaseAttribute("Illegal Rel Astr", "./start-%03-end.txt", "2", "{.} .", "{G} start-%03-end.txt", "{N} (null)", "{N} (null)", "Relative", "Discouraged", null)]
+        [NUnit.Framework.TestCaseAttribute("Illegal Rel Astr", "./start-%00-end.txt", "2", "{.} .", "{G} start-%00-end.txt", "{N} (null)", "{N} (null)", "Relative", "Illegal", null)]
+        [NUnit.Framework.TestCaseAttribute("Illegal Rel Ques", "./foo?bar.txt", "2", "{.} .", "{G} foo?bar.txt", "{N} (null)", "{N} (null)", "Relative", "Legal", null)]
+        [NUnit.Framework.TestCaseAttribute("Illegal Rel Colon", "./foo:bar.txt", "2", "{.} .", "{G} foo:bar.txt", "{N} (null)", "{N} (null)", "Relative", "Legal", null)]
         public virtual void DriveRootedPaths(string name, string path, string length, string root, string segment1, string segment2, string segment3, string anchor, string status, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;
