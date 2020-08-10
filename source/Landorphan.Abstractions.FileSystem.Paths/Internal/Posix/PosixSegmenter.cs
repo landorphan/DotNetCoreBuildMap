@@ -19,25 +19,6 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Posix
 
             for (int i = 0; i < tokens.Length; i++)
             {
-                if (i == 0)
-                {
-                    if (tokens[i].StartsWith("UNC:"))
-                    {
-                        segments.Add(new PosixSegment(SegmentType.RemoteSegment, tokens[i].Substring(4)));
-                        continue;
-                    }
-                    if (tokens[i].StartsWith(DoubleForwardSlash, StringComparison.Ordinal))
-                    {
-                        segments.Add(new PosixSegment(SegmentType.RemoteSegment, tokens[i].Substring(2)));
-                        continue;
-                    }
-
-                    if (tokens[i].StartsWith(PosixRelevantPathChars.ForwardSlash.ToString(), StringComparison.Ordinal))
-                    {
-                        segments.Add(new PosixSegment(SegmentType.RootSegment, tokens[i].Substring(1)));
-                        continue;
-                    }
-                }
                 if (tokens.Length == 1)
                 {
                     if (tokens[i] == null)
@@ -51,11 +32,38 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Posix
                         segments.Add(PosixSegment.EmptySegment);
                         continue;
                     }
-                    else
+                    //else
+                    //{
+                    //    segments.Add(new PosixSegment(SegmentType.GenericSegment, tokens[i]));
+                    //    continue;
+                    //}
+                }
+                if (i == 0)
+                {
+                    if (tokens[i].StartsWith("UNC:"))
                     {
-                        segments.Add(new PosixSegment(SegmentType.GenericSegment, tokens[i]));
+                        segments.Add(new PosixSegment(SegmentType.RemoteSegment, tokens[i].Substring(4)));
                         continue;
                     }
+                    //if (tokens[i].Length == 0)
+                    //{
+                    //    segments.Add(new PosixSegment(SegmentType.RemoteSegment, tokens[i].Substring(2)));
+                    //    continue;
+                    //}
+
+                    //if (tokens[i].StartsWith(PosixRelevantPathChars.ForwardSlash.ToString(), StringComparison.Ordinal))
+                    //{
+                    //    segments.Add(new PosixSegment(SegmentType.RootSegment, tokens[i].Substring(1)));
+                    //    continue;
+                    //}
+
+                    if (tokens[i] == string.Empty)
+                    {
+                        var name = tokens[++i];
+                        segments.Add(new PosixSegment(SegmentType.RootSegment, name));
+                        continue;
+                    }
+
                 }
                 segments.Add(PosixSegment.ParseFromString(tokens[i]));
             }

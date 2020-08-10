@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <SpecFlowObsoleteCodeBehindFiles Remove="Specifications\Path\Posix\WindowsPaths.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Specifications\Path\Posix\WindowsPathSegments.feature.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -25,12 +26,19 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Specifications\Path\Windows\WindowsPathSegments.feature.cs">
+      <DependentUpon>WindowsPathSegments.feature</DependentUpon>
+    </Compile>
     <Compile Update="Specifications\Path\Windows\WindowsPath.feature.cs">
       <DependentUpon>WindowsPath.feature</DependentUpon>
     </Compile>
   </ItemGroup>
 
   <ItemGroup>
+    <SpecFlowFeatureFiles Update="Specifications\Path\Windows\WindowsPathSegments.feature">
+      <Visible>$(UsingMicrosoftNETSdk)</Visible>
+      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
+    </SpecFlowFeatureFiles>
     <SpecFlowFeatureFiles Update="Specifications\Path\Windows\WindowsPath.feature">
       <Visible>$(UsingMicrosoftNETSdk)</Visible>
       <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>

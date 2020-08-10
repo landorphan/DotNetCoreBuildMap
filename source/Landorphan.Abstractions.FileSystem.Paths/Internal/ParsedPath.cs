@@ -1,6 +1,8 @@
 namespace Landorphan.Abstractions.FileSystem.Paths.Internal
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Runtime.CompilerServices;
     using Landorphan.Abstractions.FileSystem.Paths.Internal.Posix;
     using Landorphan.Abstractions.FileSystem.Paths.Internal.Windows;
@@ -54,8 +56,9 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
         public ISegment[] Segments { get; private set; }
         public abstract PathAnchor Anchor { get; }
         public IPath SuppliedPath => this;
-        public long NormalizationLevel 
-        { 
+
+        public long NormalizationLevel
+        {
             get
             {
                 int normalizationLevel = 0;
@@ -81,6 +84,27 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
                 return normalizationLevel;
             }
         }
-        public bool IsNormalized => NormalizationLevel < 0;
+
+        private List<SegmentType> nonNormalSegmentTypes = new List<SegmentType>()
+        {
+            SegmentType.EmptySegment,
+            SegmentType.NullSegment,
+            SegmentType.ParentSegment,
+            SegmentType.EmptySegment,
+            SegmentType.SelfSegment
+        };
+
+        public bool IsNormalized
+        {
+            get
+            {
+                var nonNormalSegments = (
+                    from s in Segments
+                    where nonNormalSegmentTypes.Contains(s.SegmentType)
+                    select s
+                ).Any();
+                return NormalizationLevel >= 0 && !nonNormalSegments;
+            }
+        }
     }
 }

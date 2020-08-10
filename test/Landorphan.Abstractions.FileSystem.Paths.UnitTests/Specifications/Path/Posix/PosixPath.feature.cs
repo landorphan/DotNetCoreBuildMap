@@ -209,6 +209,9 @@ this.ScenarioInitialize(scenarioInfo);
 #line 18
    testRunner.And(string.Format("the segment length should be {0}", length), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
+#line 19
+   testRunner.And("the PathType should be Posix", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
             }
             this.ScenarioCleanup();
         }

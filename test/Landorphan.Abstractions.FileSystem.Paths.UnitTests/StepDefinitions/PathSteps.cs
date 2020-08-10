@@ -45,7 +45,7 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
             }
         }
 
-        [When(@"I segment the (Windows|Linux|OSX) path")]
+        [When(@"I segment the (Windows|Posix) path")]
         public void WhenISegmentThePath(string osPath)
         {
             pathType = PathType.Posix;
@@ -54,10 +54,6 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
             {
                 case "Windows":
                     pathType = PathType.Windows;
-                    break;
-                case "Linux":
-                case "OSX":
-                    pathType = PathType.Posix;
                     break;
             }
 
@@ -179,11 +175,16 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
         }
 
         [When(@"I tokenize the path with the '(.*)' tokenizer")]
-        public void WhenITokenizeThePathWithTheTokenizer(string p0)
+        public void WhenITokenizeThePathWithTheTokenizer(string pathType)
         {
-            if (p0 == "Windows")
+            if (pathType == "Windows")
             {
                 WindowsPathTokenizer tokenizer = new WindowsPathTokenizer(suppliedPath);
+                tokens = tokenizer.GetTokens();
+            }
+            else
+            {
+                PosixPathTokenizer tokenizer = new PosixPathTokenizer(suppliedPath);
                 tokens = tokenizer.GetTokens();
             }
         }
@@ -221,6 +222,13 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
         //{
 
         //}
+
+        [Then(@"the PathType should be (Windows|Posix)")]
+        public void ThenThePathTypeShouldBeWindows(PathType pathType)
+        {
+            parsedPath.PathType.Should().Be(pathType);
+        }
+
 
         [Then(@"the path should be anchored to (.*)")]
         public void ThenThePathShouldBeAnchoredToAbsolute(PathAnchor anchor)

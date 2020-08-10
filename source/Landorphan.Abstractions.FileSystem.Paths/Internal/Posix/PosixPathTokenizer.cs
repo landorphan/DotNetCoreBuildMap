@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Posix
 {
-    class PosixPathTokenizer : PathTokenizer
+    public class PosixPathTokenizer : PathTokenizer
     {
         public PosixPathTokenizer(string path) : base(PreParsePath(path))
         {
