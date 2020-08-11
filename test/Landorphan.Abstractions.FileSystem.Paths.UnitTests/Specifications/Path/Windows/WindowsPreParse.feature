@@ -6,7 +6,7 @@ Feature: Windows Preparse
 
 Scenario Outline: Windows Preparse converter creates managable strings for the tokenizer
 	Given I have the following path: <Path>
-	 When I preparse the path
+	 When I preparse the path as a Windows style path
 	 Then the resulting path should read: <Pre-Parsed>
 Examples:
 # NOTE: Due to Gherkin parsing rules, \ needs to be escaped.  In order to avoid that necissity and

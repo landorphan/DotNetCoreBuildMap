@@ -9,6 +9,8 @@
   <ItemGroup>
     <SpecFlowObsoleteCodeBehindFiles Remove="Specifications\Path\Posix\WindowsPaths.feature.cs" />
     <SpecFlowObsoleteCodeBehindFiles Remove="Specifications\Path\Posix\WindowsPathSegments.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Specifications\Path\Posix\WindowsPreParse.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Specifications\Path\Posix\WindowsTokenizer.feature.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,6 +28,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Specifications\Path\Posix\PosixPreParse.feature.cs">
+      <DependentUpon>PosixPreParse.feature</DependentUpon>
+    </Compile>
+    <Compile Update="Specifications\Path\Posix\PosixTokenizer.feature.cs">
+      <DependentUpon>PosixTokenizer.feature</DependentUpon>
+    </Compile>
     <Compile Update="Specifications\Path\Windows\WindowsPathSegments.feature.cs">
       <DependentUpon>WindowsPathSegments.feature</DependentUpon>
     </Compile>
@@ -35,6 +43,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <SpecFlowFeatureFiles Update="Specifications\Path\Posix\PosixPreParse.feature">
+      <Visible>$(UsingMicrosoftNETSdk)</Visible>
+      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
+    </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Specifications\Path\Posix\PosixTokenizer.feature">
+      <Visible>$(UsingMicrosoftNETSdk)</Visible>
+      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
+    </SpecFlowFeatureFiles>
     <SpecFlowFeatureFiles Update="Specifications\Path\Windows\WindowsPathSegments.feature">
       <Visible>$(UsingMicrosoftNETSdk)</Visible>
       <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>

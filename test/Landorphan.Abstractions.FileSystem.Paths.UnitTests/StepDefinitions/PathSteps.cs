@@ -140,10 +140,17 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
             actual.SegmentType.Should().Be(expected.SegmentType);
         }
 
-        [When(@"I preparse the path")]
-        public void WhenIPreparseThePath()
+        [When(@"I preparse the path as a (Posix|Windows) style path")]
+        public void WhenIPreparseThePath(PathType style)
         {
-            preParsedPath = WindowsPathTokenizer.PreParsePath(suppliedPath);
+            if (style == PathType.Windows)
+            {
+                preParsedPath = WindowsPathTokenizer.PreParsePath(suppliedPath);
+            }
+            else
+            {
+                preParsedPath = PosixPathTokenizer.PreParsePath(suppliedPath);
+            }
         }
 
         [Then(@"the resulting path should read: (.*)")]
