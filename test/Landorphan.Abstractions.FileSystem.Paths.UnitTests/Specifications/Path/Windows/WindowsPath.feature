@@ -51,6 +51,10 @@ Examples:
 | Empty Abs Segment  | C:`dir``file.txt                  | 4      | {R} C:      | {G} dir         | {E} (empty)  | {G} file.txt | {N} (null) | {N} (null) | {N} (null) | Absolute | Legal       | 3          |
 | Empty Rel Segment  | .`dir``file.txt                   | 4      | {.} .       | {G} dir         | {E} (empty)  | {G} file.txt | {N} (null) | {N} (null) | {N} (null) | Relative | Legal       | 2          |
 | Relative           | dir`file.txt                      | 2      | {G} dir     | {G} file.txt    | {N} (null)   | {N} (null)   | {N} (null) | {N} (null) | {N} (null) | Relative | Legal       | 2          |
+# Normalizaiton level does not increase once it is below zero																		 
+| Neg Normal 2       | ../../-1/0/1						 | 5      | {..} ..     | {..} ..         | {G} -1       | {G} 0        | {G} 1      | {N} (null) | {N} (null) | Relative | Legal       | -2         |																										  
+| Neg Normal 1       | ./../-1/0/1						 | 5      | {.} .       | {..} ..         | {G} -1       | {G} 0        | {G} 1      | {N} (null) | {N} (null) | Relative | Legal       | -1         |																										  
+
 # The following represent reserved device paths and are legal (they open a stream to the device in question if it is present)	  															
 | CON                | CON                               | 1      | {D} CON     | {N} (null)      | {N} (null)   | {N} (null)   | {N} (null) | {N} (null) | {N} (null) | Absolute | Legal       | 0          |
 | PRN                | PRN                               | 1      | {D} PRN     | {N} (null)      | {N} (null)   | {N} (null)   | {N} (null) | {N} (null) | {N} (null) | Absolute | Legal       | 0          |

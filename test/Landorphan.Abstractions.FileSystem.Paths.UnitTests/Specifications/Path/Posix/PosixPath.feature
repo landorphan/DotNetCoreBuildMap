@@ -55,7 +55,6 @@ Examples:
 | Neg Normal 2       | ../../-1/0/1						 | 5      | {..} ..     | {..} ..               | {G} -1       | {G} 0        | {G} 1      | {N} (null) | {N} (null) | Relative | Legal       | -2         |																										  
 | Neg Normal 1       | ./../-1/0/1						 | 5      | {.} .       | {..} ..               | {G} -1       | {G} 0        | {G} 1      | {N} (null) | {N} (null) | Relative | Legal       | -1         |																										  
 																																	  
-																																	  
 ## The following have absolutly no specail meaning in Posix paths																	 
 | CON                | CON                               | 1      | {G} CON     | {N} (null)            | {N} (null)   | {N} (null)   | {N} (null) | {N} (null) | {N} (null) | Relative | Legal       | 1          |
 | PRN                | PRN                               | 1      | {G} PRN     | {N} (null)            | {N} (null)   | {N} (null)   | {N} (null) | {N} (null) | {N} (null) | Relative | Legal       | 1          |
