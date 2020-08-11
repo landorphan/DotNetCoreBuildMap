@@ -9,6 +9,7 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
     using System.Runtime.InteropServices;
     using FluentAssertions;
     using Landorphan.Abstractions.FileSystem.Paths;
+    using Landorphan.Abstractions.FileSystem.Paths.Abstraction;
     using Landorphan.Abstractions.FileSystem.Paths.Internal.Posix;
     using Landorphan.Abstractions.FileSystem.Paths.Internal.Windows;
 
@@ -23,13 +24,55 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
         public IPath parsedPath;
         public IPath originalForm;
         private PathType pathType;
+        private static OSPlatform osPlatform;
+
+        internal class MockRuntimeInformation : IRuntimeInformation
+        {
+            public bool IsOSPlatform(OSPlatform platform)
+            {
+                return platform == osPlatform;
+            }
+        }
+
+        [BeforeScenario()]
+        public void ResetAbstractionManagerForTest()
+        {
+            PathAbstractionManager.GetRuntimeInformation = () =>
+            {
+                return new MockRuntimeInformation();
+            };
+        }
+
+        [Then(@"the normlization level should be: (.*)")]
+        public void ThenTheNormlizationLevelShouldBe(int normalizationLevel)
+        {
+            parsedPath.NormalizationLevel.Should().Be(normalizationLevel);
+        }
+
+
+        [Given(@"I'm running on the following Operating System: (Windows|Linux|OSX)")]
+        public void GivenImRunningOnTheFollowingOperatingSystem(string platform)
+        {
+            switch (platform)
+            {
+                case "Linux":
+                    osPlatform = OSPlatform.Linux;
+                    break;
+                case "Windows":
+                    osPlatform = OSPlatform.Windows;
+                    break;
+                case "OSX":
+                    osPlatform = OSPlatform.OSX;
+                    break;
+            }
+        }
 
         [Given(@"I have the following path: (.*)")]
         public void GivenIHaveTheFollowingPath(string path)
         {
-            for (int i = 0; i < WindowsRelevantPathCharacters.Space; i++)
+            for (int i = 0; i <= WindowsRelevantPathCharacters.Space; i++)
             {
-                path = path.Replace($"%{i:D2}", ((char)i).ToString());
+                path = path.Replace($"%{i:X2}", ((char)i).ToString());
             }
             if (path == "(null)")
             {
@@ -64,9 +107,9 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
         [Then(@"segment '(.*)' should be: (.*)")]
         public void ThenSegmentShouldBeNull(int segment, string value)
         {
-            for (int i = 0; i < WindowsRelevantPathCharacters.Space; i++)
+            for (int i = 0; i <= WindowsRelevantPathCharacters.Space; i++)
             {
-                value = value.Replace($"%{i:D2}", ((char)i).ToString());
+                value = value.Replace($"%{i:X2}", ((char)i).ToString());
             }
 //            value = value.Replace("%00", ((char)0x00).ToString());
             ISegment expected = null;
@@ -166,6 +209,12 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
             }
 
             preParsedPath.Should().Be(expected);
+        }
+
+        [When(@"I parse the path")]
+        public void WhenIParseThePath()
+        {
+            parsedPath = pathParser.Parse(suppliedPath);
         }
 
         [When(@"I parse the path as a (Windows|Posix) Path")]

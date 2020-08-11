@@ -79,6 +79,8 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
 
                     case SegmentType.RootSegment:
                     case SegmentType.RemoteSegment:
+                    case SegmentType.VolumeRelativeSegment:
+                    case SegmentType.VolumelessRootSegment:
                         if (loc != 0)
                         {
                             Status = PathStatus.Illegal;
@@ -86,15 +88,15 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
                         }
 
                         break;
-                    case SegmentType.VolumeRelativeSegment:
-                    case SegmentType.VolumelessRootSegment:
-                        if (loc > 0)
-                        {
-                            Status = PathStatus.Illegal;
-                            return;
-                        }
+                    //case SegmentType.VolumeRelativeSegment:
+                    //case SegmentType.VolumelessRootSegment:
+                    //    if (loc > 0)
+                    //    {
+                    //        Status = PathStatus.Illegal;
+                    //        return;
+                    //    }
+                    //    break;
 
-                        break;
                     // TODO: Ensure proper handling of Device Segment when determining anchor.
                     case SegmentType.DeviceSegment:
                         break;
@@ -111,8 +113,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
                     }
                 }
 
-                if (segment.Name.StartsWith(WindowsRelevantPathCharacters.Space.ToString(), StringComparison.Ordinal) ||
-                    segment.Name.EndsWith(WindowsRelevantPathCharacters.Space.ToString(), StringComparison.Ordinal))
+                if (segment.Name.StartsWith(WindowsRelevantPathCharacters.Space.ToString(), StringComparison.Ordinal))
                 {
                     isDiscouraged = true;
                 }

@@ -3,6 +3,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths
     using System;
     using System.Linq;
     using System.Runtime.InteropServices;
+    using Landorphan.Abstractions.FileSystem.Paths.Abstraction;
     using Landorphan.Abstractions.FileSystem.Paths.Internal;
     using Landorphan.Abstractions.FileSystem.Paths.Internal.Posix;
     using Landorphan.Abstractions.FileSystem.Paths.Internal.Windows;
@@ -11,7 +12,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths
     {
         public IPath Parse(string pathString)
         {
-            bool windows = System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+            bool windows = PathAbstractionManager.GetRuntimeInformation().IsOSPlatform(OSPlatform.Windows);
             if (windows)
             {
                 return Parse(pathString, PathType.Windows);

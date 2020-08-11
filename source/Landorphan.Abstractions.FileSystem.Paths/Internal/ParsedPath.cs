@@ -73,7 +73,10 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
                             break;
                         case SegmentType.VolumeRelativeSegment:
                         case SegmentType.GenericSegment:
-                            normalizationLevel++;
+                            if (normalizationLevel >= 0)
+                            {
+                                normalizationLevel++;
+                            }
                             break;
                         default:
                             // DO NOTHING TO normalization level 

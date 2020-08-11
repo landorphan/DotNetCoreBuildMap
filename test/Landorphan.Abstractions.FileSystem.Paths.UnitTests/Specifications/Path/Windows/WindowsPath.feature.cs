@@ -79,70 +79,74 @@ namespace Landorphan.Abstractions.FileSystem.Paths.UnitTests.Specifications.Path
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Drive Rooted Paths")]
-        [NUnit.Framework.TestCaseAttribute("Null", "(null)", "1", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Illegal", null)]
-        [NUnit.Framework.TestCaseAttribute("Empty", "(empty)", "1", "{E} (empty)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Illegal", null)]
-        [NUnit.Framework.TestCaseAttribute("Volume Absolute", "C:`", "2", "{R} C:", "{E} (empty)", "{N} (null)", "{N} (null)", "Absolute", "Legal", null)]
-        [NUnit.Framework.TestCaseAttribute("Volume Relative", "C:.`file.txt", "3", "{V} C:", "{.} .", "{G} file.txt", "{N} (null)", "Relative", "Legal", null)]
-        [NUnit.Framework.TestCaseAttribute("UNC", "``server`share`dir`file.txt", "4", "{U} server", "{G} share", "{G} dir", "{G} file.txt", "Absolute", "Legal", null)]
-        [NUnit.Framework.TestCaseAttribute("Long Volume Abs", "``?`C:`dir`file.txt", "3", "{R} C:", "{G} dir", "{G} file.txt", "{N} (null)", "Absolute", "Legal", null)]
-        [NUnit.Framework.TestCaseAttribute("Long UNC", "``?`UNC`server`share`dir`file.txt", "4", "{U} server", "{G} share", "{G} dir", "{G} file.txt", "Absolute", "Legal", null)]
-        [NUnit.Framework.TestCaseAttribute("Self Relative", ".`dir`file.txt", "3", "{.} .", "{G} dir", "{G} file.txt", "{N} (null)", "Relative", "Legal", null)]
-        [NUnit.Framework.TestCaseAttribute("Parent Relative", "..`dir`file.txt", "3", "{..} ..", "{G} dir", "{G} file.txt", "{N} (null)", "Relative", "Legal", null)]
-        [NUnit.Framework.TestCaseAttribute("Empty Abs Segment", "C:`dir``file.txt", "4", "{R} C:", "{G} dir", "{E} (empty)", "{G} file.txt", "Absolute", "Legal", null)]
-        [NUnit.Framework.TestCaseAttribute("Empty Rel Segment", ".`dir``file.txt", "4", "{.} .", "{G} dir", "{E} (empty)", "{G} file.txt", "Relative", "Legal", null)]
-        [NUnit.Framework.TestCaseAttribute("Relative", "dir`file.txt", "2", "{G} dir", "{G} file.txt", "{N} (null)", "{N} (null)", "Relative", "Legal", null)]
-        [NUnit.Framework.TestCaseAttribute("CON", "CON", "1", "{D} CON", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", null)]
-        [NUnit.Framework.TestCaseAttribute("PRN", "PRN", "1", "{D} PRN", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", null)]
-        [NUnit.Framework.TestCaseAttribute("AUX", "AUX", "1", "{D} AUX", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", null)]
-        [NUnit.Framework.TestCaseAttribute("NUL", "NUL", "1", "{D} NUL", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", null)]
-        [NUnit.Framework.TestCaseAttribute("COM1", "COM1", "1", "{D} COM1", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", null)]
-        [NUnit.Framework.TestCaseAttribute("COM2", "COM2", "1", "{D} COM2", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", null)]
-        [NUnit.Framework.TestCaseAttribute("COM3", "COM3", "1", "{D} COM3", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", null)]
-        [NUnit.Framework.TestCaseAttribute("COM4", "COM4", "1", "{D} COM4", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", null)]
-        [NUnit.Framework.TestCaseAttribute("COM5", "COM5", "1", "{D} COM5", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", null)]
-        [NUnit.Framework.TestCaseAttribute("COM6", "COM6", "1", "{D} COM6", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", null)]
-        [NUnit.Framework.TestCaseAttribute("COM7", "COM7", "1", "{D} COM7", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", null)]
-        [NUnit.Framework.TestCaseAttribute("COM8", "COM8", "1", "{D} COM8", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", null)]
-        [NUnit.Framework.TestCaseAttribute("COM9", "COM9", "1", "{D} COM9", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", null)]
-        [NUnit.Framework.TestCaseAttribute("LPT1", "LPT1", "1", "{D} LPT1", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", null)]
-        [NUnit.Framework.TestCaseAttribute("LPT2", "LPT2", "1", "{D} LPT2", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", null)]
-        [NUnit.Framework.TestCaseAttribute("LPT3", "LPT3", "1", "{D} LPT3", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", null)]
-        [NUnit.Framework.TestCaseAttribute("LPT4", "LPT4", "1", "{D} LPT4", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", null)]
-        [NUnit.Framework.TestCaseAttribute("LPT5", "LPT5", "1", "{D} LPT5", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", null)]
-        [NUnit.Framework.TestCaseAttribute("LPT6", "LPT6", "1", "{D} LPT6", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", null)]
-        [NUnit.Framework.TestCaseAttribute("LPT7", "LPT7", "1", "{D} LPT7", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", null)]
-        [NUnit.Framework.TestCaseAttribute("LPT8", "LPT8", "1", "{D} LPT8", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", null)]
-        [NUnit.Framework.TestCaseAttribute("LPT9", "LPT9", "1", "{D} LPT9", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", null)]
-        [NUnit.Framework.TestCaseAttribute("Long CON", "``?`CON", "1", "{D} CON", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", null)]
-        [NUnit.Framework.TestCaseAttribute("Long PRN", "``?`PRN", "1", "{D} PRN", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", null)]
-        [NUnit.Framework.TestCaseAttribute("Long AUX", "``?`AUX", "1", "{D} AUX", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", null)]
-        [NUnit.Framework.TestCaseAttribute("Long NUL", "``?`NUL", "1", "{D} NUL", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", null)]
-        [NUnit.Framework.TestCaseAttribute("Long COM1", "``?`COM1", "1", "{D} COM1", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", null)]
-        [NUnit.Framework.TestCaseAttribute("Long COM2", "``?`COM2", "1", "{D} COM2", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", null)]
-        [NUnit.Framework.TestCaseAttribute("Long COM3", "``?`COM3", "1", "{D} COM3", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", null)]
-        [NUnit.Framework.TestCaseAttribute("Long COM4", "``?`COM4", "1", "{D} COM4", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", null)]
-        [NUnit.Framework.TestCaseAttribute("Long COM5", "``?`COM5", "1", "{D} COM5", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", null)]
-        [NUnit.Framework.TestCaseAttribute("Long COM6", "``?`COM6", "1", "{D} COM6", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", null)]
-        [NUnit.Framework.TestCaseAttribute("Long COM7", "``?`COM7", "1", "{D} COM7", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", null)]
-        [NUnit.Framework.TestCaseAttribute("Long COM8", "``?`COM8", "1", "{D} COM8", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", null)]
-        [NUnit.Framework.TestCaseAttribute("Long COM9", "``?`COM9", "1", "{D} COM9", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", null)]
-        [NUnit.Framework.TestCaseAttribute("Long LPT1", "``?`LPT1", "1", "{D} LPT1", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", null)]
-        [NUnit.Framework.TestCaseAttribute("Long LPT2", "``?`LPT2", "1", "{D} LPT2", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", null)]
-        [NUnit.Framework.TestCaseAttribute("Long LPT3", "``?`LPT3", "1", "{D} LPT3", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", null)]
-        [NUnit.Framework.TestCaseAttribute("Long LPT4", "``?`LPT4", "1", "{D} LPT4", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", null)]
-        [NUnit.Framework.TestCaseAttribute("Long LPT5", "``?`LPT5", "1", "{D} LPT5", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", null)]
-        [NUnit.Framework.TestCaseAttribute("Long LPT6", "``?`LPT6", "1", "{D} LPT6", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", null)]
-        [NUnit.Framework.TestCaseAttribute("Long LPT7", "``?`LPT7", "1", "{D} LPT7", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", null)]
-        [NUnit.Framework.TestCaseAttribute("Long LPT8", "``?`LPT8", "1", "{D} LPT8", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", null)]
-        [NUnit.Framework.TestCaseAttribute("Long LPT9", "``?`LPT9", "1", "{D} LPT9", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", null)]
-        [NUnit.Framework.TestCaseAttribute("Rel CON", "..`.`CON", "3", "{..} ..", "{.} .", "{D} CON", "{N} (null)", "Absolute", "Legal", null)]
-        [NUnit.Framework.TestCaseAttribute("Abs Con", "C:`CON", "2", "{R} C:", "{D} CON", "{N} (null)", "{N} (null)", "Absolute", "Legal", null)]
-        [NUnit.Framework.TestCaseAttribute("Volume CON", "CON:", "1", "{D} CON", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", null)]
-        [NUnit.Framework.TestCaseAttribute("Discuraged Rel NUL", ".`NUL.txt", "2", "{.} .", "{G} NUL.txt", "{N} (null)", "{N} (null)", "Relative", "Discouraged", null)]
-        [NUnit.Framework.TestCaseAttribute("Illegal Rel Astr", ".`foo*bar.txt", "2", "{.} .", "{G} foo*bar.txt", "{N} (null)", "{N} (null)", "Relative", "Illegal", null)]
-        [NUnit.Framework.TestCaseAttribute("Illegal Rel Ques", ".`foo?bar.txt", "2", "{.} .", "{G} foo?bar.txt", "{N} (null)", "{N} (null)", "Relative", "Illegal", null)]
-        [NUnit.Framework.TestCaseAttribute("Illegal Rel Colon", ".`foo:bar.txt", "2", "{.} .", "{G} foo:bar.txt", "{N} (null)", "{N} (null)", "Relative", "Illegal", null)]
-        public virtual void DriveRootedPaths(string name, string path, string length, string root, string segment1, string segment2, string segment3, string anchor, string status, string[] exampleTags)
+        [NUnit.Framework.TestCaseAttribute("Null", "(null)", "1", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Illegal", "1", null)]
+        [NUnit.Framework.TestCaseAttribute("Empty", "(empty)", "1", "{E} (empty)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Illegal", "1", null)]
+        [NUnit.Framework.TestCaseAttribute("Volume Absolute", "C:`", "2", "{R} C:", "{E} (empty)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "0", null)]
+        [NUnit.Framework.TestCaseAttribute("Volume Relative", "C:.`file.txt", "3", "{V} C:", "{.} .", "{G} file.txt", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Relative", "Legal", "1", null)]
+        [NUnit.Framework.TestCaseAttribute("UNC", "``server`share`dir`file.txt", "4", "{U} server", "{G} share", "{G} dir", "{G} file.txt", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "3", null)]
+        [NUnit.Framework.TestCaseAttribute("Long Volume Abs", "``?`C:`dir`file.txt", "3", "{R} C:", "{G} dir", "{G} file.txt", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "2", null)]
+        [NUnit.Framework.TestCaseAttribute("Long UNC", "``?`UNC`server`share`dir`file.txt", "4", "{U} server", "{G} share", "{G} dir", "{G} file.txt", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "3", null)]
+        [NUnit.Framework.TestCaseAttribute("Self Relative", ".`dir`file.txt", "3", "{.} .", "{G} dir", "{G} file.txt", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Relative", "Legal", "2", null)]
+        [NUnit.Framework.TestCaseAttribute("Parent Relative", "..`dir`file.txt", "3", "{..} ..", "{G} dir", "{G} file.txt", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Relative", "Legal", "-1", null)]
+        [NUnit.Framework.TestCaseAttribute("Empty Abs Segment", "C:`dir``file.txt", "4", "{R} C:", "{G} dir", "{E} (empty)", "{G} file.txt", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "3", null)]
+        [NUnit.Framework.TestCaseAttribute("Empty Rel Segment", ".`dir``file.txt", "4", "{.} .", "{G} dir", "{E} (empty)", "{G} file.txt", "{N} (null)", "{N} (null)", "{N} (null)", "Relative", "Legal", "2", null)]
+        [NUnit.Framework.TestCaseAttribute("Relative", "dir`file.txt", "2", "{G} dir", "{G} file.txt", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Relative", "Legal", "2", null)]
+        [NUnit.Framework.TestCaseAttribute("CON", "CON", "1", "{D} CON", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "0", null)]
+        [NUnit.Framework.TestCaseAttribute("PRN", "PRN", "1", "{D} PRN", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "0", null)]
+        [NUnit.Framework.TestCaseAttribute("AUX", "AUX", "1", "{D} AUX", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "0", null)]
+        [NUnit.Framework.TestCaseAttribute("NUL", "NUL", "1", "{D} NUL", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "0", null)]
+        [NUnit.Framework.TestCaseAttribute("COM1", "COM1", "1", "{D} COM1", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "0", null)]
+        [NUnit.Framework.TestCaseAttribute("COM2", "COM2", "1", "{D} COM2", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "0", null)]
+        [NUnit.Framework.TestCaseAttribute("COM3", "COM3", "1", "{D} COM3", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "0", null)]
+        [NUnit.Framework.TestCaseAttribute("COM4", "COM4", "1", "{D} COM4", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "0", null)]
+        [NUnit.Framework.TestCaseAttribute("COM5", "COM5", "1", "{D} COM5", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "0", null)]
+        [NUnit.Framework.TestCaseAttribute("COM6", "COM6", "1", "{D} COM6", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "0", null)]
+        [NUnit.Framework.TestCaseAttribute("COM7", "COM7", "1", "{D} COM7", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "0", null)]
+        [NUnit.Framework.TestCaseAttribute("COM8", "COM8", "1", "{D} COM8", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "0", null)]
+        [NUnit.Framework.TestCaseAttribute("COM9", "COM9", "1", "{D} COM9", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "0", null)]
+        [NUnit.Framework.TestCaseAttribute("LPT1", "LPT1", "1", "{D} LPT1", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "0", null)]
+        [NUnit.Framework.TestCaseAttribute("LPT2", "LPT2", "1", "{D} LPT2", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "0", null)]
+        [NUnit.Framework.TestCaseAttribute("LPT3", "LPT3", "1", "{D} LPT3", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "0", null)]
+        [NUnit.Framework.TestCaseAttribute("LPT4", "LPT4", "1", "{D} LPT4", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "0", null)]
+        [NUnit.Framework.TestCaseAttribute("LPT5", "LPT5", "1", "{D} LPT5", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "0", null)]
+        [NUnit.Framework.TestCaseAttribute("LPT6", "LPT6", "1", "{D} LPT6", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "0", null)]
+        [NUnit.Framework.TestCaseAttribute("LPT7", "LPT7", "1", "{D} LPT7", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "0", null)]
+        [NUnit.Framework.TestCaseAttribute("LPT8", "LPT8", "1", "{D} LPT8", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "0", null)]
+        [NUnit.Framework.TestCaseAttribute("LPT9", "LPT9", "1", "{D} LPT9", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "0", null)]
+        [NUnit.Framework.TestCaseAttribute("Long CON", "``?`CON", "1", "{D} CON", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "0", null)]
+        [NUnit.Framework.TestCaseAttribute("Long PRN", "``?`PRN", "1", "{D} PRN", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "0", null)]
+        [NUnit.Framework.TestCaseAttribute("Long AUX", "``?`AUX", "1", "{D} AUX", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "0", null)]
+        [NUnit.Framework.TestCaseAttribute("Long NUL", "``?`NUL", "1", "{D} NUL", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "0", null)]
+        [NUnit.Framework.TestCaseAttribute("Long COM1", "``?`COM1", "1", "{D} COM1", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "0", null)]
+        [NUnit.Framework.TestCaseAttribute("Long COM2", "``?`COM2", "1", "{D} COM2", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "0", null)]
+        [NUnit.Framework.TestCaseAttribute("Long COM3", "``?`COM3", "1", "{D} COM3", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "0", null)]
+        [NUnit.Framework.TestCaseAttribute("Long COM4", "``?`COM4", "1", "{D} COM4", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "0", null)]
+        [NUnit.Framework.TestCaseAttribute("Long COM5", "``?`COM5", "1", "{D} COM5", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "0", null)]
+        [NUnit.Framework.TestCaseAttribute("Long COM6", "``?`COM6", "1", "{D} COM6", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "0", null)]
+        [NUnit.Framework.TestCaseAttribute("Long COM7", "``?`COM7", "1", "{D} COM7", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "0", null)]
+        [NUnit.Framework.TestCaseAttribute("Long COM8", "``?`COM8", "1", "{D} COM8", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "0", null)]
+        [NUnit.Framework.TestCaseAttribute("Long COM9", "``?`COM9", "1", "{D} COM9", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "0", null)]
+        [NUnit.Framework.TestCaseAttribute("Long LPT1", "``?`LPT1", "1", "{D} LPT1", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "0", null)]
+        [NUnit.Framework.TestCaseAttribute("Long LPT2", "``?`LPT2", "1", "{D} LPT2", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "0", null)]
+        [NUnit.Framework.TestCaseAttribute("Long LPT3", "``?`LPT3", "1", "{D} LPT3", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "0", null)]
+        [NUnit.Framework.TestCaseAttribute("Long LPT4", "``?`LPT4", "1", "{D} LPT4", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "0", null)]
+        [NUnit.Framework.TestCaseAttribute("Long LPT5", "``?`LPT5", "1", "{D} LPT5", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "0", null)]
+        [NUnit.Framework.TestCaseAttribute("Long LPT6", "``?`LPT6", "1", "{D} LPT6", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "0", null)]
+        [NUnit.Framework.TestCaseAttribute("Long LPT7", "``?`LPT7", "1", "{D} LPT7", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "0", null)]
+        [NUnit.Framework.TestCaseAttribute("Long LPT8", "``?`LPT8", "1", "{D} LPT8", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "0", null)]
+        [NUnit.Framework.TestCaseAttribute("Long LPT9", "``?`LPT9", "1", "{D} LPT9", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "0", null)]
+        [NUnit.Framework.TestCaseAttribute("Rel CON", "..`.`CON", "3", "{..} ..", "{.} .", "{D} CON", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "-1", null)]
+        [NUnit.Framework.TestCaseAttribute("Abs Con", "C:`CON", "2", "{R} C:", "{D} CON", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "1", null)]
+        [NUnit.Framework.TestCaseAttribute("Volume CON", "CON:", "1", "{D} CON", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "0", null)]
+        [NUnit.Framework.TestCaseAttribute("Discuraged Rel NUL", ".`NUL.txt", "2", "{.} .", "{G} NUL.txt", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Relative", "Discouraged", "1", null)]
+        [NUnit.Framework.TestCaseAttribute("Illegal Rel Astr", ".`foo*bar.txt", "2", "{.} .", "{G} foo*bar.txt", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Relative", "Illegal", "1", null)]
+        [NUnit.Framework.TestCaseAttribute("Illegal Rel Ques", ".`foo?bar.txt", "2", "{.} .", "{G} foo?bar.txt", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Relative", "Illegal", "1", null)]
+        [NUnit.Framework.TestCaseAttribute("Illegal Rel Colon", ".`foo:bar.txt", "2", "{.} .", "{G} foo:bar.txt", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Relative", "Illegal", "1", null)]
+        [NUnit.Framework.TestCaseAttribute("Space Ending", ".`test.txt%20", "2", "{.} .", "{G} test.txt%20", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Relative", "Illegal", "1", null)]
+        [NUnit.Framework.TestCaseAttribute("Space Both", ".`%20t.txt%20", "2", "{.} .", "{G} %20t.txt%20", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Relative", "Illegal", "1", null)]
+        [NUnit.Framework.TestCaseAttribute("Period Ending", ".`test.", "2", "{.} .", "{G} test.", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Relative", "Illegal", "1", null)]
+        [NUnit.Framework.TestCaseAttribute("Space Beginning", ".`%20test.txt", "2", "{.} .", "{G} %20test.txt", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Relative", "Discouraged", "1", null)]
+        public virtual void DriveRootedPaths(string name, string path, string length, string root, string segment1, string segment2, string segment3, string segment4, string segment5, string segment6, string anchor, string status, string normLevel, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
@@ -153,8 +157,12 @@ namespace Landorphan.Abstractions.FileSystem.Paths.UnitTests.Specifications.Path
             argumentsOfScenario.Add("Segment 1", segment1);
             argumentsOfScenario.Add("Segment 2", segment2);
             argumentsOfScenario.Add("Segment 3", segment3);
+            argumentsOfScenario.Add("Segment 4", segment4);
+            argumentsOfScenario.Add("Segment 5", segment5);
+            argumentsOfScenario.Add("Segment 6", segment6);
             argumentsOfScenario.Add("Anchor", anchor);
             argumentsOfScenario.Add("Status", status);
+            argumentsOfScenario.Add("Norm Level", normLevel);
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Drive Rooted Paths", null, tagsOfScenario, argumentsOfScenario);
 #line 7
 this.ScenarioInitialize(scenarioInfo);
@@ -180,36 +188,39 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.Given(string.Format("I have the following path: {0}", path), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 9
-  testRunner.When("I parse the path as a Windows Path", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+   testRunner.And("I\'m running on the following Operating System: Windows", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 10
-     testRunner.And("I evaluate the original form", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+  testRunner.When("I parse the path", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 11
-  testRunner.Then("I should receive a path object", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+     testRunner.And("I evaluate the original form", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 12
-   testRunner.And(string.Format("segment \'0\' should be: {0}", root), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+  testRunner.Then("I should receive a path object", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
 #line 13
-   testRunner.And(string.Format("segment \'1\' should be: {0}", segment1), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+   testRunner.And(string.Format("segment \'0\' should be: {0}", root), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 14
-   testRunner.And(string.Format("segment \'2\' should be: {0}", segment2), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+   testRunner.And(string.Format("segment \'1\' should be: {0}", segment1), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 15
-   testRunner.And(string.Format("segment \'3\' should be: {0}", segment3), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+   testRunner.And(string.Format("segment \'2\' should be: {0}", segment2), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 16
-   testRunner.And(string.Format("the path should be anchored to {0}", anchor), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+   testRunner.And(string.Format("segment \'3\' should be: {0}", segment3), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 17
-   testRunner.And(string.Format("the parse status should be {0}", status), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+   testRunner.And(string.Format("the path should be anchored to {0}", anchor), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 18
-   testRunner.And(string.Format("the segment length should be {0}", length), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+   testRunner.And(string.Format("the parse status should be {0}", status), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 19
+   testRunner.And(string.Format("the segment length should be {0}", length), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 20
    testRunner.And("the PathType should be Windows", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             }

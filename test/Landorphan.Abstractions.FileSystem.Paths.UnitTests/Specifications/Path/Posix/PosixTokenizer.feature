@@ -40,8 +40,8 @@ Examples:
 | //server/share/dir/file.txt/      | UNC:server | share    | dir      | file.txt | (empty)  |
 | //?/C:/dir/file.txt               | UNC:?      | C:       | dir      | file.txt | (null)   |
 | //?/C:/dir/file.txt/              | UNC:?      | C:       | dir      | file.txt | (empty)  |
-| //?/UNC/server/share/dir/file.txt | UNC:?      | server   | share    | dir      | file.txt |
-| //?/UNC/server/share/file.txt/    | UNC:?      | server   | share    | file.txt | (empty)  |
+| //?/UNC/server/share/file.txt     | UNC:?      | UNC      | server   | share    | file.txt |
+| //?/UNC/server/file.txt/          | UNC:?      | UNC      | server   | file.txt | (empty)  |
 | /dir/file.txt/                    | (empty)    | dir      | file.txt | (empty)  | (null)   |
 | .                                 | .          | (null)   | (null)   | (null)   | (null)   |
 | ./                                | .          | (empty)  | (null)   | (null)   | (null)   |
