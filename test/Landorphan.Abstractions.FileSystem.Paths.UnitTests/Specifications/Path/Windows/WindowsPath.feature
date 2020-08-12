@@ -18,6 +18,7 @@ Scenario Outline: Drive Rooted Paths
 	  And the parse status should be <Status>
 	  And the segment length should be <Length>
 	  And the PathType should be Windows
+	  And the normalization depth should be: <Norm Depth>
 	  And the psth's IsNoramlized property should be <Is Normalized> 
 
 # NOTE: Due to Gherkin parsing rules, \ needs to be escaped.  In order to avoid that necissity and
@@ -37,11 +38,11 @@ Scenario Outline: Drive Rooted Paths
 # {N} = NullSegment, {E} = EmptySegment, {R} = RootSegment, {D} = DeviceSegment, {/} = VolumelessRootSegment
 # {V} = VolumeRelativeSegment, {U} = UncSegment, {G} = Segment, {.} = SelfSegmentk, {..} = ParentSegment
 Examples: 
-| Name               | Path                              | Length | Root        | Segment 1       | Segment 2    | Segment 3    | Segment 4  | Segment 5  | Segment 6  | Anchor   | Status      | Norm Level | Is Normalized |
+| Name               | Path                              | Length | Root        | Segment 1       | Segment 2    | Segment 3    | Segment 4  | Segment 5  | Segment 6  | Anchor   | Status      | Norm Depth | Is Normalized |
 # a null string can be parsed but will produce a null path (which is an illegal path)																										
-| Null               | (null)                            | 1      | {N} (null)  | {N} (null)      | {N} (null)   | {N} (null)   | {N} (null) | {N} (null) | {N} (null) | Absolute | Illegal     | 1          | false         |
+| Null               | (null)                            | 1      | {N} (null)  | {N} (null)      | {N} (null)   | {N} (null)   | {N} (null) | {N} (null) | {N} (null) | Absolute | Illegal     | 0          | false         |
 # an empty string can be parsed but will produce an empty path (which is an illegal path)										  															
-| Empty              | (empty)                           | 1      | {E} (empty) | {N} (null)      | {N} (null)   | {N} (null)   | {N} (null) | {N} (null) | {N} (null) | Absolute | Illegal     | 1          | false         |
+| Empty              | (empty)                           | 1      | {E} (empty) | {N} (null)      | {N} (null)   | {N} (null)   | {N} (null) | {N} (null) | {N} (null) | Absolute | Illegal     | 0          | false         |
 | Volume Absolute    | C:`                               | 2      | {R} C:      | {E} (empty)     | {N} (null)   | {N} (null)   | {N} (null) | {N} (null) | {N} (null) | Absolute | Legal       | 0          | false         |
 | Volume Relative    | C:.`file.txt                      | 3      | {V} C:      | {.} .           | {G} file.txt | {N} (null)   | {N} (null) | {N} (null) | {N} (null) | Relative | Legal       | 1          | false         |
 | UNC                | ``server`share`dir`file.txt       | 4      | {U} server  | {G} share       | {G} dir      | {G} file.txt | {N} (null) | {N} (null) | {N} (null) | Absolute | Legal       | 3          | true          |
@@ -50,7 +51,7 @@ Examples:
 | Self Relative      | .`dir`file.txt                    | 3      | {.} .       | {G} dir         | {G} file.txt | {N} (null)   | {N} (null) | {N} (null) | {N} (null) | Relative | Legal       | 2          | false         |
 | Parent Relative    | ..`dir`file.txt                   | 3      | {..} ..     | {G} dir         | {G} file.txt | {N} (null)   | {N} (null) | {N} (null) | {N} (null) | Relative | Legal       | -1         | false         |
 # Empty segments will show up in the non-normalized for but will not be present in the normalized form							  															
-| Empty Abs Segment  | C:`dir``file.txt                  | 4      | {R} C:      | {G} dir         | {E} (empty)  | {G} file.txt | {N} (null) | {N} (null) | {N} (null) | Absolute | Legal       | 3          | false         |
+| Empty Abs Segment  | C:`dir``file.txt                  | 4      | {R} C:      | {G} dir         | {E} (empty)  | {G} file.txt | {N} (null) | {N} (null) | {N} (null) | Absolute | Legal       | 2          | false         |
 | Empty Rel Segment  | .`dir``file.txt                   | 4      | {.} .       | {G} dir         | {E} (empty)  | {G} file.txt | {N} (null) | {N} (null) | {N} (null) | Relative | Legal       | 2          | false         |
 | Relative           | dir`file.txt                      | 2      | {G} dir     | {G} file.txt    | {N} (null)   | {N} (null)   | {N} (null) | {N} (null) | {N} (null) | Relative | Legal       | 2          | true          |
 # Normalizaiton level does not increase once it is below zero																		 
@@ -106,9 +107,9 @@ Examples:
 # Using a device path as a relitive path is actually legal (all device paths are absolute)										  															
 # NOTE: Unlike all other paths, Device Paths only ever have one segment regardless of what was provided							  															
 # Most other paths will keep unecissary components (example {E}) unless they are "explicitly" normalized to have those removed	  															
-| Rel CON            | ..`.`CON                          | 3      | {..} ..     | {.} .           | {D} CON      | {N} (null)   | {N} (null) | {N} (null) | {N} (null) | Absolute | Legal       | -1         | false         |
+| Rel CON            | ..`.`CON                          | 3      | {..} ..     | {.} .           | {D} CON      | {N} (null)   | {N} (null) | {N} (null) | {N} (null) | Absolute | Legal       | 0          | false         |
 # Using a device path as an absolute path is actually legal (all device paths are absolute)										  															
-| Abs Con            | C:`CON                            | 2      | {R} C:      | {D} CON         | {N} (null)   | {N} (null)   | {N} (null) | {N} (null) | {N} (null) | Absolute | Legal       | 1          | true          |
+| Abs Con            | C:`CON                            | 2      | {R} C:      | {D} CON         | {N} (null)   | {N} (null)   | {N} (null) | {N} (null) | {N} (null) | Absolute | Legal       | 0          | true          |
 # Using a device path with a colon is in fact leagal																			  															
 | Volume CON         | CON:                              | 1      | {D} CON     | {N} (null)      | {N} (null)   | {N} (null)   | {N} (null) | {N} (null) | {N} (null) | Absolute | Legal       | 0          | true          |
 # Using a device path with an extention (as in a file name) is legal but highly discurouged (note this is a relative path because it is not a device path)		  							

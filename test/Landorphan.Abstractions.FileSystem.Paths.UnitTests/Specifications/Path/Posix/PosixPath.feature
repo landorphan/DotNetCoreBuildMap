@@ -18,7 +18,7 @@ Scenario Outline: Drive Rooted Paths
 	  And the parse status should be <Status>
 	  And the segment length should be <Length>
 	  And the PathType should be Posix
-	  And the normlization level should be: <Norm Level>
+	  And the normalization depth should be: <Norm Depth>
 	  And the psth's IsNoramlized property should be <Is Normalized> 
 # NOTE: Due to Gherkin parsing rules, \ needs to be escaped.  In order to avoid that necissity and
 # make the following examples easier to read (`) will be used in place of the (\) character
@@ -36,7 +36,7 @@ Scenario Outline: Drive Rooted Paths
 # {N} = NullSegment, {E} = EmptySegment, {R} = RootSegment, {D} = DeviceSegment, {/} = VolumelessRootSegment
 # {V} = VolumeRelativeSegment, {U} = UncSegment, {G} = Segment, {.} = SelfSegmentk, {..} = ParentSegment
 Examples: 
-| Name               | Path                              | Length | Segment 0   | Segment 1             | Segment 2    | Segment 3    | Segment 4  | Segment 5  | Segment 6  | Anchor   | Status      | Norm Level | Is Normalized | 
+| Name               | Path                              | Length | Segment 0   | Segment 1             | Segment 2    | Segment 3    | Segment 4  | Segment 5  | Segment 6  | Anchor   | Status      | Norm Depth | Is Normalized | 
 # a null string can be parsed but will produce a null path (which is an illegal path)												 
 | Null               | (null)                            | 1      | {N} (null)  | {N} (null)            | {N} (null)   | {N} (null)   | {N} (null) | {N} (null) | {N} (null) | Absolute | Illegal     | 0          | false         |
 # an empty string can be parsed but will produce an empty path (which is an illegal path)											 

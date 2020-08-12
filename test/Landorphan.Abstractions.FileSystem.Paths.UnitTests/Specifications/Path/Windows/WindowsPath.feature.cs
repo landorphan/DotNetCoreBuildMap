@@ -79,8 +79,8 @@ namespace Landorphan.Abstractions.FileSystem.Paths.UnitTests.Specifications.Path
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Drive Rooted Paths")]
-        [NUnit.Framework.TestCaseAttribute("Null", "(null)", "1", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Illegal", "1", "false", null)]
-        [NUnit.Framework.TestCaseAttribute("Empty", "(empty)", "1", "{E} (empty)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Illegal", "1", "false", null)]
+        [NUnit.Framework.TestCaseAttribute("Null", "(null)", "1", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Illegal", "0", "false", null)]
+        [NUnit.Framework.TestCaseAttribute("Empty", "(empty)", "1", "{E} (empty)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Illegal", "0", "false", null)]
         [NUnit.Framework.TestCaseAttribute("Volume Absolute", "C:`", "2", "{R} C:", "{E} (empty)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "0", "false", null)]
         [NUnit.Framework.TestCaseAttribute("Volume Relative", "C:.`file.txt", "3", "{V} C:", "{.} .", "{G} file.txt", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Relative", "Legal", "1", "false", null)]
         [NUnit.Framework.TestCaseAttribute("UNC", "``server`share`dir`file.txt", "4", "{U} server", "{G} share", "{G} dir", "{G} file.txt", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "3", "true", null)]
@@ -88,7 +88,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.UnitTests.Specifications.Path
         [NUnit.Framework.TestCaseAttribute("Long UNC", "``?`UNC`server`share`dir`file.txt", "4", "{U} server", "{G} share", "{G} dir", "{G} file.txt", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "3", "true", null)]
         [NUnit.Framework.TestCaseAttribute("Self Relative", ".`dir`file.txt", "3", "{.} .", "{G} dir", "{G} file.txt", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Relative", "Legal", "2", "false", null)]
         [NUnit.Framework.TestCaseAttribute("Parent Relative", "..`dir`file.txt", "3", "{..} ..", "{G} dir", "{G} file.txt", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Relative", "Legal", "-1", "false", null)]
-        [NUnit.Framework.TestCaseAttribute("Empty Abs Segment", "C:`dir``file.txt", "4", "{R} C:", "{G} dir", "{E} (empty)", "{G} file.txt", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "3", "false", null)]
+        [NUnit.Framework.TestCaseAttribute("Empty Abs Segment", "C:`dir``file.txt", "4", "{R} C:", "{G} dir", "{E} (empty)", "{G} file.txt", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "2", "false", null)]
         [NUnit.Framework.TestCaseAttribute("Empty Rel Segment", ".`dir``file.txt", "4", "{.} .", "{G} dir", "{E} (empty)", "{G} file.txt", "{N} (null)", "{N} (null)", "{N} (null)", "Relative", "Legal", "2", "false", null)]
         [NUnit.Framework.TestCaseAttribute("Relative", "dir`file.txt", "2", "{G} dir", "{G} file.txt", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Relative", "Legal", "2", "true", null)]
         [NUnit.Framework.TestCaseAttribute("Neg Normal 2", "../../-1/0/1", "5", "{..} ..", "{..} ..", "{G} -1", "{G} 0", "{G} 1", "{N} (null)", "{N} (null)", "Relative", "Legal", "-2", "false", null)]
@@ -137,8 +137,8 @@ namespace Landorphan.Abstractions.FileSystem.Paths.UnitTests.Specifications.Path
         [NUnit.Framework.TestCaseAttribute("Long LPT7", "``?`LPT7", "1", "{D} LPT7", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "0", "true", null)]
         [NUnit.Framework.TestCaseAttribute("Long LPT8", "``?`LPT8", "1", "{D} LPT8", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "0", "true", null)]
         [NUnit.Framework.TestCaseAttribute("Long LPT9", "``?`LPT9", "1", "{D} LPT9", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "0", "true", null)]
-        [NUnit.Framework.TestCaseAttribute("Rel CON", "..`.`CON", "3", "{..} ..", "{.} .", "{D} CON", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "-1", "false", null)]
-        [NUnit.Framework.TestCaseAttribute("Abs Con", "C:`CON", "2", "{R} C:", "{D} CON", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "1", "true", null)]
+        [NUnit.Framework.TestCaseAttribute("Rel CON", "..`.`CON", "3", "{..} ..", "{.} .", "{D} CON", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "0", "false", null)]
+        [NUnit.Framework.TestCaseAttribute("Abs Con", "C:`CON", "2", "{R} C:", "{D} CON", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "0", "true", null)]
         [NUnit.Framework.TestCaseAttribute("Volume CON", "CON:", "1", "{D} CON", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "0", "true", null)]
         [NUnit.Framework.TestCaseAttribute("Discuraged Rel NUL", ".`NUL.txt", "2", "{.} .", "{G} NUL.txt", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Relative", "Discouraged", "1", "false", null)]
         [NUnit.Framework.TestCaseAttribute("Illegal Rel Astr", ".`foo*bar.txt", "2", "{.} .", "{G} foo*bar.txt", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Relative", "Illegal", "1", "false", null)]
@@ -148,7 +148,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.UnitTests.Specifications.Path
         [NUnit.Framework.TestCaseAttribute("Space Both", ".`%20t.txt%20", "2", "{.} .", "{G} %20t.txt%20", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Relative", "Illegal", "1", "false", null)]
         [NUnit.Framework.TestCaseAttribute("Period Ending", ".`test.", "2", "{.} .", "{G} test.", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Relative", "Illegal", "1", "false", null)]
         [NUnit.Framework.TestCaseAttribute("Space Beginning", ".`%20test.txt", "2", "{.} .", "{G} %20test.txt", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Relative", "Discouraged", "1", "false", null)]
-        public virtual void DriveRootedPaths(string name, string path, string length, string root, string segment1, string segment2, string segment3, string segment4, string segment5, string segment6, string anchor, string status, string normLevel, string isNormalized, string[] exampleTags)
+        public virtual void DriveRootedPaths(string name, string path, string length, string root, string segment1, string segment2, string segment3, string segment4, string segment5, string segment6, string anchor, string status, string normDepth, string isNormalized, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
@@ -164,7 +164,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.UnitTests.Specifications.Path
             argumentsOfScenario.Add("Segment 6", segment6);
             argumentsOfScenario.Add("Anchor", anchor);
             argumentsOfScenario.Add("Status", status);
-            argumentsOfScenario.Add("Norm Level", normLevel);
+            argumentsOfScenario.Add("Norm Depth", normDepth);
             argumentsOfScenario.Add("Is Normalized", isNormalized);
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Drive Rooted Paths", null, tagsOfScenario, argumentsOfScenario);
 #line 7
@@ -227,6 +227,9 @@ this.ScenarioInitialize(scenarioInfo);
    testRunner.And("the PathType should be Windows", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 21
+   testRunner.And(string.Format("the normalization depth should be: {0}", normDepth), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 22
    testRunner.And(string.Format("the psth\'s IsNoramlized property should be {0}", isNormalized), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             }

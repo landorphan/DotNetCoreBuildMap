@@ -39,7 +39,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
 
             //if (PathAnchor.Absolute == retval.Anchor)
             //{
-            //    if (retval.NormalizationLevel < 0)
+            //    if (retval.NormalizationDepth < 0)
             //    {
             //        retval.Status = PathStatus.Illegal;
             //    }
@@ -57,11 +57,11 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
         public abstract PathAnchor Anchor { get; }
         public IPath SuppliedPath => this;
 
-        public long NormalizationLevel
+        public long NormalizationDepth
         {
             get
             {
-                int normalizationLevel = 0;
+                int normalizationDepth = 0;
                 foreach (var segment in Segments)
                 {
                     switch (segment.SegmentType)
@@ -69,13 +69,13 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
                         case SegmentType.DeviceSegment:
                             return 0;
                         case SegmentType.ParentSegment:
-                            normalizationLevel--;
+                            normalizationDepth--;
                             break;
                         case SegmentType.VolumeRelativeSegment:
                         case SegmentType.GenericSegment:
-                            if (normalizationLevel >= 0)
+                            if (normalizationDepth >= 0)
                             {
-                                normalizationLevel++;
+                                normalizationDepth++;
                             }
                             break;
                         default:
@@ -84,7 +84,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
                     }
                 }
 
-                return normalizationLevel;
+                return normalizationDepth;
             }
         }
 
@@ -93,7 +93,6 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
             SegmentType.EmptySegment,
             SegmentType.NullSegment,
             SegmentType.ParentSegment,
-            SegmentType.EmptySegment,
             SegmentType.SelfSegment
         };
 
@@ -106,7 +105,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
                     where nonNormalSegmentTypes.Contains(s.SegmentType)
                     select s
                 ).Any();
-                return NormalizationLevel >= 0 && !nonNormalSegments;
+                return NormalizationDepth >= 0 && !nonNormalSegments;
             }
         }
     }

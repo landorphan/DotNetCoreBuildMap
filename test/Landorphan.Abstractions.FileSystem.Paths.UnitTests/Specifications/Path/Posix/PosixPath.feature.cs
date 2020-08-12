@@ -147,7 +147,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.UnitTests.Specifications.Path
         [NUnit.Framework.TestCaseAttribute("Space Beginning", "./%20test.txt", "2", "{.} .", "{G} %20test.txt", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Relative", "Discouraged", "1", "false", null)]
         [NUnit.Framework.TestCaseAttribute("Space Ending", "./test.txt%20", "2", "{.} .", "{G} test.txt%20", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Relative", "Discouraged", "1", "false", null)]
         [NUnit.Framework.TestCaseAttribute("Space Both", "./%20t.txt%20", "2", "{.} .", "{G} %20t.txt%20", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Relative", "Discouraged", "1", "false", null)]
-        public virtual void DriveRootedPaths(string name, string path, string length, string segment0, string segment1, string segment2, string segment3, string segment4, string segment5, string segment6, string anchor, string status, string normLevel, string isNormalized, string[] exampleTags)
+        public virtual void DriveRootedPaths(string name, string path, string length, string segment0, string segment1, string segment2, string segment3, string segment4, string segment5, string segment6, string anchor, string status, string normDepth, string isNormalized, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
@@ -163,7 +163,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.UnitTests.Specifications.Path
             argumentsOfScenario.Add("Segment 6", segment6);
             argumentsOfScenario.Add("Anchor", anchor);
             argumentsOfScenario.Add("Status", status);
-            argumentsOfScenario.Add("Norm Level", normLevel);
+            argumentsOfScenario.Add("Norm Depth", normDepth);
             argumentsOfScenario.Add("Is Normalized", isNormalized);
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Drive Rooted Paths", null, tagsOfScenario, argumentsOfScenario);
 #line 7
@@ -226,7 +226,7 @@ this.ScenarioInitialize(scenarioInfo);
    testRunner.And("the PathType should be Posix", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 21
-   testRunner.And(string.Format("the normlization level should be: {0}", normLevel), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+   testRunner.And(string.Format("the normalization depth should be: {0}", normDepth), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 22
    testRunner.And(string.Format("the psth\'s IsNoramlized property should be {0}", isNormalized), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");

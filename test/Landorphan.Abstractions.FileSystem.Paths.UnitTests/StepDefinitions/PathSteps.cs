@@ -43,10 +43,10 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
             };
         }
 
-        [Then(@"the normlization level should be: (.*)")]
+        [Then(@"the normalization depth should be: (.*)")]
         public void ThenTheNormlizationLevelShouldBe(int normalizationLevel)
         {
-            parsedPath.NormalizationLevel.Should().Be(normalizationLevel);
+            parsedPath.NormalizationDepth.Should().Be(normalizationLevel);
         }
 
 

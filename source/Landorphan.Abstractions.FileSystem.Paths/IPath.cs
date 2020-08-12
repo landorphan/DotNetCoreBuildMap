@@ -36,7 +36,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths
 
         IPath SuppliedPath { get; }
 
-        long NormalizationLevel { get; }
+        long NormalizationDepth { get; }
 
         bool IsNormalized { get; }
     }
