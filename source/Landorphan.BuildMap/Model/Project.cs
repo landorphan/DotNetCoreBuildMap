@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 namespace Landorphan.BuildMap.Model
 {
     [Serializable]
-    [SuppressMessage("CodeSmell", "S109", 
+    [SuppressMessage("CodeSmell", "S109",
         Justification = "The 'magic' values here are order instructions and it's beter to keep them as a number (tistocks - 2020-08-03)")]
     public class Project
     {
@@ -21,7 +21,7 @@ namespace Landorphan.BuildMap.Model
         [TableDefaultDisplay]
         [TextDefaultDisplay]
         public int Item { get; set; }
-        
+
         [XmlArrayItem("Type")]
         [JsonProperty(Order = 2)]
         [TableDefaultDisplay]

@@ -246,6 +246,10 @@ namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
             {
                 property.SetValue(obj, new Guid(rawValue));
             }
+            else if (property.PropertyType == typeof(FileStatus))
+            {
+                property.SetValue(obj, Enum.Parse<FileStatus>(rawValue));
+            }
             // else if (property.PropertyType == typeof(Language))
             // {
             //     property.SetValue(obj, Enum.Parse<Language>(rawValue));

@@ -6,6 +6,7 @@ namespace Landorphan.BuildMap.UnitTests
     using Landorphan.BuildMap.Construction;
     using Landorphan.BuildMap.Model;
     using Landorphan.BuildMap.Serialization.Formatters.Implementation;
+    using Landorphan.BuildMap.Serialization.Formatters.Interfaces;
     using NUnit.Framework;
 
     public class CreationTests
@@ -23,14 +24,14 @@ namespace Landorphan.BuildMap.UnitTests
                 }
             }
 
-            currentLocation = "/repo/macos/stor/monolith";
+//            currentLocation = "/repo/macos/stor/monolith";
             
             currentLocation.Should().NotBeEmpty();
             MapManagement mapManagement = new MapManagement();
             Map map = mapManagement.Create(currentLocation, new [] {
                 "**/*.csproj", "**/*.sln", "**/*.vbproj"
             });
-            TableFormatter tableFormatter = new TableFormatter(TableFormatter.GetAllItems());
+            IFormatWriter tableFormatter = new TableFormatter(TableFormatter.GetAllItems());
             var str = tableFormatter.Write(map);
             Console.WriteLine(str);
         }

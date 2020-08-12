@@ -67,6 +67,12 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
             }
         }
 
+        [Then(@"the psth's IsNoramlized property should be (true|false)")]
+        public void ThenThePsthSIsNoramlizedPropertyShouldBeTrue(bool isNormalized)
+        {
+            parsedPath.IsNormalized.Should().Be(isNormalized);
+        }
+
         [Given(@"I have the following path: (.*)")]
         public void GivenIHaveTheFollowingPath(string path)
         {
