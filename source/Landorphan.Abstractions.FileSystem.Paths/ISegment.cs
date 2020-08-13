@@ -81,5 +81,9 @@ namespace Landorphan.Abstractions.FileSystem.Paths
         ISegment NextSegment { get; }
 
         bool IsLegal();
+
+        string NameWithoutExtension { get; }
+
+        ISegment Clone();
     }
 }

@@ -67,5 +67,11 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Posix
 
             return true;
         }
+
+        public override ISegment Clone()
+        {
+            return new PosixSegment(this.SegmentType, this.Name);
+        }
+
     }
 }

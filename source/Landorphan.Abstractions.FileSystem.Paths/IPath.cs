@@ -20,6 +20,13 @@ namespace Landorphan.Abstractions.FileSystem.Paths
         Relative
     }
 
+    public enum NormalizationLevel
+    {
+        NotApplied,
+        LeadingParentsOnly,
+        Fully
+    }
+
     public interface IPath
     {
         string SuppliedPathString { get; }
@@ -38,6 +45,6 @@ namespace Landorphan.Abstractions.FileSystem.Paths
 
         long NormalizationDepth { get; }
 
-        bool IsNormalized { get; }
+        NormalizationLevel Normalization { get; }
     }
 }

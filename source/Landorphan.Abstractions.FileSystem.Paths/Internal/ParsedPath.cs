@@ -71,7 +71,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
                         case SegmentType.ParentSegment:
                             normalizationDepth--;
                             break;
-                        case SegmentType.VolumeRelativeSegment:
+//                        case SegmentType.VolumeRelativeSegment:
                         case SegmentType.GenericSegment:
                             if (normalizationDepth >= 0)
                             {
@@ -96,17 +96,17 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
             SegmentType.SelfSegment
         };
 
-        public bool IsNormalized
-        {
-            get
-            {
-                var nonNormalSegments = (
-                    from s in Segments
-                    where nonNormalSegmentTypes.Contains(s.SegmentType)
-                    select s
-                ).Any();
-                return NormalizationDepth >= 0 && !nonNormalSegments;
-            }
-        }
+        //public bool NormalizationScope
+        //{
+        //    get
+        //    {
+        //        var nonNormalSegments = (
+        //            from s in Segments
+        //            where nonNormalSegmentTypes.Contains(s.SegmentType)
+        //            select s
+        //        ).Any();
+        //        return NormalizationDepth >= 0 && !nonNormalSegments;
+        //    }
+        //}
     }
 }
