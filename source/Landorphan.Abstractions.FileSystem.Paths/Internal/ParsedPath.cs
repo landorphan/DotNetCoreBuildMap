@@ -88,6 +88,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
             }
         }
 
+
         private List<SegmentType> nonNormalSegmentTypes = new List<SegmentType>()
         {
             SegmentType.EmptySegment,
@@ -96,6 +97,16 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
             SegmentType.SelfSegment
         };
 
+        public NormalizationLevel Normalization { get; private set; }
+
+        public IPath Normalize()
+        {
+            //IPathCreator creator = new PathCreator();
+            //ISegment lastSegment = null;
+            //foreach 
+            
+            return null;
+        }
         //public bool NormalizationScope
         //{
         //    get

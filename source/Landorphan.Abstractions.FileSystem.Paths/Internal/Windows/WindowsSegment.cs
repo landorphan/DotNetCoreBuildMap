@@ -89,5 +89,10 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
 
             return true;
         }
+
+        public override ISegment Clone()
+        {
+            return new WindowsSegment(this.SegmentType, this.Name);
+        }
     }
 }
