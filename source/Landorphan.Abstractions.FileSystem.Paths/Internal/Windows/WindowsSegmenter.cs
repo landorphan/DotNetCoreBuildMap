@@ -65,9 +65,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
                     }
                     else if (tokens[i] == string.Empty)
                     {
-                        segments.Add(WindowsSegment.EmptySegment);
-                        var name = tokens[++i];
-                        segments.Add(new WindowsSegment(SegmentType.VolumelessRootSegment, name));
+                        segments.Add(new WindowsSegment(SegmentType.VolumelessRootSegment, string.Empty));
                     }
                     else
                     {
@@ -78,6 +76,12 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
                 {
                     segments.Add(WindowsSegment.ParseFromString(tokens[i]));
                 }
+            }
+
+            // Special case for Root Segment to avoid a Root+Empty combination
+            if (segments.Count == 2 && segments[0].SegmentType == SegmentType.VolumelessRootSegment && segments[1].SegmentType == SegmentType.EmptySegment)
+            {
+                return segments.Take(1);
             }
 
             return segments;

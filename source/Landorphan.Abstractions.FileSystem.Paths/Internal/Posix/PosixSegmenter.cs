@@ -4,6 +4,8 @@ using System.Text;
 
 namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Posix
 {
+    using System.Linq;
+
     public class PosixSegmenter : ISegmenter
     {
         private const string DoubleForwardSlash = "//";
@@ -59,13 +61,18 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Posix
 
                     if (tokens[i] == string.Empty)
                     {
-                        var name = tokens[++i];
-                        segments.Add(new PosixSegment(SegmentType.RootSegment, name));
+                        segments.Add(new PosixSegment(SegmentType.RootSegment, string.Empty));
                         continue;
                     }
 
                 }
                 segments.Add(PosixSegment.ParseFromString(tokens[i]));
+            }
+
+            // Special case for Root Segment to avoid a Root+Empty combination
+            if (segments.Count == 2 && segments[0].SegmentType == SegmentType.RootSegment && segments[1].SegmentType == SegmentType.EmptySegment)
+            {
+                return segments.Take(1);
             }
 
             return segments;

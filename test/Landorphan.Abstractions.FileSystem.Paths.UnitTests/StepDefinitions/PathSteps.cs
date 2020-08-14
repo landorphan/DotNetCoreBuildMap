@@ -23,8 +23,11 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
         public string preParsedPath;
         public IPath parsedPath;
         public IPath originalForm;
+        public IPath normalizedPath;
         private PathType pathType;
         private static OSPlatform osPlatform;
+        private string toStringReturned;
+        private Exception thrownException;
 
         internal class MockRuntimeInformation : IRuntimeInformation
         {
@@ -67,14 +70,19 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
             }
         }
 
-        [Then(@"the psth's IsNoramlized property should be (true|false)")]
-        public void ThenThePsthSIsNoramlizedPropertyShouldBeTrue(bool isNormalized)
+        [Then(@"the psth's anchor property should be (Relative|Absolute)")]
+        public void ThenThePsthSIsNoramlizedPropertyShouldBeTrue(PathAnchor anchor)
         {
-//            parsedPath.NormalizationScope.Should().Be(isNormalized);
+            parsedPath.Anchor.Should().Be(anchor);
         }
 
         [Given(@"I have the following path: (.*)")]
         public void GivenIHaveTheFollowingPath(string path)
+        {
+            suppliedPath = PreparePathForTest(path);
+        }
+
+        public string PreparePathForTest(string path)
         {
             for (int i = 0; i <= WindowsRelevantPathCharacters.Space; i++)
             {
@@ -82,16 +90,18 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
             }
             if (path == "(null)")
             {
-                suppliedPath = null;
+                path = null;
             }
             else if (path == "(empty)")
             {
-                suppliedPath = string.Empty;
+                path = string.Empty;
             }
             else
             {
-                suppliedPath = path.Replace('`', '\\');
+                path = path.Replace('`', '\\');
             }
+
+            return path;
         }
 
         [When(@"I segment the (Windows|Posix) path")]
@@ -148,7 +158,14 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
             }
             else if (value.StartsWith("{R}"))
             {
-                expected = new WindowsSegment(SegmentType.RootSegment, value.Substring(4));
+                if (pathType == PathType.Posix)
+                {
+                    expected = new PosixSegment(SegmentType.RootSegment, string.Empty);
+                }
+                else
+                {
+                    expected = new WindowsSegment(SegmentType.RootSegment, value.Substring(4));
+                }
             }
             else if (value.StartsWith("{D}"))
             {
@@ -156,7 +173,7 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
             }
             else if (value.StartsWith("{/}"))
             {
-                expected = new WindowsSegment(SegmentType.VolumelessRootSegment, value.Substring(4));
+                expected = new WindowsSegment(SegmentType.VolumelessRootSegment, string.Empty);
             }
             else if (value.StartsWith("{V}"))
             {
@@ -205,22 +222,51 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
         [Then(@"the resulting path should read: (.*)")]
         public void ThenTheResultingPathShouldRead(string expected)
         {
-            if (expected == "(null)")
-            {
-                expected = null;
-            }
-            else if (expected == "(empty)")
-            {
-                expected = string.Empty;
-            }
+            expected = PreparePathForTest(expected);
 
             preParsedPath.Should().Be(expected);
         }
 
+        [When(@"I normalize the path")]
+        public void WhenINormalizeThePath()
+        {
+            normalizedPath = parsedPath.Normalize();
+            preParsedPath = normalizedPath.ToString();
+        }
+        
+        [Then(@"the resulting path should have the following Normalization Level: (NotNormalized|SelfReferenceOnly|LeadingParentsOnly|Fully)")]
+        public void ThenTheResultingPathShouldHaveTheFollowingNormalizationLevel(NormalizationLevel normalizationLevel)
+        {
+            normalizedPath.NormalizationLevel.Should().Be(normalizationLevel);
+        }
+
+        [When(@"I ask for the path to be represented as a string")]
+        public void WhenIAskForThePathToBeRepresentedAsAString()
+        {
+            toStringReturned = parsedPath.ToString();
+        }
+
+        [Then(@"no exception should be thrown")]
+        public void ThenNoExceptionShouldBeThrown()
+        {
+            thrownException.Should().BeNull();
+        }
+        
+        [Then(@"I should receive the following string: (.*)")]
+        public void ThenIShouldReceiveTheFollowingString(string expectedString)
+        {
+            var expectedPath = PreparePathForTest(expectedString);
+            toStringReturned.Should().Be(expectedPath);
+        }
+
+
+        [Given(@"I parse the path")]
         [When(@"I parse the path")]
         public void WhenIParseThePath()
         {
             parsedPath = pathParser.Parse(suppliedPath);
+            // NOTE: Unless this is overriden by a test step ... the normalized path = the parsedPath on first parsing 
+            normalizedPath = parsedPath;
         }
 
         [When(@"I parse the path as a (Windows|Posix) Path")]
@@ -278,12 +324,6 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
             this.originalForm = parsedPath.SuppliedPath;
             segments = originalForm.Segments;
         }
-
-        //[Then(@"the segment ""(.*)"" should be (.*)")]
-        //public void ThenTheSegmentShouldBeC(string root, string value)
-        //{
-
-        //}
 
         [Then(@"the PathType should be (Windows|Posix)")]
         public void ThenThePathTypeShouldBeWindows(PathType pathType)

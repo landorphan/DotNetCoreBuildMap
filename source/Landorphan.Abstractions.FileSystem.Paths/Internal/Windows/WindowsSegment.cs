@@ -2,6 +2,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
 {
     using System;
     using System.Linq;
+    using System.Runtime.CompilerServices;
 
     // TODO: Make this internal once we have enough build system to do InternalsVisibleTo
     public class WindowsSegment : Segment

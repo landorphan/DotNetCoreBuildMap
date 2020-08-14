@@ -27,7 +27,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
                 // Converts the (\\?\C:...) pattern into (C:...)
                 path = path.Substring(4);
             }
-            else if (path.StartsWith(@"\\"))
+            else if (path.StartsWith(@"\\") || path.StartsWith("//"))
             {
                 // Converts the (\\server\...) pattern into (UNC:server\...)
                 path = "UNC:" + path.Substring(2);

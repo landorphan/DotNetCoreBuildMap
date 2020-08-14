@@ -7,10 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <SpecFlowObsoleteCodeBehindFiles Remove="Specifications\Path\Posix\PosixPathNormalization - Copy.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Specifications\Path\Posix\PosixPreParse - Copy.feature.cs" />
     <SpecFlowObsoleteCodeBehindFiles Remove="Specifications\Path\Posix\WindowsPaths.feature.cs" />
     <SpecFlowObsoleteCodeBehindFiles Remove="Specifications\Path\Posix\WindowsPathSegments.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Specifications\Path\Posix\WindowsPathToString.feature.cs" />
     <SpecFlowObsoleteCodeBehindFiles Remove="Specifications\Path\Posix\WindowsPreParse.feature.cs" />
     <SpecFlowObsoleteCodeBehindFiles Remove="Specifications\Path\Posix\WindowsTokenizer.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Specifications\Path\Windows\PosixPathNormalization.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Specifications\Path\Windows\PosixPathNormalizationLevel.feature.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -28,11 +33,26 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Specifications\Path\Posix\PosixPathNormalizationLevel.feature.cs">
+      <DependentUpon>PosixPathNormalizationLevel.feature</DependentUpon>
+    </Compile>
+    <Compile Update="Specifications\Path\Posix\PosixPathNormalization.feature.cs">
+      <DependentUpon>PosixPathNormalization.feature</DependentUpon>
+    </Compile>
     <Compile Update="Specifications\Path\Posix\PosixPreParse.feature.cs">
       <DependentUpon>PosixPreParse.feature</DependentUpon>
     </Compile>
     <Compile Update="Specifications\Path\Posix\PosixTokenizer.feature.cs">
       <DependentUpon>PosixTokenizer.feature</DependentUpon>
+    </Compile>
+    <Compile Update="Specifications\Path\Posix\PosixPathToString.feature.cs">
+      <DependentUpon>PosixPathToString.feature</DependentUpon>
+    </Compile>
+    <Compile Update="Specifications\Path\Windows\WindowsPathNormalization.feature.cs">
+      <DependentUpon>WindowsPathNormalization.feature</DependentUpon>
+    </Compile>
+    <Compile Update="Specifications\Path\Windows\WindowsPathNormalizationLevel.feature.cs">
+      <DependentUpon>WindowsPathNormalizationLevel.feature</DependentUpon>
     </Compile>
     <Compile Update="Specifications\Path\Windows\WindowsPathSegments.feature.cs">
       <DependentUpon>WindowsPathSegments.feature</DependentUpon>
@@ -43,11 +63,31 @@
   </ItemGroup>
 
   <ItemGroup>
+    <SpecFlowFeatureFiles Update="Specifications\Path\Posix\PosixPathNormalizationLevel.feature">
+      <Visible>$(UsingMicrosoftNETSdk)</Visible>
+      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
+    </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Specifications\Path\Posix\PosixPathNormalization.feature">
+      <Visible>$(UsingMicrosoftNETSdk)</Visible>
+      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
+    </SpecFlowFeatureFiles>
     <SpecFlowFeatureFiles Update="Specifications\Path\Posix\PosixPreParse.feature">
       <Visible>$(UsingMicrosoftNETSdk)</Visible>
       <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
     </SpecFlowFeatureFiles>
     <SpecFlowFeatureFiles Update="Specifications\Path\Posix\PosixTokenizer.feature">
+      <Visible>$(UsingMicrosoftNETSdk)</Visible>
+      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
+    </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Specifications\Path\Posix\PosixPathToString.feature">
+      <Visible>$(UsingMicrosoftNETSdk)</Visible>
+      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
+    </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Specifications\Path\Windows\WindowsPathNormalization.feature">
+      <Visible>$(UsingMicrosoftNETSdk)</Visible>
+      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
+    </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Specifications\Path\Windows\WindowsPathNormalizationLevel.feature">
       <Visible>$(UsingMicrosoftNETSdk)</Visible>
       <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
     </SpecFlowFeatureFiles>

@@ -47,7 +47,7 @@ Examples:
 | ``?`C:`dir`file.txt`               | {R} C:      | {G} dir      | {G} file.txt | {E} (empty)  | {N} (null)  | {N} (null) |
 | ``?`UNC`server`share`dir`file.txt  | {U} server  | {G} share    | {G} dir      | {G} file.txt | {N} (null)  | {N} (null) |
 | ``?`UNC`server`share`dir`file.txt` | {U} server  | {G} share    | {G} dir      | {G} file.txt | {E} (empty) | {N} (null) |
-| `dir`file.txt`                     | {E} (empty) | {/} dir      | {G} file.txt | {E} (empty)  | {N} (null)  | {N} (null) |
+| `dir`file.txt`                     | {/}         | {G} dir      | {G} file.txt | {E} (empty)  | {N} (null)  | {N} (null) |
 | .                                  | {.} .       | {N} (null)   | {N} (null)   | {N} (null)   | {N} (null)  | {N} (null) |
 | .`                                 | {.} .       | {E} (empty)  | {N} (null)   | {N} (null)   | {N} (null)  | {N} (null) |
 | .`file.txt                         | {.} .       | {G} file.txt | {N} (null)   | {N} (null)   | {N} (null)  | {N} (null) |
@@ -64,7 +64,7 @@ Examples:
 | CON                                | {D} CON     | {N} (null)   | {N} (null)   | {N} (null)   | {N} (null)  | {N} (null) |
 | C:`CON                             | {R} C:      | {D} CON      | {N} (null)   | {N} (null)   | {N} (null)  | {N} (null) |
 | ..`CON                             | {..} ..     | {D} CON      | {N} (null)   | {N} (null)   | {N} (null)  | {N} (null) |
-| `dir`CON                           | {E} (empty) | {/} dir      | {D} CON      | {N} (null)   | {N} (null)  | {N} (null) |
+| `dir`CON                           | {/}         | {G} dir      | {D} CON      | {N} (null)   | {N} (null)  | {N} (null) |
 # A Byproduct of the parser means the following will be accepted as a legitimate source                                  
 | UNC:server                         | {U} server  | {N} (null)   | {N} (null)   | {N} (null)   | {N} (null)  | {N} (null) |
 | UNC:server`                        | {U} server  | {E} (empty)  | {N} (null)   | {N} (null)   | {N} (null)  | {N} (null) |

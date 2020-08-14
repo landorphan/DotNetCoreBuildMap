@@ -78,9 +78,9 @@ namespace Landorphan.Abstractions.FileSystem.Paths.UnitTests.Specifications.Path
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Drive Rooted Paths")]
-        [NUnit.Framework.TestCaseAttribute("Null", "(null)", "1", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Illegal", "0", "false", null)]
-        [NUnit.Framework.TestCaseAttribute("Empty", "(empty)", "1", "{E} (empty)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Illegal", "0", "false", null)]
+        [NUnit.Framework.DescriptionAttribute("Posix Paths")]
+        [NUnit.Framework.TestCaseAttribute("Null", "(null)", "1", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Relative", "Illegal", "0", "false", null)]
+        [NUnit.Framework.TestCaseAttribute("Empty", "(empty)", "1", "{E} (empty)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Relative", "Illegal", "0", "false", null)]
         [NUnit.Framework.TestCaseAttribute("Volume Absolute", "c:", "1", "{G} c:", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Relative", "Legal", "1", "true", null)]
         [NUnit.Framework.TestCaseAttribute("Volume Relative", "C:/./file.txt", "3", "{G} C:", "{.} .", "{G} file.txt", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Relative", "Legal", "2", "false", null)]
         [NUnit.Framework.TestCaseAttribute("UNC", "//server/share/dir/file.txt", "4", "{U} server", "{G} share", "{G} dir", "{G} file.txt", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "3", "true", null)]
@@ -147,7 +147,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.UnitTests.Specifications.Path
         [NUnit.Framework.TestCaseAttribute("Space Beginning", "./%20test.txt", "2", "{.} .", "{G} %20test.txt", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Relative", "Discouraged", "1", "false", null)]
         [NUnit.Framework.TestCaseAttribute("Space Ending", "./test.txt%20", "2", "{.} .", "{G} test.txt%20", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Relative", "Discouraged", "1", "false", null)]
         [NUnit.Framework.TestCaseAttribute("Space Both", "./%20t.txt%20", "2", "{.} .", "{G} %20t.txt%20", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Relative", "Discouraged", "1", "false", null)]
-        public virtual void DriveRootedPaths(string name, string path, string length, string segment0, string segment1, string segment2, string segment3, string segment4, string segment5, string segment6, string anchor, string status, string normDepth, string isNormalized, string[] exampleTags)
+        public virtual void PosixPaths(string name, string path, string length, string segment0, string segment1, string segment2, string segment3, string segment4, string segment5, string segment6, string anchor, string status, string normDepth, string isNormalized, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
@@ -165,7 +165,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.UnitTests.Specifications.Path
             argumentsOfScenario.Add("Status", status);
             argumentsOfScenario.Add("Norm Depth", normDepth);
             argumentsOfScenario.Add("Is Normalized", isNormalized);
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Drive Rooted Paths", null, tagsOfScenario, argumentsOfScenario);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Posix Paths", null, tagsOfScenario, argumentsOfScenario);
 #line 7
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -196,7 +196,7 @@ this.ScenarioInitialize(scenarioInfo);
   testRunner.When("I parse the path", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 11
-     testRunner.And("I evaluate the original form", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+      testRunner.And("I evaluate the original form", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 12
   testRunner.Then("I should receive a path object", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
@@ -214,22 +214,28 @@ this.ScenarioInitialize(scenarioInfo);
    testRunner.And(string.Format("segment \'3\' should be: {0}", segment3), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 17
-   testRunner.And(string.Format("the path should be anchored to {0}", anchor), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+   testRunner.And(string.Format("segment \'4\' should be: {0}", segment4), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 18
-   testRunner.And(string.Format("the parse status should be {0}", status), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+   testRunner.And(string.Format("segment \'5\' should be: {0}", segment5), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 19
-   testRunner.And(string.Format("the segment length should be {0}", length), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+   testRunner.And(string.Format("segment \'6\' should be: {0}", segment6), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 20
-   testRunner.And("the PathType should be Posix", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+   testRunner.And(string.Format("the path should be anchored to {0}", anchor), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 21
-   testRunner.And(string.Format("the normalization depth should be: {0}", normDepth), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+   testRunner.And(string.Format("the parse status should be {0}", status), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 22
-   testRunner.And(string.Format("the psth\'s IsNoramlized property should be {0}", isNormalized), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+   testRunner.And(string.Format("the segment length should be {0}", length), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 23
+   testRunner.And("the PathType should be Posix", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 24
+   testRunner.And(string.Format("the normalization depth should be: {0}", normDepth), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             }
             this.ScenarioCleanup();

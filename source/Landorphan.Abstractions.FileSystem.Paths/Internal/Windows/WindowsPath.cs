@@ -2,7 +2,9 @@
 
 namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
 {
+    using System.Globalization;
     using System.Linq;
+    using System.Text;
 
     class WindowsPath : ParsedPath
     {
@@ -12,12 +14,12 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
         {
             get
             {
-                if (this.LeadingSegment.SegmentType == SegmentType.RemoteSegment ||
-                    this.LeadingSegment.SegmentType == SegmentType.RootSegment ||
-                    this.LeadingSegment.SegmentType == SegmentType.EmptySegment ||
-                    this.LeadingSegment.SegmentType == SegmentType.NullSegment)
+                if ((this.LeadingSegment.SegmentType == SegmentType.RemoteSegment ||
+                     this.LeadingSegment.SegmentType == SegmentType.RootSegment ||
+                     this.LeadingSegment.SegmentType == SegmentType.VolumelessRootSegment) &&
+                    NormalizationDepth >= 0)
                 {
-                    return Paths.PathAnchor.Absolute;
+                    return PathAnchor.Absolute;
                 }
                 foreach (var segment in this.Segments)
                 {
@@ -26,7 +28,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
                         return PathAnchor.Absolute;
                     }
                 }
-                return Paths.PathAnchor.Relative;
+                return PathAnchor.Relative;
             }
         }
 
@@ -128,6 +130,67 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
             }
 
             Status = PathStatus.Legal;
+        }
+
+        public const string UncPrefix = "UNC";
+
+        public static string ConvertToString(ParsedPath path)
+        {
+            var seperator = '\\';
+            if (path.Segments.Length == 1 && path.LeadingSegment.SegmentType == SegmentType.VolumelessRootSegment)
+            {
+                return seperator.ToString();
+            }
+            StringBuilder builder = new StringBuilder();
+            //if (style == ToStringStyle.Long)
+            //{
+            //    builder.Append(seperator);
+            //    builder.Append(seperator);
+            //    builder.Append(WindowsRelevantPathCharacters.QuestionMark);
+            //    builder.Append(seperator);
+            //    builder.Append(UncPrefix);
+            //    builder.Append(seperator);
+            //}
+            
+            var segments = path.Segments.ToArray();
+            bool skipNextSeperator = false;
+            for (int i = 0; i < segments.Length; i++)
+            {
+                var segment = segments[i];
+                if (i > 0 && !skipNextSeperator)
+                {
+                    builder.Append(seperator);
+                }
+
+                skipNextSeperator = false;
+                switch (segment.SegmentType)
+                {
+                    // As device segments throw out all but the device ...
+                    // only the device is relevant in the path so all else is thrown away.
+                    case SegmentType.DeviceSegment:
+                        return segment.Name;
+                    case SegmentType.RemoteSegment:
+                        builder.Append(seperator);
+                        builder.Append(seperator);
+                        builder.Append(segment.Name);
+                        break;
+                    case SegmentType.VolumeRelativeSegment:
+                        builder.Append(segment.Name);
+                        skipNextSeperator = true;
+                        break;
+                    //case SegmentType.NullSegment:
+                    //case SegmentType.EmptySegment:
+                    //case SegmentType.RootSegment:
+                    //case SegmentType.GenericSegment:
+                    //case SegmentType.SelfSegment:
+                    //case SegmentType.ParentSegment:
+                    default:
+                        builder.Append(segment.Name);
+                        break;
+                }
+            }
+
+            return builder.ToString();
         }
     }
 }

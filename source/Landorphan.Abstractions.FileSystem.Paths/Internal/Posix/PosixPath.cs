@@ -4,7 +4,9 @@ using System.Text;
 
 namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Posix
 {
-    class PostixPath : ParsedPath
+    using System.Linq;
+
+    class PosixPath : ParsedPath
     {
         protected override void SetStatus()
         {
@@ -88,15 +90,62 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Posix
         { 
             get
             {
-                if (this.LeadingSegment.SegmentType == SegmentType.RemoteSegment ||
-                    this.LeadingSegment.SegmentType == SegmentType.RootSegment ||
-                    this.LeadingSegment.SegmentType == SegmentType.EmptySegment ||
-                    this.LeadingSegment.SegmentType == SegmentType.NullSegment)
+                if ((this.LeadingSegment.SegmentType == SegmentType.RemoteSegment ||
+                     this.LeadingSegment.SegmentType == SegmentType.RootSegment) &&
+                    NormalizationDepth >= 0)
                 {
                     return Paths.PathAnchor.Absolute;
                 }
                 return Paths.PathAnchor.Relative;
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="style"></param>
+        /// <returns></returns>
+        public static string ConvertToString(ParsedPath path)
+        {
+            var seperator = '/';
+            if (path.Segments.Length == 1 && path.LeadingSegment.SegmentType == SegmentType.RootSegment)
+            {
+                return seperator.ToString();
+            }
+            StringBuilder builder = new StringBuilder();
+            var segments = path.Segments.ToArray();
+
+            for (int i = 0; i < segments.Length; i++)
+            {
+                var segment = segments[i];
+                if (i > 0)
+                {
+                    builder.Append(seperator);
+                }
+                switch (segment.SegmentType)
+                {
+                    case SegmentType.RemoteSegment:
+                        builder.Append(seperator);
+                        builder.Append(seperator);
+                        builder.Append(segment.Name);
+                        break;
+                    //case SegmentType.NullSegment:
+                    //case SegmentType.EmptySegment:
+                    //case SegmentType.DeviceSegment:
+                    //case SegmentType.VolumelessRootSegment:
+                    //case SegmentType.VolumeRelativeSegment:
+                    //case SegmentType.GenericSegment:
+                    //case SegmentType.SelfSegment:
+                    //case SegmentType.ParentSegment:
+                    default:
+                        builder.Append(segment.Name);
+                        break;
+                }
+            }
+
+            return builder.ToString();
+        }
+
     }
 }
