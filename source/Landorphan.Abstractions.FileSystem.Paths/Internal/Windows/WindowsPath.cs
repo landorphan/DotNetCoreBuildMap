@@ -32,6 +32,11 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
             }
         }
 
+        protected override ISegment SelfSegment => WindowsSegment.SelfSegment;
+        protected override ISegment NullSegment => WindowsSegment.NullSegment;
+        protected override ISegment EmptySegment => WindowsSegment.EmptySegment;
+        protected override ISegment ParentSegment => WindowsSegment.ParentSegment;
+
         protected override void SetStatus()
         {
             int loc = 0;
@@ -156,36 +161,40 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
             bool skipNextSeperator = false;
             for (int i = 0; i < segments.Length; i++)
             {
-                var segment = segments[i];
+                var currentSegment = segments[i];
                 if (i > 0 && !skipNextSeperator)
                 {
                     builder.Append(seperator);
                 }
 
                 skipNextSeperator = false;
-                switch (segment.SegmentType)
+                switch (currentSegment.SegmentType)
                 {
                     // As device segments throw out all but the device ...
                     // only the device is relevant in the path so all else is thrown away.
                     case SegmentType.DeviceSegment:
-                        return segment.Name;
+                        return currentSegment.Name;
                     case SegmentType.RemoteSegment:
                         builder.Append(seperator);
                         builder.Append(seperator);
-                        builder.Append(segment.Name);
+                        builder.Append(currentSegment.Name);
                         break;
                     case SegmentType.VolumeRelativeSegment:
-                        builder.Append(segment.Name);
+                        builder.Append(currentSegment.Name);
+                        skipNextSeperator = true;
+                        break;
+                    case SegmentType.RootSegment:
+                        builder.Append(currentSegment.Name);
+                        builder.Append(seperator);
                         skipNextSeperator = true;
                         break;
                     //case SegmentType.NullSegment:
                     //case SegmentType.EmptySegment:
-                    //case SegmentType.RootSegment:
                     //case SegmentType.GenericSegment:
                     //case SegmentType.SelfSegment:
                     //case SegmentType.ParentSegment:
                     default:
-                        builder.Append(segment.Name);
+                        builder.Append(currentSegment.Name);
                         break;
                 }
             }

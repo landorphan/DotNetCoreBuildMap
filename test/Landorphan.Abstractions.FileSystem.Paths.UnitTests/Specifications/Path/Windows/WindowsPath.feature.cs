@@ -79,8 +79,8 @@ namespace Landorphan.Abstractions.FileSystem.Paths.UnitTests.Specifications.Path
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Windows Paths")]
-        [NUnit.Framework.TestCaseAttribute("Null", "(null)", "1", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Relative", "Illegal", "0", null)]
-        [NUnit.Framework.TestCaseAttribute("Empty", "(empty)", "1", "{E} (empty)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Relative", "Illegal", "0", null)]
+        [NUnit.Framework.TestCaseAttribute("Null", "(null)", "1", "{.} .", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Relative", "Legal", "0", null)]
+        [NUnit.Framework.TestCaseAttribute("Empty", "(empty)", "1", "{.} .", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Relative", "Legal", "0", null)]
         [NUnit.Framework.TestCaseAttribute("Volume Absolute", "C:`", "2", "{R} C:", "{E} (empty)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "0", null)]
         [NUnit.Framework.TestCaseAttribute("Volume Relative", "C:.`file.txt", "3", "{V} C:", "{.} .", "{G} file.txt", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Relative", "Legal", "1", null)]
         [NUnit.Framework.TestCaseAttribute("UNC", "``server`share`dir`file.txt", "4", "{U} server", "{G} share", "{G} dir", "{G} file.txt", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "3", null)]
@@ -143,7 +143,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.UnitTests.Specifications.Path
         [NUnit.Framework.TestCaseAttribute("Discuraged Rel NUL", ".`NUL.txt", "2", "{.} .", "{G} NUL.txt", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Relative", "Discouraged", "1", null)]
         [NUnit.Framework.TestCaseAttribute("Illegal Rel Astr", ".`foo*bar.txt", "2", "{.} .", "{G} foo*bar.txt", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Relative", "Illegal", "1", null)]
         [NUnit.Framework.TestCaseAttribute("Illegal Rel Ques", ".`foo?bar.txt", "2", "{.} .", "{G} foo?bar.txt", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Relative", "Illegal", "1", null)]
-        [NUnit.Framework.TestCaseAttribute("Illegal Rel Colon", ".`foo:bar.txt", "2", "{.} .", "{G} foo:bar.txt", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Relative", "Illegal", "1", null)]
+        [NUnit.Framework.TestCaseAttribute("Illegal Rel Colon", ".`foo:bar.txt", "3", "{.} .", "{V} foo:", "{G} bar.txt", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Relative", "Illegal", "1", null)]
         [NUnit.Framework.TestCaseAttribute("Space Ending", ".`test.txt%20", "2", "{.} .", "{G} test.txt%20", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Relative", "Illegal", "1", null)]
         [NUnit.Framework.TestCaseAttribute("Space Both", ".`%20t.txt%20", "2", "{.} .", "{G} %20t.txt%20", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Relative", "Illegal", "1", null)]
         [NUnit.Framework.TestCaseAttribute("Period Ending", ".`test.", "2", "{.} .", "{G} test.", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Relative", "Illegal", "1", null)]
@@ -156,6 +156,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.UnitTests.Specifications.Path
         [NUnit.Framework.TestCaseAttribute("Vol Abs Neg Back", "C:/a/../../b/../c", "7", "{R} C:", "{G} a", "{..} ..", "{..} ..", "{G} b", "{..} ..", "{G} c", "Relative", "Legal", "-1", null)]
         [NUnit.Framework.TestCaseAttribute("Vol Root Zero Back", "C:/a/../b/..", "5", "{R} C:", "{G} a", "{..} ..", "{G} b", "{..} ..", "{N} (null)", "{N} (null)", "Absolute", "Legal", "0", null)]
         [NUnit.Framework.TestCaseAttribute("Vol Root Pos Back", "C:/a/../b/../c", "6", "{R} C:", "{G} a", "{..} ..", "{G} b", "{..} ..", "{G} c", "{N} (null)", "Absolute", "Legal", "1", null)]
+        [NUnit.Framework.TestCaseAttribute("Vol Double Root", "C:/C:/dir/dir/file.txt", "5", "{R} C:", "{R} C:", "{G} dir", "{G} dir", "{G} file.txt", "{N} (null)", "{N} (null)", "Absolute", "Illegal", "3", null)]
         public virtual void WindowsPaths(string name, string path, string length, string segment0, string segment1, string segment2, string segment3, string segment4, string segment5, string segment6, string anchor, string status, string normDepth, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;

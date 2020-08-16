@@ -17,7 +17,7 @@ Examples:
 | Path                         | Normalized Path             | Normalization Level | Notes                                                                                              |
 | (null)                       | .                           | SelfReferenceOnly   | Imposible for Null path to normalize                                                               |
 | (empty)                      | .                           | SelfReferenceOnly   | Imposible for Empty path to normalize                                                              |
-| C:/                          | C:                          | Fully               | The trailing slash adds an empty segment thus it's not normalized                                  |
+| C:/                          | C:`                         | Fully               | This is a root segment and must key the trailing slash or it will become a volume relative segment |
 | /                            | `                           | Fully               | A root only segment should be created and this path is normalized                                  |
 | /foo/bar                     | `foo`bar                    | Fully               | This path only contains root and generic segments                                                  |
 | foo/bar                      | foo`bar                     | Fully               | This path is relative but fully normalized                                                         |
@@ -57,3 +57,9 @@ Examples:
 | a/b/./c/../d/../../e         | a`e                         | Fully               | To many resons to mention                                                                          |
 | ./././././                   | .                           | SelfReferenceOnly   | Nothing but self references = one self reference                                                   |
 | .//.//.//.                   | .                           | SelfReferenceOnly   | Same as above as empty segments count as self references for normalization purposes                |
+| C:`..                        | C:`                         | Fully               | Parrent trversal stops at the first "rooted" segment                                               |
+| C:`../..                     | C:`                         | Fully               | Parrent trversal stops at the first "rooted" segment                                               |
+| /..                          | `                           | Fully               | Parrent trversal stops at the first "rooted" segment                                               |
+| /../..                       | `                           | Fully               | Parrent trversal stops at the first "rooted" segment                                               |
+| ``server`..                  | ``server                    | Fully               | Parrent trversal stops at the first "rooted" segment                                               |
+| ``server`..`..               | ``server                    | Fully               | Parrent trversal stops at the first "rooted" segment                                               |

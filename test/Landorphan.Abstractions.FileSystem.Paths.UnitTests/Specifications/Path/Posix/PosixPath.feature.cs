@@ -79,8 +79,8 @@ namespace Landorphan.Abstractions.FileSystem.Paths.UnitTests.Specifications.Path
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Posix Paths")]
-        [NUnit.Framework.TestCaseAttribute("Null", "(null)", "1", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Relative", "Illegal", "0", "false", null)]
-        [NUnit.Framework.TestCaseAttribute("Empty", "(empty)", "1", "{E} (empty)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Relative", "Illegal", "0", "false", null)]
+        [NUnit.Framework.TestCaseAttribute("Null", "(null)", "1", "{.} .", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Relative", "Legal", "0", "false", null)]
+        [NUnit.Framework.TestCaseAttribute("Empty", "(empty)", "1", "{.} .", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Relative", "Legal", "0", "false", null)]
         [NUnit.Framework.TestCaseAttribute("Volume Absolute", "c:", "1", "{G} c:", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Relative", "Legal", "1", "true", null)]
         [NUnit.Framework.TestCaseAttribute("Volume Relative", "C:/./file.txt", "3", "{G} C:", "{.} .", "{G} file.txt", "{N} (null)", "{N} (null)", "{N} (null)", "{N} (null)", "Relative", "Legal", "2", "false", null)]
         [NUnit.Framework.TestCaseAttribute("UNC", "//server/share/dir/file.txt", "4", "{U} server", "{G} share", "{G} dir", "{G} file.txt", "{N} (null)", "{N} (null)", "{N} (null)", "Absolute", "Legal", "3", "true", null)]

@@ -24,10 +24,12 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
         public IPath parsedPath;
         public IPath originalForm;
         public IPath normalizedPath;
+        public IPath pathChangeResult;
         private PathType pathType;
         private static OSPlatform osPlatform;
         private string toStringReturned;
         private Exception thrownException;
+        private string nameRequestResult;
 
         internal class MockRuntimeInformation : IRuntimeInformation
         {
@@ -120,16 +122,11 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
             segments = segmenter.GetSegments(tokens).ToArray();
         }
 
-        [Then(@"segment '(.*)' should be: (.*)")]
-        public void ThenSegmentShouldBeNull(int segment, string value)
+        public void CompareSegment(ISegment actualSegment, string value)
         {
-            for (int i = 0; i <= WindowsRelevantPathCharacters.Space; i++)
-            {
-                value = value.Replace($"%{i:X2}", ((char)i).ToString());
-            }
-//            value = value.Replace("%00", ((char)0x00).ToString());
+            value = PreparePathForTest(value);
             ISegment expected = null;
-            if (value == "{N} (null)" || segment > segments.Length)
+            if (value == "{N} (null)")
             {
                 expected = WindowsSegment.NullSegment;
             }
@@ -183,6 +180,20 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
             {
                 expected = new WindowsSegment(SegmentType.GenericSegment, value.Substring(4));
             }
+            if (pathType == PathType.Posix)
+            {
+                actualSegment.Name.Should().Be(expected.Name);
+            }
+            else
+            {
+                actualSegment.Name.Should().BeEquivalentTo(expected.Name);
+            }
+            actualSegment.SegmentType.Should().Be(expected.SegmentType);
+        }
+
+        [Then(@"segment '(.*)' should be: (.*)")]
+        public void ThenSegmentShouldBeNull(int segment, string value)
+        {
 
             ISegment actual;
             if (segment >= segments.Length)
@@ -193,17 +204,8 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
             {
                 actual = segments[segment];
             }
+            CompareSegment(actual, value);
 
-            if (pathType == PathType.Posix)
-            {
-                actual.Name.Should().Be(expected.Name);
-            }
-            else
-            {
-                actual.Name.Should().BeEquivalentTo(expected.Name);
-            }
-
-            actual.SegmentType.Should().Be(expected.SegmentType);
         }
 
         [When(@"I preparse the path as a (Posix|Windows) style path")]
@@ -219,11 +221,17 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
             }
         }
 
+        [When(@"I ask for the parent path")]
+        public void WhenIAskForTheParentPath()
+        {
+            preParsedPath = parsedPath.Parent.ToString();
+        }
+
+
         [Then(@"the resulting path should read: (.*)")]
         public void ThenTheResultingPathShouldRead(string expected)
         {
             expected = PreparePathForTest(expected);
-
             preParsedPath.Should().Be(expected);
         }
 
@@ -240,11 +248,31 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
             normalizedPath.NormalizationLevel.Should().Be(normalizationLevel);
         }
 
+        [Then(@"the path's FullyQualified property should be: (true|false)")]
+        public void ThenThePathSFullyQualifiedPropertyShouldBeFalse(bool expected)
+        {
+            parsedPath.IsFullyQualified.Should().Be(expected);
+        }
+
+
         [When(@"I ask for the path to be represented as a string")]
         public void WhenIAskForThePathToBeRepresentedAsAString()
         {
             toStringReturned = parsedPath.ToString();
         }
+
+        [Then(@"an exception of type ""(.*)"" should be thrown")]
+        public void ThenAnExceptionOfTypeShouldBeThrown(string exceptionType)
+        {
+            thrownException.GetType().Name.Should().Be(exceptionType);
+        }
+        
+        [Then(@"the exception message should contain: (.*)")]
+        public void ThenTheExceptionMessageShouldContainMessagePart(string messagePart)
+        {
+            thrownException.Message.Should().Contain(messagePart);
+        }
+
 
         [Then(@"no exception should be thrown")]
         public void ThenNoExceptionShouldBeThrown()
@@ -259,6 +287,50 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
             toStringReturned.Should().Be(expectedPath);
         }
 
+        [When(@"the path's has extension property is: (true|false)")]
+        [Then(@"the path's has extension property is: (true|false)")]
+        public void WhenThePathSHasExtensionPropertyIs(bool hasExtension)
+        {
+            parsedPath.HasExtension.Should().Be(hasExtension);
+        }
+
+        [When(@"I change the path's extension to: (.*)")]
+        public void WhenIChangeThePathSExtensionTo_Json(string newExtension)
+        {
+            newExtension = PreparePathForTest(newExtension);
+            pathChangeResult = parsedPath.ChangeExtension(newExtension);
+            nameRequestResult = pathChangeResult.ToString();
+        }
+
+        [When(@"the (parsed|resulting) path's (Name|NameWithoutExtension|Extension) should be: (.*)")]
+        [Then(@"the (parsed|resulting) path's (Name|NameWithoutExtension|Extension) should be: (.*)")]
+        public void WhenIRetreiveTheNameOfTheLastSegment(string whichPath, string nameFunction, string value)
+        {
+            value = PreparePathForTest(value);
+            IPath path = whichPath == "parsed" ? parsedPath : pathChangeResult;
+            string nameOperation;
+            if (nameFunction == "Name")
+            {
+                nameOperation = path.Name;
+            }
+            else if (nameFunction == "NameWithoutExtension")
+            {
+                nameOperation = path.NameWithoutExtension;
+            }
+            else
+            {
+                nameOperation = path.Extension;
+            }
+
+            nameOperation.Should().Be(value);
+        }
+        
+        [Then(@"the result should be: (.*)")]
+        public void ThenTheResultShouldBeValue(string value)
+        {
+            value = PreparePathForTest(value);
+            nameRequestResult.Should().Be(value);
+        }
 
         [Given(@"I parse the path")]
         [When(@"I parse the path")]
@@ -332,16 +404,45 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
         }
 
 
-        [Then(@"the path should be anchored to (.*)")]
-        public void ThenThePathShouldBeAnchoredToAbsolute(PathAnchor anchor)
+        [Then(@"the (relative )?path should be anchored to (.*)")]
+        public void ThenThePathShouldBeAnchoredToAbsolute(string isRelative, PathAnchor anchor)
         {
-            parsedPath.Anchor.Should().Be(anchor);
+            if (isRelative.Length > 0)
+            {
+                pathChangeResult.Anchor.Should().Be(anchor);
+            }
+            else
+            {
+                parsedPath.Anchor.Should().Be(anchor);
+            }
         }
 
-        [Then(@"the parse status should be (.*)")]
-        public void ThenTheParseStatusShouldBeLegal(PathStatus status)
+        [Then(@"the path's root segment should return: (.*)")]
+        public void ThenThePathSHasRootSegmentShouldReturn(string root)
         {
-            parsedPath.Status.Should().Be(status);
+            CompareSegment(parsedPath.RootSegment, root);
+        }
+        
+        [Then(@"get relative path should return: (.*)")]
+        public void ThenGetRelativePathShouldReturn(string relativePath)
+        {
+            relativePath = PreparePathForTest(relativePath);
+            pathChangeResult = parsedPath.ConvertToRelativePath();
+            pathChangeResult.ToString().Should().Be(relativePath);
+        }
+
+        [Then(@"the (parse|resulting) status should be (.*)")]
+        public void ThenTheParseStatusShouldBeLegal(string parseOrResulting, PathStatus status)
+        {
+            if (parseOrResulting == "parse")
+            {
+                parsedPath.Status.Should().Be(status);
+            }
+            else
+            {
+                pathChangeResult.Status.Should().Be(status);
+            }
+
         }
 
         [Then(@"the segment length should be (.*)")]

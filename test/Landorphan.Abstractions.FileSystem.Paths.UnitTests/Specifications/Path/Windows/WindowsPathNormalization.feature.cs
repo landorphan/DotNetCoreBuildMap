@@ -82,7 +82,8 @@ namespace Landorphan.Abstractions.FileSystem.Paths.UnitTests.Specifications.Path
         [NUnit.Framework.DescriptionAttribute("Windows Paths can be normalized to best available form.")]
         [NUnit.Framework.TestCaseAttribute("(null)", ".", "SelfReferenceOnly", "Imposible for Null path to normalize", null)]
         [NUnit.Framework.TestCaseAttribute("(empty)", ".", "SelfReferenceOnly", "Imposible for Empty path to normalize", null)]
-        [NUnit.Framework.TestCaseAttribute("C:/", "C:", "Fully", "The trailing slash adds an empty segment thus it\'s not normalized", null)]
+        [NUnit.Framework.TestCaseAttribute("C:/", "C:`", "Fully", "This is a root segment and must key the trailing slash or it will become a volume" +
+            " relative segment", null)]
         [NUnit.Framework.TestCaseAttribute("/", "`", "Fully", "A root only segment should be created and this path is normalized", null)]
         [NUnit.Framework.TestCaseAttribute("/foo/bar", "`foo`bar", "Fully", "This path only contains root and generic segments", null)]
         [NUnit.Framework.TestCaseAttribute("foo/bar", "foo`bar", "Fully", "This path is relative but fully normalized", null)]
@@ -128,6 +129,12 @@ namespace Landorphan.Abstractions.FileSystem.Paths.UnitTests.Specifications.Path
         [NUnit.Framework.TestCaseAttribute("./././././", ".", "SelfReferenceOnly", "Nothing but self references = one self reference", null)]
         [NUnit.Framework.TestCaseAttribute(".//.//.//.", ".", "SelfReferenceOnly", "Same as above as empty segments count as self references for normalization purpos" +
             "es", null)]
+        [NUnit.Framework.TestCaseAttribute("C:`..", "C:`", "Fully", "Parrent trversal stops at the first \"rooted\" segment", null)]
+        [NUnit.Framework.TestCaseAttribute("C:`../..", "C:`", "Fully", "Parrent trversal stops at the first \"rooted\" segment", null)]
+        [NUnit.Framework.TestCaseAttribute("/..", "`", "Fully", "Parrent trversal stops at the first \"rooted\" segment", null)]
+        [NUnit.Framework.TestCaseAttribute("/../..", "`", "Fully", "Parrent trversal stops at the first \"rooted\" segment", null)]
+        [NUnit.Framework.TestCaseAttribute("``server`..", "``server", "Fully", "Parrent trversal stops at the first \"rooted\" segment", null)]
+        [NUnit.Framework.TestCaseAttribute("``server`..`..", "``server", "Fully", "Parrent trversal stops at the first \"rooted\" segment", null)]
         public virtual void WindowsPathsCanBeNormalizedToBestAvailableForm_(string path, string normalizedPath, string normalizationLevel, string notes, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;

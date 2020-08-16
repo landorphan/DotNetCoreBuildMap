@@ -74,7 +74,30 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
                 }
                 else if (i >= 1)
                 {
-                    segments.Add(WindowsSegment.ParseFromString(tokens[i]));
+                    if (tokens[i].Contains(":"))
+                    {
+                        var parts = tokens[i].Split(':');
+                        if (parts.Length > 1 && !string.IsNullOrWhiteSpace(parts[1]))
+                        {
+                            segments.Add(new WindowsSegment(SegmentType.VolumeRelativeSegment, parts[0] + ":"));
+                            segments.Add(WindowsSegment.ParseFromString(parts[1]));
+                        }
+                        else
+                        {
+                            if (WindowsSegment.IsDeviceSegment(parts[0]))
+                            {
+                                segments.Add(new WindowsSegment(SegmentType.DeviceSegment, parts[0]));
+                            }
+                            else
+                            {
+                                segments.Add(new WindowsSegment(SegmentType.RootSegment, parts[0] + ":"));
+                            }
+                        }
+                    }
+                    else
+                    {
+                        segments.Add(WindowsSegment.ParseFromString(tokens[i]));
+                    }
                 }
             }
 

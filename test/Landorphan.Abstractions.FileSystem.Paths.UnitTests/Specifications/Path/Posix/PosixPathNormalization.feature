@@ -57,3 +57,7 @@ Examples:
 | a/b/./c/../d/../../e         | a/e                         | Fully               | To many resons to mention                                                                          |
 | ./././././                   | .                           | SelfReferenceOnly   | Nothing but self references = one self reference                                                   |
 | .//.//.//.                   | .                           | SelfReferenceOnly   | Same as above as empty segments count as self references for normalization purposes                |
+| /..                          | /                           | Fully               | Parrent trversal stops at the first "rooted" segment                                               |
+| /../..                       | /                           | Fully               | Parrent trversal stops at the first "rooted" segment                                               |
+| //server/..                  | //server                    | Fully               | Parrent trversal stops at the first "rooted" segment                                               |
+| //server/../..               | //server                    | Fully               | Parrent trversal stops at the first "rooted" segment                                               |

@@ -127,6 +127,10 @@ namespace Landorphan.Abstractions.FileSystem.Paths.UnitTests.Specifications.Path
         [NUnit.Framework.TestCaseAttribute("./././././", ".", "SelfReferenceOnly", "Nothing but self references = one self reference", null)]
         [NUnit.Framework.TestCaseAttribute(".//.//.//.", ".", "SelfReferenceOnly", "Same as above as empty segments count as self references for normalization purpos" +
             "es", null)]
+        [NUnit.Framework.TestCaseAttribute("/..", "/", "Fully", "Parrent trversal stops at the first \"rooted\" segment", null)]
+        [NUnit.Framework.TestCaseAttribute("/../..", "/", "Fully", "Parrent trversal stops at the first \"rooted\" segment", null)]
+        [NUnit.Framework.TestCaseAttribute("//server/..", "//server", "Fully", "Parrent trversal stops at the first \"rooted\" segment", null)]
+        [NUnit.Framework.TestCaseAttribute("//server/../..", "//server", "Fully", "Parrent trversal stops at the first \"rooted\" segment", null)]
         public virtual void PosixPathsCanBeNormalizedToBestAvailableForm_(string path, string normalizedPath, string normalizationLevel, string notes, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;

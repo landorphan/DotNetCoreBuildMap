@@ -8,6 +8,11 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Posix
 
     class PosixPath : ParsedPath
     {
+        protected override ISegment SelfSegment => PosixSegment.SelfSegment;
+        protected override ISegment NullSegment => PosixSegment.NullSegment;
+        protected override ISegment EmptySegment => PosixSegment.EmptySegment;
+        protected override ISegment ParentSegment => PosixSegment.ParentSegment;
+
         protected override void SetStatus()
         {
             int loc = 0;
@@ -66,7 +71,10 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Posix
                     }
                     if (!isDiscouraged &&
                         (segment.Name.StartsWith(PosixRelevantPathChars.Space.ToString(), StringComparison.Ordinal) ||
-                         segment.Name.EndsWith(PosixRelevantPathChars.Space.ToString(), StringComparison.Ordinal)))
+                         segment.Name.EndsWith(PosixRelevantPathChars.Space.ToString(), StringComparison.Ordinal) ||
+                         ((segment.SegmentType != SegmentType.SelfSegment &&
+                           segment.SegmentType != SegmentType.ParentSegment) && 
+                          segment.Name.EndsWith(PosixRelevantPathChars.Period.ToString(), StringComparison.Ordinal))))
                     {
                         isDiscouraged = true;
                     }

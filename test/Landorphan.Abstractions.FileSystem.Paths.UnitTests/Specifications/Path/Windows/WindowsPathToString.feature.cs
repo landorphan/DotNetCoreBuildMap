@@ -77,8 +77,8 @@ namespace Landorphan.Abstractions.FileSystem.Paths.UnitTests.Specifications.Path
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Windows Paths can be converted back to the correct string")]
-        [NUnit.Framework.TestCaseAttribute("(null)", "(empty)", "Null Paths turn into empty paths", null)]
-        [NUnit.Framework.TestCaseAttribute("(empty)", "(empty)", "Empty", null)]
+        [NUnit.Framework.TestCaseAttribute("(null)", ".", "Null Paths turn into self reference only \'.\' paths", null)]
+        [NUnit.Framework.TestCaseAttribute("(empty)", ".", "Empty Paths turn into self reference only \'.\' paths", null)]
         [NUnit.Framework.TestCaseAttribute(".", ".", "Self Segment", null)]
         [NUnit.Framework.TestCaseAttribute("..", "..", "Parent Segment", null)]
         [NUnit.Framework.TestCaseAttribute("C:`", "C:`", "Volume Root Segment", null)]

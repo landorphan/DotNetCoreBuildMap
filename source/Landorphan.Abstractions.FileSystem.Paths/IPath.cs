@@ -34,6 +34,8 @@ namespace Landorphan.Abstractions.FileSystem.Paths
 
         ISegment LeadingSegment { get; }
 
+        ISegment TrailingSegment { get; }
+
         PathStatus Status { get; }
 
         PathType PathType { get; }
@@ -44,10 +46,22 @@ namespace Landorphan.Abstractions.FileSystem.Paths
 
         IPath SuppliedPath { get; }
 
+        IPath Parent { get; }
+
         long NormalizationDepth { get; }
+
+        ISegment RootSegment { get; }
 
         NormalizationLevel NormalizationLevel { get; }
 
+        string Name { get; }
+        string NameWithoutExtension { get; }
+        string Extension { get; }
+        bool HasExtension { get; }
+        bool IsFullyQualified { get; }
+
+        IPath ChangeExtension(string newExtension);
+        IPath ConvertToRelativePath();
         IPath Normalize();
     }
 }
