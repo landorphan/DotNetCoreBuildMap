@@ -8,11 +8,11 @@ Scenario Outline: Get Path Root, Ancor and Relative Paths
 	  And I'm running on the following Operating System: Windows
 	 When I parse the path 
      Then the parse status should be <Path Status>
-	  And the path should be anchored to <Anchor>
+	  And the parse path should be anchored to <Anchor>
 	  And get relative path should return: <Relative Path>
-	  And the relative path should be anchored to Relative
+	  And the resulting path should be anchored to Relative
 	  And the resulting status should be <Resulting Status>
-	  And the path's root segment should return: <Root Segment>
+	  And the parse path's root segment should return: <Root Segment>
 Examples:
 | Path                    | Path Status | Anchor   | Root Segment | Relative Path       | Resulting Status |
 | /                       | Legal       | Absolute | {/}          | .                   | Legal            |

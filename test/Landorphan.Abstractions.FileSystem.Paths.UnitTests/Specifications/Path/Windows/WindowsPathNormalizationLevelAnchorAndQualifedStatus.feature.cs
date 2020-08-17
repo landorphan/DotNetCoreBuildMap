@@ -170,7 +170,7 @@ this.ScenarioInitialize(scenarioInfo);
    testRunner.And(string.Format("the psth\'s anchor property should be {0}", anchor), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 13
-   testRunner.And(string.Format("the path\'s FullyQualified property should be: {0}", fullyQualified), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+   testRunner.And(string.Format("the parse path\'s FullyQualified property should be: {0}", fullyQualified), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             }
             this.ScenarioCleanup();

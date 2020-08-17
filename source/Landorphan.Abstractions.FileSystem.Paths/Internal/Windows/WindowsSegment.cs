@@ -83,7 +83,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
             }
 
             if (Name.EndsWith(WindowsRelevantPathCharacters.Period.ToString(), StringComparison.Ordinal) &&
-                (this != ParentSegment || this != SelfSegment))
+                (this.SegmentType != SegmentType.ParentSegment && this.SegmentType != SegmentType.SelfSegment))
             {
                 return false;
             }

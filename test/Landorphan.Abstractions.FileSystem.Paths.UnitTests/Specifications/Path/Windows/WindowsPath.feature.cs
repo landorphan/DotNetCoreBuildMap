@@ -151,9 +151,9 @@ namespace Landorphan.Abstractions.FileSystem.Paths.UnitTests.Specifications.Path
         [NUnit.Framework.TestCaseAttribute("Neg Back Reference", "a/b/../../../e", "6", "{G} a", "{G} b", "{..} ..", "{..} ..", "{..} ..", "{G} e", "{N} (null)", "Relative", "Legal", "-1", null)]
         [NUnit.Framework.TestCaseAttribute("Neg Back Reference 2", "a/b/../../../e/", "7", "{G} a", "{G} b", "{..} ..", "{..} ..", "{..} ..", "{G} e", "{E} (empty)", "Relative", "Legal", "-1", null)]
         [NUnit.Framework.TestCaseAttribute("Root Pos Back", "/a/b/../c/../e", "7", "{/}", "{G} a", "{G} b", "{..} ..", "{G} c", "{..} ..", "{G} e", "Absolute", "Legal", "2", null)]
-        [NUnit.Framework.TestCaseAttribute("Root Neg Back", "/a/b/../../../e", "7", "{/}", "{G} a", "{G} b", "{..} ..", "{..} ..", "{..} ..", "{G} e", "Relative", "Legal", "-1", null)]
-        [NUnit.Framework.TestCaseAttribute("Root Neg Back 2", "/a/../../e/", "6", "{/}", "{G} a", "{..} ..", "{..} ..", "{G} e", "{E} (empty)", "{N} (null)", "Relative", "Legal", "-1", null)]
-        [NUnit.Framework.TestCaseAttribute("Vol Abs Neg Back", "C:/a/../../b/../c", "7", "{R} C:", "{G} a", "{..} ..", "{..} ..", "{G} b", "{..} ..", "{G} c", "Relative", "Legal", "-1", null)]
+        [NUnit.Framework.TestCaseAttribute("Root Neg Back", "/a/b/../../../e", "7", "{/}", "{G} a", "{G} b", "{..} ..", "{..} ..", "{..} ..", "{G} e", "Absolute", "Legal", "-1", null)]
+        [NUnit.Framework.TestCaseAttribute("Root Neg Back 2", "/a/../../e/", "6", "{/}", "{G} a", "{..} ..", "{..} ..", "{G} e", "{E} (empty)", "{N} (null)", "Absolute", "Legal", "-1", null)]
+        [NUnit.Framework.TestCaseAttribute("Vol Abs Neg Back", "C:/a/../../b/../c", "7", "{R} C:", "{G} a", "{..} ..", "{..} ..", "{G} b", "{..} ..", "{G} c", "Absolute", "Legal", "-1", null)]
         [NUnit.Framework.TestCaseAttribute("Vol Root Zero Back", "C:/a/../b/..", "5", "{R} C:", "{G} a", "{..} ..", "{G} b", "{..} ..", "{N} (null)", "{N} (null)", "Absolute", "Legal", "0", null)]
         [NUnit.Framework.TestCaseAttribute("Vol Root Pos Back", "C:/a/../b/../c", "6", "{R} C:", "{G} a", "{..} ..", "{G} b", "{..} ..", "{G} c", "{N} (null)", "Absolute", "Legal", "1", null)]
         [NUnit.Framework.TestCaseAttribute("Vol Double Root", "C:/C:/dir/dir/file.txt", "5", "{R} C:", "{R} C:", "{G} dir", "{G} dir", "{G} file.txt", "{N} (null)", "{N} (null)", "Absolute", "Illegal", "3", null)]
@@ -232,7 +232,7 @@ this.ScenarioInitialize(scenarioInfo);
    testRunner.And(string.Format("segment \'6\' should be: {0}", segment6), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 20
-   testRunner.And(string.Format("the path should be anchored to {0}", anchor), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+   testRunner.And(string.Format("the parse path should be anchored to {0}", anchor), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 21
    testRunner.And(string.Format("the parse status should be {0}", status), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
@@ -245,9 +245,6 @@ this.ScenarioInitialize(scenarioInfo);
 #line hidden
 #line 24
    testRunner.And(string.Format("the normalization depth should be: {0}", normDepth), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
-#line 25
-   testRunner.And(string.Format("the psth\'s anchor property should be {0}", anchor), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             }
             this.ScenarioCleanup();

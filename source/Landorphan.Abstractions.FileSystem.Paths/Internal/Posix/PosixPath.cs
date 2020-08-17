@@ -99,8 +99,9 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Posix
             get
             {
                 if ((this.LeadingSegment.SegmentType == SegmentType.RemoteSegment ||
-                     this.LeadingSegment.SegmentType == SegmentType.RootSegment) &&
-                    NormalizationDepth >= 0)
+                     this.LeadingSegment.SegmentType == SegmentType.RootSegment) 
+//                    && NormalizationDepth >= 0
+                    )
                 {
                     return Paths.PathAnchor.Absolute;
                 }

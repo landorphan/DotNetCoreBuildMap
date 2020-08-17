@@ -17,12 +17,11 @@ Scenario Outline: Windows Paths
 	  And segment '4' should be: <Segment 4>
 	  And segment '5' should be: <Segment 5>
 	  And segment '6' should be: <Segment 6>
-	  And the path should be anchored to <Anchor>
+	  And the parse path should be anchored to <Anchor>
 	  And the parse status should be <Status>
 	  And the segment length should be <Length>
 	  And the PathType should be Windows
 	  And the normalization depth should be: <Norm Depth>
-	  And the psth's anchor property should be <Anchor> 
 
 # NOTE: Due to Gherkin parsing rules, \ needs to be escaped.  In order to avoid that necissity and
 # make the following examples easier to read (`) will be used in place of the (\) character
@@ -132,9 +131,9 @@ Examples:
 | Neg Back Reference   | a/b/../../../e                    | 6      | {G} a      | {G} b           | {..} ..      | {..} ..      | {..} ..      | {G} e       | {N} (null)  | Relative | Legal       | -1         |
 | Neg Back Reference 2 | a/b/../../../e/                   | 7      | {G} a      | {G} b           | {..} ..      | {..} ..      | {..} ..      | {G} e       | {E} (empty) | Relative | Legal       | -1         |
 | Root Pos Back        | /a/b/../c/../e                    | 7      | {/}        | {G} a           | {G} b        | {..} ..      | {G} c        | {..} ..     | {G} e       | Absolute | Legal       | 2          |
-| Root Neg Back        | /a/b/../../../e                   | 7      | {/}        | {G} a           | {G} b        | {..} ..      | {..} ..      | {..} ..     | {G} e       | Relative | Legal       | -1         |
-| Root Neg Back 2      | /a/../../e/                       | 6      | {/}        | {G} a           | {..} ..      | {..} ..      | {G} e        | {E} (empty) | {N} (null)  | Relative | Legal       | -1         |
-| Vol Abs Neg Back     | C:/a/../../b/../c                 | 7      | {R} C:     | {G} a           | {..} ..      | {..} ..      | {G} b        | {..} ..     | {G} c       | Relative | Legal       | -1         |
+| Root Neg Back        | /a/b/../../../e                   | 7      | {/}        | {G} a           | {G} b        | {..} ..      | {..} ..      | {..} ..     | {G} e       | Absolute | Legal       | -1         |
+| Root Neg Back 2      | /a/../../e/                       | 6      | {/}        | {G} a           | {..} ..      | {..} ..      | {G} e        | {E} (empty) | {N} (null)  | Absolute | Legal       | -1         |
+| Vol Abs Neg Back     | C:/a/../../b/../c                 | 7      | {R} C:     | {G} a           | {..} ..      | {..} ..      | {G} b        | {..} ..     | {G} c       | Absolute | Legal       | -1         |
 | Vol Root Zero Back   | C:/a/../b/..                      | 5      | {R} C:     | {G} a           | {..} ..      | {G} b        | {..} ..      | {N} (null)  | {N} (null)  | Absolute | Legal       | 0          |
 | Vol Root Pos Back    | C:/a/../b/../c                    | 6      | {R} C:     | {G} a           | {..} ..      | {G} b        | {..} ..      | {G} c       | {N} (null)  | Absolute | Legal       | 1          |
 | Vol Double Root      | C:/C:/dir/dir/file.txt            | 5      | {R} C:     | {R} C:          | {G} dir      | {G} dir      | {G} file.txt | {N} (null)  | {N} (null)  | Absolute | Illegal     | 3          |

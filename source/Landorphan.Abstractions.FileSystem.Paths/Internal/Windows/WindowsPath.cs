@@ -16,8 +16,9 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
             {
                 if ((this.LeadingSegment.SegmentType == SegmentType.RemoteSegment ||
                      this.LeadingSegment.SegmentType == SegmentType.RootSegment ||
-                     this.LeadingSegment.SegmentType == SegmentType.VolumelessRootSegment) &&
-                    NormalizationDepth >= 0)
+                     this.LeadingSegment.SegmentType == SegmentType.VolumelessRootSegment)
+//                    && NormalizationDepth >= 0
+                    )
                 {
                     return PathAnchor.Absolute;
                 }

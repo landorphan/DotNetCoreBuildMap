@@ -10,7 +10,7 @@ Scenario Outline: Windows Paths can be normalized to best available form.
      When I parse the path 
 	 Then the resulting path should have the following Normalization Level: <Normalization Level>
 	  And the psth's anchor property should be <Anchor>
-	  And the path's FullyQualified property should be: <Fully Qualified>
+	  And the parse path's FullyQualified property should be: <Fully Qualified>
 Examples:
 # NOTE: We are using the "Alt" Path seperator here ... to keep consistantcy with the Posix paths.
 # The path parser accepts both back and forward slash carachters as path seperators for Windows Paths 

@@ -25,7 +25,7 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
         public IPath originalForm;
         public IPath normalizedPath;
         public IPath pathChangeResult;
-        private PathType pathType;
+        private PathType pathType { get; set; }
         private static OSPlatform osPlatform;
         private string toStringReturned;
         private Exception thrownException;
@@ -239,6 +239,7 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
         public void WhenINormalizeThePath()
         {
             normalizedPath = parsedPath.Normalize();
+            pathChangeResult = normalizedPath;
             preParsedPath = normalizedPath.ToString();
         }
         
@@ -248,10 +249,18 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
             normalizedPath.NormalizationLevel.Should().Be(normalizationLevel);
         }
 
-        [Then(@"the path's FullyQualified property should be: (true|false)")]
-        public void ThenThePathSFullyQualifiedPropertyShouldBeFalse(bool expected)
+        [Given(@"the (parse|resulting) path's FullyQualified property should be: (true|false)")]
+        [Then(@"the (parse|resulting) path's FullyQualified property should be: (true|false)")]
+        public void ThenThePathSFullyQualifiedPropertyShouldBeFalse(string parseOrResulting, bool expected)
         {
-            parsedPath.IsFullyQualified.Should().Be(expected);
+            if (parseOrResulting == "parse")
+            {
+                parsedPath.IsFullyQualified.Should().Be(expected);
+            }
+            else
+            {
+                pathChangeResult.IsFullyQualified.Should().Be(expected);
+            }
         }
 
 
@@ -337,10 +346,12 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
         public void WhenIParseThePath()
         {
             parsedPath = pathParser.Parse(suppliedPath);
+            pathType = parsedPath.PathType;
             // NOTE: Unless this is overriden by a test step ... the normalized path = the parsedPath on first parsing 
             normalizedPath = parsedPath;
         }
 
+        [Given(@"I parse the path as a (Windows|Posix) Path")]
         [When(@"I parse the path as a (Windows|Posix) Path")]
         public void WhenIParseThePathAsA_pathType_Path(PathType pathtype)
         {
@@ -403,11 +414,11 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
             parsedPath.PathType.Should().Be(pathType);
         }
 
-
-        [Then(@"the (relative )?path should be anchored to (.*)")]
-        public void ThenThePathShouldBeAnchoredToAbsolute(string isRelative, PathAnchor anchor)
+        [Given(@"the (resulting|parse) path should be anchored to (.*)")]
+        [Then(@"the (resulting|parse) path should be anchored to (.*)")]
+        public void ThenThePathShouldBeAnchoredToAbsolute(string parseOrResulting, PathAnchor anchor)
         {
-            if (isRelative.Length > 0)
+            if (parseOrResulting == "resulting")
             {
                 pathChangeResult.Anchor.Should().Be(anchor);
             }
@@ -417,10 +428,18 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
             }
         }
 
-        [Then(@"the path's root segment should return: (.*)")]
-        public void ThenThePathSHasRootSegmentShouldReturn(string root)
+        [Given(@"the (parse|resulting) path's root segment should return: (.*)")]
+        [Then(@"the (parse|resulting) path's root segment should return: (.*)")]
+        public void ThenThePathSHasRootSegmentShouldReturn(string parseOrResulting, string root)
         {
-            CompareSegment(parsedPath.RootSegment, root);
+            if (parseOrResulting == "parse")
+            {
+                CompareSegment(parsedPath.RootSegment, root);
+            }
+            else
+            {
+                CompareSegment(pathChangeResult.RootSegment, root);
+            }
         }
         
         [Then(@"get relative path should return: (.*)")]
@@ -431,6 +450,7 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
             pathChangeResult.ToString().Should().Be(relativePath);
         }
 
+        [Given(@"the (parse|resulting) status should be (.*)")]
         [Then(@"the (parse|resulting) status should be (.*)")]
         public void ThenTheParseStatusShouldBeLegal(string parseOrResulting, PathStatus status)
         {

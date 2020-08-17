@@ -6,6 +6,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
     using System.IO;
     using System.Linq;
     using System.Runtime.CompilerServices;
+    using System.Transactions;
     using Landorphan.Abstractions.FileSystem.Paths.Internal.Posix;
     using Landorphan.Abstractions.FileSystem.Paths.Internal.Windows;
 
@@ -60,6 +61,11 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
             retval.SuppliedPath = retval;
             return retval;
         }
+
+        //internal static IPath CreateSimplifiedForm(IPath suppliedPath)
+        //{
+
+        //}
 
         private static Segment[] TraverseSegmentChain(PathType pathType, Segment[] segments)
         {
@@ -249,6 +255,165 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
             return WindowsPath.ConvertToString(this);
         }
 
+        internal static Segment[] SimplifySegments(PathType pathType, Segment[] segments)
+        {
+            Stack<Segment> stack = new Stack<Segment>(segments);
+            Stack<Segment> result = new Stack<Segment>();
+
+            //Func<Segment, bool> IsTrueRoot = (t) =>
+            //{
+            //    if (t.SegmentType == SegmentType.RemoteSegment ||
+            //        t.SegmentType == SegmentType.RootSegment ||
+            //        t.SegmentType == SegmentType.VolumelessRootSegment)
+            //    {
+            //        if (stack.Count > 0)
+            //        {
+            //            return true;
+            //        }
+            //    }
+            //    return false;
+            //};
+
+            //Func<Segment, bool> IsTrueFullyQualified = (t) =>
+            //{
+            //    if (t.SegmentType == SegmentType.RemoteSegment ||
+            //        t.SegmentType == SegmentType.RootSegment ||
+            //        t.SegmentType == SegmentType.VolumeRelativeSegment)
+            //    {
+            //        if (stack.Count > 0)
+            //        {
+            //            return true;
+            //        }
+            //    }
+
+            //    return false;
+            //};
+
+            //Func<Segment> SafePeek = () =>
+            //{
+            //    Segment prior = null;
+            //    if (stack.Count > 0)
+            //    {
+            //        prior = stack.Peek();
+            //    }
+
+            //    return prior;
+            //};
+
+            int popDepth = 0;
+            Func<bool> ShouldDiscard = () =>
+            {
+                if (popDepth > 0)
+                {
+                    popDepth--;
+                    return true;
+                }
+                return false;
+            };
+
+            Segment forcedRoot = null;
+            Segment current = null;
+            while (stack.Count > 0)
+            {
+                current = stack.Pop();
+                switch (current.SegmentType)
+                {
+                    // Any Device Segment anywhere in the path resolves immediately to
+                    // that device and causes all other segments to be irrelevant.
+                    case SegmentType.DeviceSegment:
+                        return new[] {current};
+
+                    // Handle all Absolute Segment types
+                    // "True" Absolute segments must be the first segment.
+                    // If this is a "true" Fully Qualified segment, It can not be removed
+                    // If however, this is not the first segment, then it is treated as 
+                    // just a generic segment which can be removed.
+                    case SegmentType.RemoteSegment:
+                    case SegmentType.RootSegment:
+                    case SegmentType.VolumelessRootSegment:
+                        if (stack.Count == 0)
+                        {
+                            // If there is no count, this is a root segment ... 
+                            // keep the segment and throw out the popDepth.
+                            popDepth = 0;
+                            result.Push(current);
+                        }
+                        else if(!ShouldDiscard())
+                        {
+                            // If there is no pop depth, keep the segment 
+                            // It will be considered a "generic" segment for 
+                            // other purposes after this.
+                            result.Push(current);
+                        }
+                        break;
+
+                    // Special case Vol Rel Segment
+                    // If this is a true "Fully Qualified" segment, 
+                    // It can not be removed.  However, It can still be affected by 
+                    // parent segments.
+                    case SegmentType.VolumeRelativeSegment:
+                        if (!ShouldDiscard())
+                        {
+                            forcedRoot = current;
+                        }
+                        break;
+
+                    // Parents simply increase the "pop" count.
+                    case SegmentType.ParentSegment:
+                        popDepth++;
+                        break;
+
+                    // Self segments to resolve:
+                    // Self segments can safely be removed.  The rare case where it can't
+                    // be removed (the case of a SelfReferenceOnly path) is handled below
+                    // by converting any "empty" set of segments into a Self reference only.
+                    // HOWEVER: These segment types never alter the popDepth (they 
+                    // always pop).
+                    case SegmentType.NullSegment:
+                    case SegmentType.EmptySegment:
+                    case SegmentType.SelfSegment:
+                        break;
+                    case SegmentType.GenericSegment:
+                        if (!ShouldDiscard())
+                        {
+                            result.Push(current);
+                        }
+                        break;
+                }
+            }
+
+            for (int i = 0; i < popDepth; i++)
+            {
+                if (pathType == PathType.Posix)
+                {
+                    result.Push(PosixSegment.ParentSegment);
+                }
+                else
+                {
+                    result.Push(WindowsSegment.ParentSegment);
+                }
+            }
+
+            if (forcedRoot != null)
+            {
+                result.Push(forcedRoot);
+            }
+
+            if (result.Count == 0)
+            {
+                if (pathType == PathType.Posix)
+                {
+                    result.Push(PosixSegment.SelfSegment);
+                }
+                else
+                {
+                    result.Push(WindowsSegment.SelfSegment);
+                }
+            }
+
+            return result.ToArray();
+        }
+
         internal Segment[] NormalizeSegments()
         {
             Stack<Segment> newSegments = new Stack<Segment>();
@@ -290,10 +455,15 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
                         continue;
                     case SegmentType.DeviceSegment:
                         return new[] {clone};
+                        // N + R
                     case SegmentType.GenericSegment:
+                        // Q + R
                     case SegmentType.VolumeRelativeSegment:
+                        // Q + A
                     case SegmentType.RootSegment:
+                        // N + A
                     case SegmentType.VolumelessRootSegment:
+                        // Q + A
                     case SegmentType.RemoteSegment:
                         isSelfSegmentsOnly = false;
                         newSegments.Push(clone);

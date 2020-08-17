@@ -129,19 +129,19 @@ this.ScenarioInitialize(scenarioInfo);
      testRunner.Then(string.Format("the parse status should be {0}", pathStatus), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
 #line 11
-   testRunner.And(string.Format("the path should be anchored to {0}", anchor), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+   testRunner.And(string.Format("the parse path should be anchored to {0}", anchor), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 12
    testRunner.And(string.Format("get relative path should return: {0}", relativePath), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 13
-   testRunner.And("the relative path should be anchored to Relative", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+   testRunner.And("the resulting path should be anchored to Relative", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 14
    testRunner.And(string.Format("the resulting status should be {0}", resultingStatus), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 15
-   testRunner.And(string.Format("the path\'s root segment should return: {0}", rootSegment), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+   testRunner.And(string.Format("the parse path\'s root segment should return: {0}", rootSegment), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             }
             this.ScenarioCleanup();
