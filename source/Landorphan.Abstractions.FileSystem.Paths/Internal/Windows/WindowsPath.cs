@@ -14,29 +14,29 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
         {
             get
             {
-                if ((this.LeadingSegment.SegmentType == SegmentType.RemoteSegment ||
-                     this.LeadingSegment.SegmentType == SegmentType.RootSegment ||
-                     this.LeadingSegment.SegmentType == SegmentType.VolumelessRootSegment)
+                if (this == simplifiedForm)
+                {
+                    if ((this.LeadingSegment.SegmentType == SegmentType.RemoteSegment ||
+                         this.LeadingSegment.SegmentType == SegmentType.RootSegment ||
+                         this.LeadingSegment.SegmentType == SegmentType.VolumelessRootSegment)
 //                    && NormalizationDepth >= 0
                     )
-                {
-                    return PathAnchor.Absolute;
-                }
-                foreach (var segment in this.Segments)
-                {
-                    if (segment.SegmentType == SegmentType.DeviceSegment)
                     {
                         return PathAnchor.Absolute;
                     }
+                    foreach (var segment in this.Segments)
+                    {
+                        if (segment.SegmentType == SegmentType.DeviceSegment)
+                        {
+                            return PathAnchor.Absolute;
+                        }
+                    }
+                    return PathAnchor.Relative;
                 }
-                return PathAnchor.Relative;
+
+                return simplifiedForm.Anchor;
             }
         }
-
-        protected override ISegment SelfSegment => WindowsSegment.SelfSegment;
-        protected override ISegment NullSegment => WindowsSegment.NullSegment;
-        protected override ISegment EmptySegment => WindowsSegment.EmptySegment;
-        protected override ISegment ParentSegment => WindowsSegment.ParentSegment;
 
         protected override void SetStatus()
         {
@@ -47,7 +47,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
             {
                 if (!segment.IsLegal())
                 {
-                    Status = PathStatus.Illegal;
+                    status = PathStatus.Illegal;
                     return;
                 }
 
@@ -59,7 +59,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
                         {
                             if (segment.Name.ToCharArray().Contains(illegalAfterFirstSegment))
                             {
-                                Status = PathStatus.Illegal;
+                                status = PathStatus.Illegal;
                                 return;
                             }
                         }
@@ -71,7 +71,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
                     case SegmentType.NullSegment:
                         if (loc + 1 < Segments.Length || loc == 0)
                         {
-                            Status = PathStatus.Illegal;
+                            status = PathStatus.Illegal;
                         }
 
                         return;
@@ -79,7 +79,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
                     case SegmentType.EmptySegment:
                         if (loc == 0)
                         {
-                            Status = PathStatus.Illegal;
+                            status = PathStatus.Illegal;
                             return;
                         }
 
@@ -91,7 +91,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
                     case SegmentType.VolumelessRootSegment:
                         if (loc != 0)
                         {
-                            Status = PathStatus.Illegal;
+                            status = PathStatus.Illegal;
                             return;
                         }
 
@@ -131,11 +131,11 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
 
             if (isDiscouraged)
             {
-                Status = PathStatus.Discouraged;
+                status = PathStatus.Discouraged;
                 return;
             }
 
-            Status = PathStatus.Legal;
+            status = PathStatus.Legal;
         }
 
         public const string UncPrefix = "UNC";

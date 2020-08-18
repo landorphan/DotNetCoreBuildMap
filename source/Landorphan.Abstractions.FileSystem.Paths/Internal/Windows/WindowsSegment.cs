@@ -91,6 +91,32 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
             return true;
         }
 
+        public override bool IsDiscouraged()
+        {
+            if (this.SegmentType != SegmentType.DeviceSegment)
+            {
+                foreach (var deviceName in WindowsSegment.DeviceNames)
+                {
+                    if (this.Name.StartsWith(deviceName, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            if (this.Name.StartsWith(WindowsRelevantPathCharacters.Space.ToString(), StringComparison.Ordinal))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public override bool IsLegalIfGeneric()
+        {
+            return false;
+        }
+
         public override ISegment Clone()
         {
             return new WindowsSegment(this.SegmentType, this.Name);

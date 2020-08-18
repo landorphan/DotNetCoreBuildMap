@@ -38,6 +38,8 @@ namespace Landorphan.Abstractions.FileSystem.Paths
 
         PathStatus Status { get; }
 
+        bool IsDiscouraged { get; }
+
         PathType PathType { get; }
 
         PathAnchor Anchor { get; }

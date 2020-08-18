@@ -58,11 +58,11 @@
             Null, StartOfHeader, StartOfText, EndOfText, EndOfTransmission, Enquiry, Acknowledge, Bell, Backspace, HorizontalTabulation,
             LineFeed, VerticalTabulation, FormFeed, CarriageReturn, ShiftOut, ShiftIn, DataLinkEscape, DeviceControl1, DeviceControl2, DeviceControl3,
             DeviceControl4, NegativeAcknowledge, SynchronousIdle, EndOfTransmissionBlock, Cancel, EndOfMedium, Substitute, Escape, FileSeparator,
-            GroupSeparator, RecordSeparator, UnitSeparator, DoubleQuote, Asterisk, ForwardSlash, LessThanSign, GreaterThanSign, BackSlash, VerticalBar
+            GroupSeparator, RecordSeparator, UnitSeparator, DoubleQuote, Asterisk, ForwardSlash, LessThanSign, GreaterThanSign, QuestionMark, BackSlash, VerticalBar
         };
         public static readonly char[] IllegalAfterFirstSegment =
         {
-            Colon, QuestionMark
+            Colon
         };
     }
 }

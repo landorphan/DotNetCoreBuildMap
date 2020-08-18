@@ -76,62 +76,62 @@ namespace Landorphan.Abstractions.FileSystem.Paths.UnitTests.Specifications.Path
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Change Extension Safe Execute (no Exceptions)")]
-        [NUnit.Framework.TestCaseAttribute("/foo.txt", ".json", "`foo.json", "Legal", ".json", "The leading period in the extension is ignored", null)]
-        [NUnit.Framework.TestCaseAttribute("/foo.txt", "json", "`foo.json", "Legal", ".json", "simple change", null)]
-        [NUnit.Framework.TestCaseAttribute("/foo.txt", "(null)", "`foo", "Legal", "(empty)", "Null becomes empty string", null)]
-        [NUnit.Framework.TestCaseAttribute("/foo.txt", "(empty)", "`foo", "Legal", "(empty)", "Empty string means no extension", null)]
-        [NUnit.Framework.TestCaseAttribute("/foo.txt", ".", "`foo", "Legal", "(empty)", "The leading period in the extension is ignored", null)]
-        [NUnit.Framework.TestCaseAttribute("/foo.txt", "json.txt", "`foo.json.txt", "Legal", ".txt", "only the last part of the new extension is an extension", null)]
-        [NUnit.Framework.TestCaseAttribute("/foo.txt", ".json.txt.", "`foo.json.txt.", "Illegal", "(empty)", "Trailing \'.\' are illegal on Windows", null)]
-        [NUnit.Framework.TestCaseAttribute("/foo.txt", "..", "`foo..", "Illegal", "(empty)", "Trailing \'.\' are illegal on Windows", null)]
-        [NUnit.Framework.TestCaseAttribute("/foo.txt", ".json.", "`foo.json.", "Illegal", "(empty)", "Trailing \'.\' are illegal on Windows", null)]
-        [NUnit.Framework.TestCaseAttribute("/foo.txt", "json.", "`foo.json.", "Illegal", "(empty)", "Trailing \'.\' are illegal on Windows", null)]
-        [NUnit.Framework.TestCaseAttribute("/foo.txt", "json%20", "`foo.json%20", "Illegal", ".json%20", "Trailing \' \' are illegal on Windows", null)]
-        [NUnit.Framework.TestCaseAttribute("/foo.bar.txt", ".json", "`foo.bar.json", "Legal", ".json", "The leading period in the extension is ignored", null)]
-        [NUnit.Framework.TestCaseAttribute("/foo.bar.txt", "json", "`foo.bar.json", "Legal", ".json", "simple change", null)]
-        [NUnit.Framework.TestCaseAttribute("/foo.bar.txt", "(null)", "`foo.bar", "Legal", ".bar", "Null becomes empty string", null)]
-        [NUnit.Framework.TestCaseAttribute("/foo.bar.txt", "(empty)", "`foo.bar", "Legal", ".bar", "Empty string means no extension", null)]
-        [NUnit.Framework.TestCaseAttribute("/foo.bar.txt", ".", "`foo.bar", "Legal", ".bar", "The leading period in the extension is ignored", null)]
-        [NUnit.Framework.TestCaseAttribute("/foo.bar.txt", "json.txt", "`foo.bar.json.txt", "Legal", ".txt", "only the last part of the new extension is an extension", null)]
-        [NUnit.Framework.TestCaseAttribute("/foo.bar.txt", ".json.txt.", "`foo.bar.json.txt.", "Illegal", "(empty)", "Trailing \'.\' are illegal on Windows", null)]
-        [NUnit.Framework.TestCaseAttribute("/foo.bar.txt", "..", "`foo.bar..", "Illegal", "(empty)", "Trailing \'.\' are illegal on Windows", null)]
-        [NUnit.Framework.TestCaseAttribute("/foo.bar.txt", ".json.", "`foo.bar.json.", "Illegal", "(empty)", "Trailing \'.\' are illegal on Windows", null)]
-        [NUnit.Framework.TestCaseAttribute("/foo.bar.txt", "json.", "`foo.bar.json.", "Illegal", "(empty)", "Trailing \'.\' are illegal on Windows", null)]
-        [NUnit.Framework.TestCaseAttribute("/foo.bar.txt", "json%20", "`foo.bar.json%20", "Illegal", ".json%20", "Trailing \' \' are illegal on Windows", null)]
-        [NUnit.Framework.TestCaseAttribute("/.gitignore", "json", "`.gitignore.json", "Legal", ".json", "The leading period in the extension is ignored", null)]
-        [NUnit.Framework.TestCaseAttribute("/.gitignore", ".json", "`.gitignore.json", "Legal", ".json", "simple change", null)]
-        [NUnit.Framework.TestCaseAttribute("/.gitignore", "(null)", "`.gitignore", "Legal", "(empty)", "Null becomes empty string", null)]
-        [NUnit.Framework.TestCaseAttribute("/.gitignore", "(empty)", "`.gitignore", "Legal", "(empty)", "Empty string means no extension", null)]
-        [NUnit.Framework.TestCaseAttribute("/.gitignore", ".", "`.gitignore", "Legal", "(empty)", "The leading period in the extension is ignored", null)]
-        [NUnit.Framework.TestCaseAttribute("/.gitignore", "json.txt", "`.gitignore.json.txt", "Legal", ".txt", "only the last part of the new extension is an extension", null)]
-        [NUnit.Framework.TestCaseAttribute("/.gitignore", ".json.txt.", "`.gitignore.json.txt.", "Illegal", "(empty)", "Trailing \'.\' are illegal on Windows", null)]
-        [NUnit.Framework.TestCaseAttribute("/.gitignore", "..", "`.gitignore..", "Illegal", "(empty)", "Trailing \'.\' are illegal on Windows", null)]
-        [NUnit.Framework.TestCaseAttribute("/.gitignore", ".json.", "`.gitignore.json.", "Illegal", "(empty)", "Trailing \'.\' are illegal on Windows", null)]
-        [NUnit.Framework.TestCaseAttribute("/.gitignore", "json.", "`.gitignore.json.", "Illegal", "(empty)", "Trailing \'.\' are illegal on Windows", null)]
-        [NUnit.Framework.TestCaseAttribute("/.gitignore", "json%20", "`.gitignore.json%20", "Illegal", ".json%20", "Trailing \' \' are illegal on Windows", null)]
-        [NUnit.Framework.TestCaseAttribute("/.gitignore.txt", "json", "`.gitignore.json", "Legal", ".json", "The leading period in the extension is ignored", null)]
-        [NUnit.Framework.TestCaseAttribute("/.gitignore.txt", ".json", "`.gitignore.json", "Legal", ".json", "simple change", null)]
-        [NUnit.Framework.TestCaseAttribute("/.gitignore.txt", "(null)", "`.gitignore", "Legal", "(empty)", "Null becomes empty string", null)]
-        [NUnit.Framework.TestCaseAttribute("/.gitignore.txt", "(empty)", "`.gitignore", "Legal", "(empty)", "Empty string means no extension", null)]
-        [NUnit.Framework.TestCaseAttribute("/.gitignore.txt", ".", "`.gitignore", "Legal", "(empty)", "The leading period in the extension is ignored", null)]
-        [NUnit.Framework.TestCaseAttribute("/.gitignore.txt", "json.txt", "`.gitignore.json.txt", "Legal", ".txt", "only the last part of the new extension is an extension", null)]
-        [NUnit.Framework.TestCaseAttribute("/.gitignore.txt", ".json.txt.", "`.gitignore.json.txt.", "Illegal", "(empty)", "Trailing \'.\' are illegal on Windows", null)]
-        [NUnit.Framework.TestCaseAttribute("/.gitignore.txt", "..", "`.gitignore..", "Illegal", "(empty)", "Trailing \'.\' are illegal on Windows", null)]
-        [NUnit.Framework.TestCaseAttribute("/.gitignore.txt", ".json.", "`.gitignore.json.", "Illegal", "(empty)", "Trailing \'.\' are illegal on Windows", null)]
-        [NUnit.Framework.TestCaseAttribute("/.gitignore.txt", "json.", "`.gitignore.json.", "Illegal", "(empty)", "Trailing \'.\' are illegal on Windows", null)]
-        [NUnit.Framework.TestCaseAttribute("/.gitignore.txt", "json%20", "`.gitignore.json%20", "Illegal", ".json%20", "Trailing \' \' are illegal on Windows", null)]
-        [NUnit.Framework.TestCaseAttribute("/file", "json", "`file.json", "Legal", ".json", "The leading period in the extension is ignored", null)]
-        [NUnit.Framework.TestCaseAttribute("/file", ".json", "`file.json", "Legal", ".json", "simple change", null)]
-        [NUnit.Framework.TestCaseAttribute("/file", "(null)", "`file", "Legal", "(empty)", "Null becomes empty string", null)]
-        [NUnit.Framework.TestCaseAttribute("/file", "(empty)", "`file", "Legal", "(empty)", "Empty string means no extension", null)]
-        [NUnit.Framework.TestCaseAttribute("/file", ".", "`file", "Legal", "(empty)", "The leading period in the extension is ignored", null)]
-        [NUnit.Framework.TestCaseAttribute("/file", "json.txt", "`file.json.txt", "Legal", ".txt", "only the last part of the new extension is an extension", null)]
-        [NUnit.Framework.TestCaseAttribute("/file", ".json.txt.", "`file.json.txt.", "Illegal", "(empty)", "Trailing \'.\' are illegal on Windows", null)]
-        [NUnit.Framework.TestCaseAttribute("/file", "..", "`file..", "Illegal", "(empty)", "Trailing \'.\' are illegal on Windows", null)]
-        [NUnit.Framework.TestCaseAttribute("/file", ".json.", "`file.json.", "Illegal", "(empty)", "Trailing \'.\' are illegal on Windows", null)]
-        [NUnit.Framework.TestCaseAttribute("/file", "json.", "`file.json.", "Illegal", "(empty)", "Trailing \'.\' are illegal on Windows", null)]
-        [NUnit.Framework.TestCaseAttribute("/file", "json%20", "`file.json%20", "Illegal", ".json%20", "Trailing \' \' are illegal on Windows", null)]
-        public virtual void ChangeExtensionSafeExecuteNoExceptions(string path, string newExtension, string result, string newPathStatus, string resultingExtension, string notes, string[] exampleTags)
+        [NUnit.Framework.TestCaseAttribute("/foo.txt", ".json", "`foo.json", "Legal", "false", ".json", "The leading period in the extension is ignored", null)]
+        [NUnit.Framework.TestCaseAttribute("/foo.txt", "json", "`foo.json", "Legal", "false", ".json", "simple change", null)]
+        [NUnit.Framework.TestCaseAttribute("/foo.txt", "(null)", "`foo", "Legal", "false", "(empty)", "Null becomes empty string", null)]
+        [NUnit.Framework.TestCaseAttribute("/foo.txt", "(empty)", "`foo", "Legal", "false", "(empty)", "Empty string means no extension", null)]
+        [NUnit.Framework.TestCaseAttribute("/foo.txt", ".", "`foo", "Legal", "false", "(empty)", "The leading period in the extension is ignored", null)]
+        [NUnit.Framework.TestCaseAttribute("/foo.txt", "json.txt", "`foo.json.txt", "Legal", "false", ".txt", "only the last part of the new extension is an extension", null)]
+        [NUnit.Framework.TestCaseAttribute("/foo.txt", ".json.txt.", "`foo.json.txt.", "Illegal", "false", "(empty)", "Trailing \'.\' are illegal on Windows", null)]
+        [NUnit.Framework.TestCaseAttribute("/foo.txt", "..", "`foo..", "Illegal", "false", "(empty)", "Trailing \'.\' are illegal on Windows", null)]
+        [NUnit.Framework.TestCaseAttribute("/foo.txt", ".json.", "`foo.json.", "Illegal", "false", "(empty)", "Trailing \'.\' are illegal on Windows", null)]
+        [NUnit.Framework.TestCaseAttribute("/foo.txt", "json.", "`foo.json.", "Illegal", "false", "(empty)", "Trailing \'.\' are illegal on Windows", null)]
+        [NUnit.Framework.TestCaseAttribute("/foo.txt", "json%20", "`foo.json%20", "Illegal", "false", ".json%20", "Trailing \' \' are illegal on Windows", null)]
+        [NUnit.Framework.TestCaseAttribute("/foo.bar.txt", ".json", "`foo.bar.json", "Legal", "false", ".json", "The leading period in the extension is ignored", null)]
+        [NUnit.Framework.TestCaseAttribute("/foo.bar.txt", "json", "`foo.bar.json", "Legal", "false", ".json", "simple change", null)]
+        [NUnit.Framework.TestCaseAttribute("/foo.bar.txt", "(null)", "`foo.bar", "Legal", "false", ".bar", "Null becomes empty string", null)]
+        [NUnit.Framework.TestCaseAttribute("/foo.bar.txt", "(empty)", "`foo.bar", "Legal", "false", ".bar", "Empty string means no extension", null)]
+        [NUnit.Framework.TestCaseAttribute("/foo.bar.txt", ".", "`foo.bar", "Legal", "false", ".bar", "The leading period in the extension is ignored", null)]
+        [NUnit.Framework.TestCaseAttribute("/foo.bar.txt", "json.txt", "`foo.bar.json.txt", "Legal", "false", ".txt", "only the last part of the new extension is an extension", null)]
+        [NUnit.Framework.TestCaseAttribute("/foo.bar.txt", ".json.txt.", "`foo.bar.json.txt.", "Illegal", "false", "(empty)", "Trailing \'.\' are illegal on Windows", null)]
+        [NUnit.Framework.TestCaseAttribute("/foo.bar.txt", "..", "`foo.bar..", "Illegal", "false", "(empty)", "Trailing \'.\' are illegal on Windows", null)]
+        [NUnit.Framework.TestCaseAttribute("/foo.bar.txt", ".json.", "`foo.bar.json.", "Illegal", "false", "(empty)", "Trailing \'.\' are illegal on Windows", null)]
+        [NUnit.Framework.TestCaseAttribute("/foo.bar.txt", "json.", "`foo.bar.json.", "Illegal", "false", "(empty)", "Trailing \'.\' are illegal on Windows", null)]
+        [NUnit.Framework.TestCaseAttribute("/foo.bar.txt", "json%20", "`foo.bar.json%20", "Illegal", "false", ".json%20", "Trailing \' \' are illegal on Windows", null)]
+        [NUnit.Framework.TestCaseAttribute("/.gitignore", "json", "`.gitignore.json", "Legal", "false", ".json", "The leading period in the extension is ignored", null)]
+        [NUnit.Framework.TestCaseAttribute("/.gitignore", ".json", "`.gitignore.json", "Legal", "false", ".json", "simple change", null)]
+        [NUnit.Framework.TestCaseAttribute("/.gitignore", "(null)", "`.gitignore", "Legal", "false", "(empty)", "Null becomes empty string", null)]
+        [NUnit.Framework.TestCaseAttribute("/.gitignore", "(empty)", "`.gitignore", "Legal", "false", "(empty)", "Empty string means no extension", null)]
+        [NUnit.Framework.TestCaseAttribute("/.gitignore", ".", "`.gitignore", "Legal", "false", "(empty)", "The leading period in the extension is ignored", null)]
+        [NUnit.Framework.TestCaseAttribute("/.gitignore", "json.txt", "`.gitignore.json.txt", "Legal", "false", ".txt", "only the last part of the new extension is an extension", null)]
+        [NUnit.Framework.TestCaseAttribute("/.gitignore", ".json.txt.", "`.gitignore.json.txt.", "Illegal", "false", "(empty)", "Trailing \'.\' are illegal on Windows", null)]
+        [NUnit.Framework.TestCaseAttribute("/.gitignore", "..", "`.gitignore..", "Illegal", "false", "(empty)", "Trailing \'.\' are illegal on Windows", null)]
+        [NUnit.Framework.TestCaseAttribute("/.gitignore", ".json.", "`.gitignore.json.", "Illegal", "false", "(empty)", "Trailing \'.\' are illegal on Windows", null)]
+        [NUnit.Framework.TestCaseAttribute("/.gitignore", "json.", "`.gitignore.json.", "Illegal", "false", "(empty)", "Trailing \'.\' are illegal on Windows", null)]
+        [NUnit.Framework.TestCaseAttribute("/.gitignore", "json%20", "`.gitignore.json%20", "Illegal", "false", ".json%20", "Trailing \' \' are illegal on Windows", null)]
+        [NUnit.Framework.TestCaseAttribute("/.gitignore.txt", "json", "`.gitignore.json", "Legal", "false", ".json", "The leading period in the extension is ignored", null)]
+        [NUnit.Framework.TestCaseAttribute("/.gitignore.txt", ".json", "`.gitignore.json", "Legal", "false", ".json", "simple change", null)]
+        [NUnit.Framework.TestCaseAttribute("/.gitignore.txt", "(null)", "`.gitignore", "Legal", "false", "(empty)", "Null becomes empty string", null)]
+        [NUnit.Framework.TestCaseAttribute("/.gitignore.txt", "(empty)", "`.gitignore", "Legal", "false", "(empty)", "Empty string means no extension", null)]
+        [NUnit.Framework.TestCaseAttribute("/.gitignore.txt", ".", "`.gitignore", "Legal", "false", "(empty)", "The leading period in the extension is ignored", null)]
+        [NUnit.Framework.TestCaseAttribute("/.gitignore.txt", "json.txt", "`.gitignore.json.txt", "Legal", "false", ".txt", "only the last part of the new extension is an extension", null)]
+        [NUnit.Framework.TestCaseAttribute("/.gitignore.txt", ".json.txt.", "`.gitignore.json.txt.", "Illegal", "false", "(empty)", "Trailing \'.\' are illegal on Windows", null)]
+        [NUnit.Framework.TestCaseAttribute("/.gitignore.txt", "..", "`.gitignore..", "Illegal", "false", "(empty)", "Trailing \'.\' are illegal on Windows", null)]
+        [NUnit.Framework.TestCaseAttribute("/.gitignore.txt", ".json.", "`.gitignore.json.", "Illegal", "false", "(empty)", "Trailing \'.\' are illegal on Windows", null)]
+        [NUnit.Framework.TestCaseAttribute("/.gitignore.txt", "json.", "`.gitignore.json.", "Illegal", "false", "(empty)", "Trailing \'.\' are illegal on Windows", null)]
+        [NUnit.Framework.TestCaseAttribute("/.gitignore.txt", "json%20", "`.gitignore.json%20", "Illegal", "false", ".json%20", "Trailing \' \' are illegal on Windows", null)]
+        [NUnit.Framework.TestCaseAttribute("/file", "json", "`file.json", "Legal", "false", ".json", "The leading period in the extension is ignored", null)]
+        [NUnit.Framework.TestCaseAttribute("/file", ".json", "`file.json", "Legal", "false", ".json", "simple change", null)]
+        [NUnit.Framework.TestCaseAttribute("/file", "(null)", "`file", "Legal", "false", "(empty)", "Null becomes empty string", null)]
+        [NUnit.Framework.TestCaseAttribute("/file", "(empty)", "`file", "Legal", "false", "(empty)", "Empty string means no extension", null)]
+        [NUnit.Framework.TestCaseAttribute("/file", ".", "`file", "Legal", "false", "(empty)", "The leading period in the extension is ignored", null)]
+        [NUnit.Framework.TestCaseAttribute("/file", "json.txt", "`file.json.txt", "Legal", "false", ".txt", "only the last part of the new extension is an extension", null)]
+        [NUnit.Framework.TestCaseAttribute("/file", ".json.txt.", "`file.json.txt.", "Illegal", "false", "(empty)", "Trailing \'.\' are illegal on Windows", null)]
+        [NUnit.Framework.TestCaseAttribute("/file", "..", "`file..", "Illegal", "false", "(empty)", "Trailing \'.\' are illegal on Windows", null)]
+        [NUnit.Framework.TestCaseAttribute("/file", ".json.", "`file.json.", "Illegal", "false", "(empty)", "Trailing \'.\' are illegal on Windows", null)]
+        [NUnit.Framework.TestCaseAttribute("/file", "json.", "`file.json.", "Illegal", "false", "(empty)", "Trailing \'.\' are illegal on Windows", null)]
+        [NUnit.Framework.TestCaseAttribute("/file", "json%20", "`file.json%20", "Illegal", "false", ".json%20", "Trailing \' \' are illegal on Windows", null)]
+        public virtual void ChangeExtensionSafeExecuteNoExceptions(string path, string newExtension, string result, string newPathStatus, string isDiscouraged, string resultingExtension, string notes, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
@@ -139,6 +139,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.UnitTests.Specifications.Path
             argumentsOfScenario.Add("New Extension", newExtension);
             argumentsOfScenario.Add("Result", result);
             argumentsOfScenario.Add("New Path Status", newPathStatus);
+            argumentsOfScenario.Add("Is Discouraged", isDiscouraged);
             argumentsOfScenario.Add("Resulting Extension", resultingExtension);
             argumentsOfScenario.Add("Notes", notes);
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Change Extension Safe Execute (no Exceptions)", null, tagsOfScenario, argumentsOfScenario);
@@ -178,9 +179,12 @@ this.ScenarioInitialize(scenarioInfo);
      testRunner.Then(string.Format("the resulting status should be {0}", newPathStatus), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
 #line 12
-   testRunner.And(string.Format("the result should be: {0}", result), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+   testRunner.And(string.Format("the resulting path\'s IsDiscouraged property should be {0}", isDiscouraged), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 13
+   testRunner.And(string.Format("the result should be: {0}", result), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 14
      testRunner.And(string.Format("the resulting path\'s Extension should be: {0}", resultingExtension), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             }

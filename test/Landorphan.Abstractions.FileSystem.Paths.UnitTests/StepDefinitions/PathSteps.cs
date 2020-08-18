@@ -249,6 +249,19 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
             normalizedPath.NormalizationLevel.Should().Be(normalizationLevel);
         }
 
+        [Then(@"the (parse|resulting) path's IsDiscouraged property should be (true|false)")]
+        public void ThenTheResultingPathSIsDiscouragedPropertyShouldBeFalse(string parseOrResulting, bool expected)
+        {
+            if (parseOrResulting == "parse")
+            {
+                parsedPath.IsDiscouraged.Should().Be(expected);
+            }
+            else
+            {
+                pathChangeResult.IsDiscouraged.Should().Be(expected);
+            }
+        }
+
         [Given(@"the (parse|resulting) path's FullyQualified property should be: (true|false)")]
         [Then(@"the (parse|resulting) path's FullyQualified property should be: (true|false)")]
         public void ThenThePathSFullyQualifiedPropertyShouldBeFalse(string parseOrResulting, bool expected)

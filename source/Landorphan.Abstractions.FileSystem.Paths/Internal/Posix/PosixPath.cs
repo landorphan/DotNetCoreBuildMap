@@ -8,12 +8,17 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Posix
 
     class PosixPath : ParsedPath
     {
-        protected override ISegment SelfSegment => PosixSegment.SelfSegment;
-        protected override ISegment NullSegment => PosixSegment.NullSegment;
-        protected override ISegment EmptySegment => PosixSegment.EmptySegment;
-        protected override ISegment ParentSegment => PosixSegment.ParentSegment;
-
         protected override void SetStatus()
+        {
+            SetStatusInternal();
+        }
+
+        private void SetStatusInternal2()
+        {
+
+        }
+
+        private void SetStatusInternal()
         {
             int loc = 0;
             bool isDiscouraged = false;
@@ -22,7 +27,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Posix
             {
                 if (!segment.IsLegal())
                 {
-                    Status = PathStatus.Illegal;
+                    status = PathStatus.Illegal;
                     return;
                 }
 
@@ -31,7 +36,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Posix
                     case SegmentType.NullSegment:
                         if (loc + 1 < Segments.Length || loc == 0)
                         {
-                            Status = PathStatus.Illegal;
+                            status = PathStatus.Illegal;
                             return;
                         }
 
@@ -39,7 +44,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Posix
                     case SegmentType.EmptySegment:
                         if (loc == 0)
                         {
-                            Status = PathStatus.Illegal;
+                            status = PathStatus.Illegal;
                             return;
                         }
 
@@ -48,7 +53,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Posix
                     case SegmentType.RemoteSegment:
                         if (loc != 0)
                         {
-                            Status = PathStatus.Illegal;
+                            status = PathStatus.Illegal;
                             return;
                         }
 
@@ -56,7 +61,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Posix
                     case SegmentType.DeviceSegment:
                     case SegmentType.VolumeRelativeSegment:
                     case SegmentType.VolumelessRootSegment:
-                        Status = PathStatus.Illegal;
+                        status = PathStatus.Illegal;
                         return;
                 }
 
@@ -86,11 +91,11 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Posix
 
             if (isDiscouraged)
             {
-                Status = PathStatus.Discouraged;
+                status = PathStatus.Discouraged;
                 return;
             }
 
-            Status = PathStatus.Legal;
+            status = PathStatus.Legal;
         }
 
         public override PathType PathType => PathType.Posix;
@@ -98,14 +103,19 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Posix
         { 
             get
             {
-                if ((this.LeadingSegment.SegmentType == SegmentType.RemoteSegment ||
-                     this.LeadingSegment.SegmentType == SegmentType.RootSegment) 
+                if (this == this.simplifiedForm)
+                {
+                    if ((this.LeadingSegment.SegmentType == SegmentType.RemoteSegment ||
+                         this.LeadingSegment.SegmentType == SegmentType.RootSegment) 
 //                    && NormalizationDepth >= 0
                     )
-                {
-                    return Paths.PathAnchor.Absolute;
+                    {
+                        return Paths.PathAnchor.Absolute;
+                    }
+                    return Paths.PathAnchor.Relative;
                 }
-                return Paths.PathAnchor.Relative;
+
+                return simplifiedForm.Anchor;
             }
         }
 

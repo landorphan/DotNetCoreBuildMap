@@ -68,6 +68,35 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Posix
             return true;
         }
 
+        public override bool IsDiscouraged()
+        {
+            if (this.Name != null)
+            {
+                foreach (var segmentChar in this.Name.ToCharArray())
+                {
+                    if (segmentChar < PosixRelevantPathChars.Space)
+                    {
+                        return true;
+                    }
+                }
+                if ((this.Name.StartsWith(PosixRelevantPathChars.Space.ToString(), StringComparison.Ordinal) ||
+                     this.Name.EndsWith(PosixRelevantPathChars.Space.ToString(), StringComparison.Ordinal) ||
+                     ((this.SegmentType != SegmentType.SelfSegment &&
+                       this.SegmentType != SegmentType.ParentSegment) && 
+                      this.Name.EndsWith(PosixRelevantPathChars.Period.ToString(), StringComparison.Ordinal))))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public override bool IsLegalIfGeneric()
+        {
+            return false;
+        }
+
         public override ISegment Clone()
         {
             return new PosixSegment(this.SegmentType, this.Name);

@@ -83,14 +83,16 @@ namespace Landorphan.Abstractions.FileSystem.Paths
 
         string Name { get; }
 
-        ISegment NextSegment { get; }
+        //ISegment NextSegment { get; }
 
-        ISegment LastSegment { get; }
+        //ISegment LastSegment { get; }
 
         bool IsRootSegment { get; }
 
         bool IsLegal();
 
+        bool IsDiscouraged();
+        
         string NameWithoutExtension { get; }
 
         string Extension { get; }
