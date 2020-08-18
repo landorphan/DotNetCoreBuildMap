@@ -81,10 +81,10 @@ namespace Landorphan.Abstractions.FileSystem.Paths.UnitTests.Specifications.Path
         [NUnit.Framework.TestCaseAttribute("/dir/dir/file", "Legal", "Absolute", "{/}", "dir`dir`file", "Legal", null)]
         [NUnit.Framework.TestCaseAttribute("dir/dir/file", "Legal", "Relative", "{E} (empty)", "dir`dir`file", "Legal", null)]
         [NUnit.Framework.TestCaseAttribute("//server/share/dir/file", "Legal", "Absolute", "{U} server", "share`dir`file", "Legal", null)]
-        [NUnit.Framework.TestCaseAttribute("C:`", "Legal", "Absolute", "{R} C:", ".", "Legal", null)]
-        [NUnit.Framework.TestCaseAttribute("C:`dir`file", "Legal", "Absolute", "{R} C:", "dir`file", "Legal", null)]
-        [NUnit.Framework.TestCaseAttribute("C:`C:`dir`file", "Illegal", "Absolute", "{R} C:", "dir`file", "Legal", null)]
-        [NUnit.Framework.TestCaseAttribute("C:`dir`C:`dir`dir`file", "Illegal", "Absolute", "{R} C:", "dir`C:`dir`dir`file", "Illegal", null)]
+        [NUnit.Framework.TestCaseAttribute("C:`", "Legal", "Absolute", "{R} C", ".", "Legal", null)]
+        [NUnit.Framework.TestCaseAttribute("C:`dir`file", "Legal", "Absolute", "{R} C", "dir`file", "Legal", null)]
+        [NUnit.Framework.TestCaseAttribute("C:`C:`dir`file", "Illegal", "Absolute", "{R} C", "dir`file", "Legal", null)]
+        [NUnit.Framework.TestCaseAttribute("C:`dir`C:`dir`dir`file", "Illegal", "Absolute", "{R} C", "dir`C:`dir`dir`file", "Illegal", null)]
         public virtual void GetPathRootAncorAndRelativePaths(string path, string pathStatus, string anchor, string rootSegment, string relativePath, string resultingStatus, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;

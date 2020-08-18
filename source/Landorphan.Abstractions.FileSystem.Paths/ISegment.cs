@@ -89,7 +89,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths
 
         bool IsRootSegment { get; }
 
-        bool IsLegal();
+        bool IsLegalForSegmentOffset(int offset);
 
         bool IsDiscouraged();
         

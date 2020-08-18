@@ -13,6 +13,13 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Posix
         public static readonly PosixSegment SelfSegment = new PosixSegment(SegmentType.SelfSegment, ".");
         public static readonly PosixSegment ParentSegment = new PosixSegment(SegmentType.ParentSegment, "..");
 
+        public override string ToString()
+        {
+            return this.Name;
+        }
+
+
+
         public PosixSegment(SegmentType type, string name)
         {
             this.SegmentType = type;
@@ -47,7 +54,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Posix
         }
 
 
-        public override bool IsLegal()
+        public override bool IsLegalForSegmentOffset(int offset)
         {
             if (this == ParentSegment || this == EmptySegment || this == SelfSegment || this == NullSegment)
             {

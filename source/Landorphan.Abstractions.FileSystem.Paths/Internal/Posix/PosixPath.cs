@@ -25,7 +25,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Posix
 
             foreach (var segment in Segments)
             {
-                if (!segment.IsLegal())
+                if (!segment.IsLegalForSegmentOffset(loc))
                 {
                     status = PathStatus.Illegal;
                     return;

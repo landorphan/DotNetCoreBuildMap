@@ -46,15 +46,15 @@ Examples:
 | Null                 | (null)                            | 1      | {.} .      | {N} (null)      | {N} (null)   | {N} (null)   | {N} (null)   | {N} (null)  | {N} (null)  | Relative | Legal       | false          | 0          |
 # an empty string can be parsed but will produce an empty path (which is an illegal path)										  																
 | Empty                | (empty)                           | 1      | {.} .      | {N} (null)      | {N} (null)   | {N} (null)   | {N} (null)   | {N} (null)  | {N} (null)  | Relative | Legal       | false          | 0          |
-| Volume Absolute      | C:`                               | 2      | {R} C:     | {E} (empty)     | {N} (null)   | {N} (null)   | {N} (null)   | {N} (null)  | {N} (null)  | Absolute | Legal       | false          | 0          |
-| Volume Relative      | C:.`file.txt                      | 3      | {V} C:     | {.} .           | {G} file.txt | {N} (null)   | {N} (null)   | {N} (null)  | {N} (null)  | Relative | Legal       | false          | 1          |
+| Volume Absolute      | C:`                               | 2      | {R} C      | {E} (empty)     | {N} (null)   | {N} (null)   | {N} (null)   | {N} (null)  | {N} (null)  | Absolute | Legal       | false          | 0          |
+| Volume Relative      | C:.`file.txt                      | 3      | {V} C      | {.} .           | {G} file.txt | {N} (null)   | {N} (null)   | {N} (null)  | {N} (null)  | Relative | Legal       | false          | 1          |
 | UNC                  | ``server`share`dir`file.txt       | 4      | {U} server | {G} share       | {G} dir      | {G} file.txt | {N} (null)   | {N} (null)  | {N} (null)  | Absolute | Legal       | false          | 3          |
-| Long Volume Abs      | ``?`C:`dir`file.txt               | 3      | {R} C:     | {G} dir         | {G} file.txt | {N} (null)   | {N} (null)   | {N} (null)  | {N} (null)  | Absolute | Legal       | false          | 2          |
+| Long Volume Abs      | ``?`C:`dir`file.txt               | 3      | {R} C      | {G} dir         | {G} file.txt | {N} (null)   | {N} (null)   | {N} (null)  | {N} (null)  | Absolute | Legal       | false          | 2          |
 | Long UNC             | ``?`UNC`server`share`dir`file.txt | 4      | {U} server | {G} share       | {G} dir      | {G} file.txt | {N} (null)   | {N} (null)  | {N} (null)  | Absolute | Legal       | false          | 3          |
 | Self Relative        | .`dir`file.txt                    | 3      | {.} .      | {G} dir         | {G} file.txt | {N} (null)   | {N} (null)   | {N} (null)  | {N} (null)  | Relative | Legal       | false          | 2          |
 | Parent Relative      | ..`dir`file.txt                   | 3      | {..} ..    | {G} dir         | {G} file.txt | {N} (null)   | {N} (null)   | {N} (null)  | {N} (null)  | Relative | Legal       | false          | -1         |
 # Empty segments will show up in the non-normalized for but will not be present in the normalized form							  																
-| Empty Abs Segment    | C:`dir``file.txt                  | 4      | {R} C:     | {G} dir         | {E} (empty)  | {G} file.txt | {N} (null)   | {N} (null)  | {N} (null)  | Absolute | Legal       | false          | 2          |
+| Empty Abs Segment    | C:`dir``file.txt                  | 4      | {R} C      | {G} dir         | {E} (empty)  | {G} file.txt | {N} (null)   | {N} (null)  | {N} (null)  | Absolute | Legal       | false          | 2          |
 | Empty Rel Segment    | .`dir``file.txt                   | 4      | {.} .      | {G} dir         | {E} (empty)  | {G} file.txt | {N} (null)   | {N} (null)  | {N} (null)  | Relative | Legal       | false          | 2          |
 | Relative             | dir`file.txt                      | 2      | {G} dir    | {G} file.txt    | {N} (null)   | {N} (null)   | {N} (null)   | {N} (null)  | {N} (null)  | Relative | Legal       | false          | 2          |
 # Normalizaiton level does not increase once it is below zero																		 															
@@ -111,7 +111,7 @@ Examples:
 # Most other paths will keep unecissary components (example {E}) unless they are "explicitly" normalized to have those removed	  																
 | Rel CON              | ..`.`CON                          | 3      | {..} ..    | {.} .           | {D} CON      | {N} (null)   | {N} (null)   | {N} (null)  | {N} (null)  | Absolute | Legal       | false          | 0          |
 # Using a device path as an absolute path is actually legal (all device paths are absolute)										  																
-| Abs Con              | C:`CON                            | 2      | {R} C:     | {D} CON         | {N} (null)   | {N} (null)   | {N} (null)   | {N} (null)  | {N} (null)  | Absolute | Legal       | false          | 0          |
+| Abs Con              | C:`CON                            | 2      | {R} C      | {D} CON         | {N} (null)   | {N} (null)   | {N} (null)   | {N} (null)  | {N} (null)  | Absolute | Legal       | false          | 0          |
 # Using a device path with a colon is in fact leagal																			  																
 | Volume CON           | CON:                              | 1      | {D} CON    | {N} (null)      | {N} (null)   | {N} (null)   | {N} (null)   | {N} (null)  | {N} (null)  | Absolute | Legal       | false          | 0          |
 # Using a device path with an extention (as in a file name) is legal but highly discurouged (note this is a relative path because it is not a device path)		  								
@@ -121,7 +121,7 @@ Examples:
 # After the long sentax, a question mark is illegal																																				
 | Illegal Rel Ques     | .`foo?bar.txt                     | 2      | {.} .      | {G} foo?bar.txt | {N} (null)   | {N} (null)   | {N} (null)   | {N} (null)  | {N} (null)  | Relative | Illegal     | false          | 1          |
 # After the volume sentax, a colon is illegal																																					
-| Illegal Rel Colon    | `.`foo:bar.txt                    | 4      | {/}        | {.} .           | {V} foo:     | {G} bar.txt  | {N} (null)   | {N} (null)  | {N} (null)  | Absolute | Illegal     | false          | 1          |
+| Illegal Rel Colon    | `.`foo:bar.txt                    | 4      | {/}        | {.} .           | {V} foo      | {G} bar.txt  | {N} (null)   | {N} (null)  | {N} (null)  | Absolute | Illegal     | false          | 1          |
 # Spaces end of a segment is an illegal path.																																					
 | Space Ending         | .`test.txt%20                     | 2      | {.} .      | {G} test.txt%20 | {N} (null)   | {N} (null)   | {N} (null)   | {N} (null)  | {N} (null)  | Relative | Illegal     | false          | 1          |
 | Space Both           | .`%20t.txt%20                     | 2      | {.} .      | {G} %20t.txt%20 | {N} (null)   | {N} (null)   | {N} (null)   | {N} (null)  | {N} (null)  | Relative | Illegal     | false          | 1          |
@@ -134,9 +134,9 @@ Examples:
 | Root Pos Back        | /a/b/../c/../e                    | 7      | {/}        | {G} a           | {G} b        | {..} ..      | {G} c        | {..} ..     | {G} e       | Absolute | Legal       | false          | 2          |
 | Root Neg Back        | /a/b/../../../e                   | 7      | {/}        | {G} a           | {G} b        | {..} ..      | {..} ..      | {..} ..     | {G} e       | Absolute | Legal       | false          | -1         |
 | Root Neg Back 2      | /a/../../e/                       | 6      | {/}        | {G} a           | {..} ..      | {..} ..      | {G} e        | {E} (empty) | {N} (null)  | Absolute | Legal       | false          | -1         |
-| Vol Abs Neg Back     | C:/a/../../b/../c                 | 7      | {R} C:     | {G} a           | {..} ..      | {..} ..      | {G} b        | {..} ..     | {G} c       | Absolute | Legal       | false          | -1         |
-| Vol Root Zero Back   | C:/a/../b/..                      | 5      | {R} C:     | {G} a           | {..} ..      | {G} b        | {..} ..      | {N} (null)  | {N} (null)  | Absolute | Legal       | false          | 0          |
-| Vol Root Pos Back    | C:/a/../b/../c                    | 6      | {R} C:     | {G} a           | {..} ..      | {G} b        | {..} ..      | {G} c       | {N} (null)  | Absolute | Legal       | false          | 1          |
-| Vol Double Root      | C:/C:/dir/dir/file.txt            | 5      | {R} C:     | {R} C:          | {G} dir      | {G} dir      | {G} file.txt | {N} (null)  | {N} (null)  | Absolute | Illegal     | false          | 3          |
+| Vol Abs Neg Back     | C:/a/../../b/../c                 | 7      | {R} C      | {G} a           | {..} ..      | {..} ..      | {G} b        | {..} ..     | {G} c       | Absolute | Legal       | false          | -1         |
+| Vol Root Zero Back   | C:/a/../b/..                      | 5      | {R} C      | {G} a           | {..} ..      | {G} b        | {..} ..      | {N} (null)  | {N} (null)  | Absolute | Legal       | false          | 0          |
+| Vol Root Pos Back    | C:/a/../b/../c                    | 6      | {R} C      | {G} a           | {..} ..      | {G} b        | {..} ..      | {G} c       | {N} (null)  | Absolute | Legal       | false          | 1          |
+| Vol Double Root      | C:/C:/dir/dir/file.txt            | 5      | {R} C      | {R} C           | {G} dir      | {G} dir      | {G} file.txt | {N} (null)  | {N} (null)  | Absolute | Illegal     | false          | 3          |
 # NOTE: There are no pipe test cases here (because Gherkin uses that for the table, we will have to test those in scenarios and not ountlines)
 

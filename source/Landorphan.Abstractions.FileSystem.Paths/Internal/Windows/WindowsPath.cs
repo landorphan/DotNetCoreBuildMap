@@ -45,7 +45,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
 
             foreach (var segment in Segments)
             {
-                if (!segment.IsLegal())
+                if (!segment.IsLegalForSegmentOffset(loc))
                 {
                     status = PathStatus.Illegal;
                     return;
@@ -174,18 +174,20 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
                     // As device segments throw out all but the device ...
                     // only the device is relevant in the path so all else is thrown away.
                     case SegmentType.DeviceSegment:
-                        return currentSegment.Name;
+                        return currentSegment.ToString();
                     case SegmentType.RemoteSegment:
                         builder.Append(seperator);
                         builder.Append(seperator);
-                        builder.Append(currentSegment.Name);
+                        builder.Append(currentSegment);
                         break;
                     case SegmentType.VolumeRelativeSegment:
-                        builder.Append(currentSegment.Name);
+                        builder.Append(currentSegment);
+//                        builder.Append(WindowsRelevantPathCharacters.Colon);
                         skipNextSeperator = true;
                         break;
                     case SegmentType.RootSegment:
-                        builder.Append(currentSegment.Name);
+                        builder.Append(currentSegment);
+//                        builder.Append(WindowsRelevantPathCharacters.Colon);
                         builder.Append(seperator);
                         skipNextSeperator = true;
                         break;
@@ -195,7 +197,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
                     //case SegmentType.SelfSegment:
                     //case SegmentType.ParentSegment:
                     default:
-                        builder.Append(currentSegment.Name);
+                        builder.Append(currentSegment);
                         break;
                 }
             }

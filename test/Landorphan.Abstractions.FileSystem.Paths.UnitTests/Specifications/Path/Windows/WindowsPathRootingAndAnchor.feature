@@ -20,7 +20,7 @@ Examples:
 | /dir/dir/file           | Legal       | Absolute | {/}          | dir`dir`file        | Legal            |
 | dir/dir/file            | Legal       | Relative | {E} (empty)  | dir`dir`file        | Legal            |
 | //server/share/dir/file | Legal       | Absolute | {U} server   | share`dir`file      | Legal            |
-| C:`                     | Legal       | Absolute | {R} C:       | .                   | Legal            |
-| C:`dir`file             | Legal       | Absolute | {R} C:       | dir`file            | Legal            |
-| C:`C:`dir`file          | Illegal     | Absolute | {R} C:       | dir`file            | Legal            |
-| C:`dir`C:`dir`dir`file  | Illegal     | Absolute | {R} C:       | dir`C:`dir`dir`file | Illegal          |
+| C:`                     | Legal       | Absolute | {R} C        | .                   | Legal            |
+| C:`dir`file             | Legal       | Absolute | {R} C        | dir`file            | Legal            |
+| C:`C:`dir`file          | Illegal     | Absolute | {R} C        | dir`file            | Legal            |
+| C:`dir`C:`dir`dir`file  | Illegal     | Absolute | {R} C        | dir`C:`dir`dir`file | Illegal          |

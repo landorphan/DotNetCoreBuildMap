@@ -53,7 +53,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths
                                      SegmentType == SegmentType.RemoteSegment ||
                                      SegmentType == SegmentType.VolumelessRootSegment;
 
-        public abstract bool IsLegal();
+        public abstract bool IsLegalForSegmentOffset(int offset);
         public abstract bool IsDiscouraged();
 
         public abstract bool IsLegalIfGeneric();

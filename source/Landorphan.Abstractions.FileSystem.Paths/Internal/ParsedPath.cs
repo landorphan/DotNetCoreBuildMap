@@ -138,9 +138,18 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
             { 
                 if (this == simplifiedForm)
                 {
-                    if (status == PathStatus.Discouraged)
-                        return PathStatus.Legal;
-                    return status;
+                    int loc = 0;
+                    if ((from s in Segments
+                         where !s.IsLegalForSegmentOffset(loc++)
+                         select s).Any())
+                    {
+                        return PathStatus.Illegal;
+                    }
+
+                    return PathStatus.Legal;
+                    //if (status == PathStatus.Discouraged)
+                    //    return PathStatus.Legal;
+                    //return status;
                 }
 
                 return simplifiedForm.Status;

@@ -32,7 +32,8 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
                         var parts = tokens[i].Split(':');
                         if (parts.Length > 1 && !string.IsNullOrWhiteSpace(parts[1]))
                         {
-                            segments.Add(new WindowsSegment(SegmentType.VolumeRelativeSegment, parts[0] + ":"));
+                            segments.Add(new WindowsSegment(SegmentType.VolumeRelativeSegment, parts[0]));
+//                            segments.Add(new WindowsSegment(SegmentType.VolumeRelativeSegment, parts[0] + ":"));
                             segments.Add(WindowsSegment.ParseFromString(parts[1]));
                         }
                         else
@@ -43,7 +44,8 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
                             }
                             else
                             {
-                                segments.Add(new WindowsSegment(SegmentType.RootSegment, parts[0] + ":"));
+                                segments.Add(new WindowsSegment(SegmentType.RootSegment, parts[0]));
+//                                segments.Add(new WindowsSegment(SegmentType.RootSegment, parts[0] + ":"));
                             }
                         }
                     }
@@ -79,7 +81,8 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
                         var parts = tokens[i].Split(':');
                         if (parts.Length > 1 && !string.IsNullOrWhiteSpace(parts[1]))
                         {
-                            segments.Add(new WindowsSegment(SegmentType.VolumeRelativeSegment, parts[0] + ":"));
+                            segments.Add(new WindowsSegment(SegmentType.VolumeRelativeSegment, parts[0]));
+//                            segments.Add(new WindowsSegment(SegmentType.VolumeRelativeSegment, parts[0] + ":"));
                             segments.Add(WindowsSegment.ParseFromString(parts[1]));
                         }
                         else
@@ -90,7 +93,8 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
                             }
                             else
                             {
-                                segments.Add(new WindowsSegment(SegmentType.RootSegment, parts[0] + ":"));
+                                segments.Add(new WindowsSegment(SegmentType.RootSegment, parts[0]));
+//                                segments.Add(new WindowsSegment(SegmentType.RootSegment, parts[0] + ":"));
                             }
                         }
                     }

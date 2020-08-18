@@ -182,11 +182,11 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
             }
             if (pathType == PathType.Posix)
             {
-                actualSegment.Name.Should().Be(expected.Name);
+                actualSegment.ToString().Should().Be(expected.ToString());
             }
             else
             {
-                actualSegment.Name.Should().BeEquivalentTo(expected.Name);
+                actualSegment.ToString().Should().BeEquivalentTo(expected.ToString());
             }
             actualSegment.SegmentType.Should().Be(expected.SegmentType);
         }

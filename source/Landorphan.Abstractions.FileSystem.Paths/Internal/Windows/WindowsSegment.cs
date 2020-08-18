@@ -17,6 +17,17 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
         public static readonly WindowsSegment SelfSegment = new WindowsSegment(SegmentType.SelfSegment, ".");
         public static readonly WindowsSegment ParentSegment = new WindowsSegment(SegmentType.ParentSegment, "..");
 
+        public override string ToString()
+        {
+            if (SegmentType == SegmentType.VolumeRelativeSegment ||
+                SegmentType == SegmentType.RootSegment)
+            {
+                return $"{Name}:";
+            }
+
+            return Name;
+        }
+
         public static WindowsSegment ParseFromString(string input)
         {
             if (input == ".")
@@ -59,8 +70,12 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
             this.Name = name;
         }
 
-        public override bool IsLegal()
+        public override bool IsLegalForSegmentOffset(int offset)
         {
+            if (offset > 0 && (this.SegmentType == SegmentType.VolumeRelativeSegment || this.SegmentType == SegmentType.RootSegment))
+            {
+                return false;
+            }
             if (this == ParentSegment || this == EmptySegment || this == SelfSegment || this == NullSegment)
             {
                 return true;
