@@ -94,7 +94,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.UnitTests.Specifications.Path
         [NUnit.Framework.TestCaseAttribute("C:/dir/file.txt/", "Legal", "Relative", "false", "{E} (empty)", "C:/dir/file.txt", "Fully", "The trailing slash adds an empty segement thus it\'s not normalized", null)]
         [NUnit.Framework.TestCaseAttribute("C:/dir", "Legal", "Relative", "false", "{E} (empty)", "C:/dir", "Fully", "This path is fully normalized", null)]
         [NUnit.Framework.TestCaseAttribute("C:/dir/", "Legal", "Relative", "false", "{E} (empty)", "C:/dir", "Fully", "The trailing slash adds an empty segement thus it\'s not normalized", null)]
-        [NUnit.Framework.TestCaseAttribute("C:./file.txt/", "Discouraged", "Relative", "false", "{E} (empty)", "C:./file.txt", "Fully", "The self reference and the trailing slash prevent this from being normalized", null)]
+        [NUnit.Framework.TestCaseAttribute("C:./file.txt/", "Legal", "Relative", "false", "{E} (empty)", "C:./file.txt", "Fully", "The self reference and the trailing slash prevent this from being normalized", null)]
         [NUnit.Framework.TestCaseAttribute("C:file.txt", "Legal", "Relative", "false", "{E} (empty)", "C:file.txt", "Fully", "While not relative this path is still normalized", null)]
         [NUnit.Framework.TestCaseAttribute("C:file.txt/", "Legal", "Relative", "false", "{E} (empty)", "C:file.txt", "Fully", "Trailing Slash prevents normalization", null)]
         [NUnit.Framework.TestCaseAttribute("C:dir", "Legal", "Relative", "false", "{E} (empty)", "C:dir", "Fully", "Fully normalized", null)]

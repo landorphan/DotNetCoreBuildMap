@@ -115,7 +115,7 @@ Examples:
 # Using a device path with a colon is in fact leagal																			  																
 | Volume CON           | CON:                              | 1      | {D} CON    | {N} (null)      | {N} (null)   | {N} (null)   | {N} (null)   | {N} (null)  | {N} (null)  | Absolute | Legal       | false          | 0          |
 # Using a device path with an extention (as in a file name) is legal but highly discurouged (note this is a relative path because it is not a device path)		  								
-| Discuraged Rel NUL   | .`NUL.txt                         | 2      | {.} .      | {G} NUL.txt     | {N} (null)   | {N} (null)   | {N} (null)   | {N} (null)  | {N} (null)  | Relative | Discouraged | true           | 1          |
+| Discuraged Rel NUL   | .`NUL.txt                         | 2      | {.} .      | {G} NUL.txt     | {N} (null)   | {N} (null)   | {N} (null)   | {N} (null)  | {N} (null)  | Relative | Legal | true           | 1          |
 # Using an illegal character in a path is illegal																																				
 | Illegal Rel Astr     | .`foo*bar.txt                     | 2      | {.} .      | {G} foo*bar.txt | {N} (null)   | {N} (null)   | {N} (null)   | {N} (null)  | {N} (null)  | Relative | Illegal     | false          | 1          |
 # After the long sentax, a question mark is illegal																																				
@@ -128,7 +128,7 @@ Examples:
 # period at end of segment is an illegal path.																																					
 | Period Ending        | .`test.                           | 2      | {.} .      | {G} test.       | {N} (null)   | {N} (null)   | {N} (null)   | {N} (null)  | {N} (null)  | Relative | Illegal     | false          | 1          |
 # Space at begining of path is discuraged 																																						
-| Space Beginning      | .`%20test.txt                     | 2      | {.} .      | {G} %20test.txt | {N} (null)   | {N} (null)   | {N} (null)   | {N} (null)  | {N} (null)  | Relative | Discouraged | true           | 1          |
+| Space Beginning      | .`%20test.txt                     | 2      | {.} .      | {G} %20test.txt | {N} (null)   | {N} (null)   | {N} (null)   | {N} (null)  | {N} (null)  | Relative | Legal | true           | 1          |
 | Neg Back Reference   | a/b/../../../e                    | 6      | {G} a      | {G} b           | {..} ..      | {..} ..      | {..} ..      | {G} e       | {N} (null)  | Relative | Legal       | false          | -1         |
 | Neg Back Reference 2 | a/b/../../../e/                   | 7      | {G} a      | {G} b           | {..} ..      | {..} ..      | {..} ..      | {G} e       | {E} (empty) | Relative | Legal       | false          | -1         |
 | Root Pos Back        | /a/b/../c/../e                    | 7      | {/}        | {G} a           | {G} b        | {..} ..      | {G} c        | {..} ..     | {G} e       | Absolute | Legal       | false          | 2          |

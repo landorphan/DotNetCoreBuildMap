@@ -114,7 +114,7 @@ Examples:
 # Per previous tests, device path's have no special meaning in Posix (NOTE: This is NOT Discouraged on Posix) 						 														     
 | Discuraged Rel NUL | ./NUL.txt                   | 2      | {.} .      | {G} NUL.txt           | {N} (null)   | {N} (null)   | {N} (null) | {N} (null)  | {N} (null) | Relative | Legal       |  false       | 1          |
 # Nonprintable charachters are legal but Discuraged 																				 														    
-| Illegal Rel Astr   | ./start-%03-end.txt         | 2      | {.} .      | {G} start-%03-end.txt | {N} (null)   | {N} (null)   | {N} (null) | {N} (null)  | {N} (null) | Relative | Discouraged |  true       | 1          |
+| Illegal Rel Astr   | ./start-%03-end.txt         | 2      | {.} .      | {G} start-%03-end.txt | {N} (null)   | {N} (null)   | {N} (null) | {N} (null)  | {N} (null) | Relative | Legal |  true       | 1          |
 # Using an illegal character in a path is illegal																					 														   
 | Illegal Rel Astr   | ./start-%00-end.txt         | 2      | {.} .      | {G} start-%00-end.txt | {N} (null)   | {N} (null)   | {N} (null) | {N} (null)  | {N} (null) | Relative | Illegal     |  false       | 1          |
 # Question mark is legal any place on Posix																							 														   
@@ -122,9 +122,9 @@ Examples:
 # Colon is legaln any place on Posix																								 														   
 | Illegal Rel Colon  | ./foo:bar.txt               | 2      | {.} .      | {G} foo:bar.txt       | {N} (null)   | {N} (null)   | {N} (null) | {N} (null)  | {N} (null) | Relative | Legal       |  false       | 1          |
 # Spaces at begining or end of a path is discurraged 																				 														    
-| Space Beginning    | ./%20test.txt               | 2      | {.} .      | {G} %20test.txt       | {N} (null)   | {N} (null)   | {N} (null) | {N} (null)  | {N} (null) | Relative | Discouraged |  true       | 1          |
-| Space Ending       | ./test.txt%20               | 2      | {.} .      | {G} test.txt%20       | {N} (null)   | {N} (null)   | {N} (null) | {N} (null)  | {N} (null) | Relative | Discouraged |  true       | 1          |
-| Space Both         | ./%20t.txt%20               | 2      | {.} .      | {G} %20t.txt%20       | {N} (null)   | {N} (null)   | {N} (null) | {N} (null)  | {N} (null) | Relative | Discouraged |  true       | 1          |
+| Space Beginning    | ./%20test.txt               | 2      | {.} .      | {G} %20test.txt       | {N} (null)   | {N} (null)   | {N} (null) | {N} (null)  | {N} (null) | Relative | Legal |  true       | 1          |
+| Space Ending       | ./test.txt%20               | 2      | {.} .      | {G} test.txt%20       | {N} (null)   | {N} (null)   | {N} (null) | {N} (null)  | {N} (null) | Relative | Legal |  true       | 1          |
+| Space Both         | ./%20t.txt%20               | 2      | {.} .      | {G} %20t.txt%20       | {N} (null)   | {N} (null)   | {N} (null) | {N} (null)  | {N} (null) | Relative | Legal |  true       | 1          |
 | Root Pos Back      | /a/b/../c/../e              | 7      | {R}        | {G} a                 | {G} b        | {..} ..      | {G} c      | {..} ..     | {G} e      | Absolute | Legal       |  false       | 2          |
 | Root Neg Back      | /a/b/../../../e             | 7      | {R}        | {G} a                 | {G} b        | {..} ..      | {..} ..    | {..} ..     | {G} e      | Absolute | Legal       |  false       | -1         |
 | Root Neg Back 2    | /a/../../e/                 | 6      | {R}        | {G} a                 | {..} ..      | {..} ..      | {G} e      | {E} (empty) | {N} (null) | Absolute | Legal       |  false       | -1         |

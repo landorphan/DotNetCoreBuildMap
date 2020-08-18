@@ -138,6 +138,8 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
             { 
                 if (this == simplifiedForm)
                 {
+                    if (status == PathStatus.Discouraged)
+                        return PathStatus.Legal;
                     return status;
                 }
 
