@@ -34,11 +34,6 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Posix
                         segments.Add(PosixSegment.EmptySegment);
                         continue;
                     }
-                    //else
-                    //{
-                    //    segments.Add(new PosixSegment(SegmentType.GenericSegment, tokens[i]));
-                    //    continue;
-                    //}
                 }
                 if (i == 0)
                 {
@@ -47,17 +42,6 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Posix
                         segments.Add(new PosixSegment(SegmentType.RemoteSegment, tokens[i].Substring(4)));
                         continue;
                     }
-                    //if (tokens[i].Length == 0)
-                    //{
-                    //    segments.Add(new PosixSegment(SegmentType.RemoteSegment, tokens[i].Substring(2)));
-                    //    continue;
-                    //}
-
-                    //if (tokens[i].StartsWith(PosixRelevantPathChars.ForwardSlash.ToString(), StringComparison.Ordinal))
-                    //{
-                    //    segments.Add(new PosixSegment(SegmentType.RootSegment, tokens[i].Substring(1)));
-                    //    continue;
-                    //}
 
                     if (tokens[i] == string.Empty)
                     {

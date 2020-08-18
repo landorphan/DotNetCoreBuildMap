@@ -83,10 +83,6 @@ namespace Landorphan.Abstractions.FileSystem.Paths
 
         string Name { get; }
 
-        //ISegment NextSegment { get; }
-
-        //ISegment LastSegment { get; }
-
         bool IsRootSegment { get; }
 
         bool IsLegalForSegmentOffset(int offset);

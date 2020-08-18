@@ -50,7 +50,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths
 
         IPath Parent { get; }
 
-        long NormalizationDepth { get; }
+//        long NormalizationDepth { get; }
 
         ISegment RootSegment { get; }
 

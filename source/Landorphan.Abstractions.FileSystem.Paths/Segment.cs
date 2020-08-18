@@ -56,8 +56,6 @@ namespace Landorphan.Abstractions.FileSystem.Paths
         public abstract bool IsLegalForSegmentOffset(int offset);
         public abstract bool IsDiscouraged();
 
-        public abstract bool IsLegalIfGeneric();
-
         public string NameWithoutExtension {
             get
             {

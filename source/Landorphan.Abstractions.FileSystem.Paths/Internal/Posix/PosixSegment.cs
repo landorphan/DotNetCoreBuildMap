@@ -18,8 +18,6 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Posix
             return this.Name;
         }
 
-
-
         public PosixSegment(SegmentType type, string name)
         {
             this.SegmentType = type;
@@ -96,11 +94,6 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Posix
                 }
             }
 
-            return false;
-        }
-
-        public override bool IsLegalIfGeneric()
-        {
             return false;
         }
 

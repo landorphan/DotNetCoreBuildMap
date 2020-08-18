@@ -38,105 +38,109 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
             }
         }
 
-        protected override void SetStatus()
-        {
-            int loc = 0;
-            bool isDiscouraged = false;
+//        protected override void SetStatus()
+//        {
+////            SetStatusInternal();
+//        }
+//        private void SetStatusInternal()
+//        {
+//            int loc = 0;
+//            bool isDiscouraged = false;
 
-            foreach (var segment in Segments)
-            {
-                if (!segment.IsLegalForSegmentOffset(loc))
-                {
-                    status = PathStatus.Illegal;
-                    return;
-                }
+//            foreach (var segment in Segments)
+//            {
+//                if (!segment.IsLegalForSegmentOffset(loc))
+//                {
+//                    status = PathStatus.Illegal;
+//                    return;
+//                }
 
-                if (loc > 0)
-                {
-                    if (segment.Name != null)
-                    {
-                        foreach (char illegalAfterFirstSegment in WindowsRelevantPathCharacters.IllegalAfterFirstSegment)
-                        {
-                            if (segment.Name.ToCharArray().Contains(illegalAfterFirstSegment))
-                            {
-                                status = PathStatus.Illegal;
-                                return;
-                            }
-                        }
-                    }
-                }
+//                if (loc > 0)
+//                {
+//                    if (segment.Name != null)
+//                    {
+//                        foreach (char illegalAfterFirstSegment in WindowsRelevantPathCharacters.IllegalAfterFirstSegment)
+//                        {
+//                            if (segment.Name.ToCharArray().Contains(illegalAfterFirstSegment))
+//                            {
+//                                status = PathStatus.Illegal;
+//                                return;
+//                            }
+//                        }
+//                    }
+//                }
 
-                switch (segment.SegmentType)
-                {
-                    case SegmentType.NullSegment:
-                        if (loc + 1 < Segments.Length || loc == 0)
-                        {
-                            status = PathStatus.Illegal;
-                        }
+//                switch (segment.SegmentType)
+//                {
+//                    case SegmentType.NullSegment:
+//                        if (loc + 1 < Segments.Length || loc == 0)
+//                        {
+//                            status = PathStatus.Illegal;
+//                        }
 
-                        return;
+//                        return;
 
-                    case SegmentType.EmptySegment:
-                        if (loc == 0)
-                        {
-                            status = PathStatus.Illegal;
-                            return;
-                        }
+//                    case SegmentType.EmptySegment:
+//                        if (loc == 0)
+//                        {
+//                            status = PathStatus.Illegal;
+//                            return;
+//                        }
 
-                        break;
+//                        break;
 
-                    case SegmentType.RootSegment:
-                    case SegmentType.RemoteSegment:
-                    case SegmentType.VolumeRelativeSegment:
-                    case SegmentType.VolumelessRootSegment:
-                        if (loc != 0)
-                        {
-                            status = PathStatus.Illegal;
-                            return;
-                        }
+//                    case SegmentType.RootSegment:
+//                    case SegmentType.RemoteSegment:
+//                    case SegmentType.VolumeRelativeSegment:
+//                    case SegmentType.VolumelessRootSegment:
+//                        if (loc != 0)
+//                        {
+//                            status = PathStatus.Illegal;
+//                            return;
+//                        }
 
-                        break;
-                    //case SegmentType.VolumeRelativeSegment:
-                    //case SegmentType.VolumelessRootSegment:
-                    //    if (loc > 0)
-                    //    {
-                    //        Status = PathStatus.Illegal;
-                    //        return;
-                    //    }
-                    //    break;
+//                        break;
+//                    //case SegmentType.VolumeRelativeSegment:
+//                    //case SegmentType.VolumelessRootSegment:
+//                    //    if (loc > 0)
+//                    //    {
+//                    //        Status = PathStatus.Illegal;
+//                    //        return;
+//                    //    }
+//                    //    break;
 
-                    // TODO: Ensure proper handling of Device Segment when determining anchor.
-                    case SegmentType.DeviceSegment:
-                        break;
-                }
+//                    // TODO: Ensure proper handling of Device Segment when determining anchor.
+//                    case SegmentType.DeviceSegment:
+//                        break;
+//                }
 
-                if (segment.SegmentType != SegmentType.DeviceSegment)
-                {
-                    foreach (var deviceName in WindowsSegment.DeviceNames)
-                    {
-                        if (segment.Name.StartsWith(deviceName, StringComparison.OrdinalIgnoreCase))
-                        {
-                            isDiscouraged = true;
-                        }
-                    }
-                }
+//                if (segment.SegmentType != SegmentType.DeviceSegment)
+//                {
+//                    foreach (var deviceName in WindowsSegment.DeviceNames)
+//                    {
+//                        if (segment.Name.StartsWith(deviceName, StringComparison.OrdinalIgnoreCase))
+//                        {
+//                            isDiscouraged = true;
+//                        }
+//                    }
+//                }
 
-                if (segment.Name.StartsWith(WindowsRelevantPathCharacters.Space.ToString(), StringComparison.Ordinal))
-                {
-                    isDiscouraged = true;
-                }
+//                if (segment.Name.StartsWith(WindowsRelevantPathCharacters.Space.ToString(), StringComparison.Ordinal))
+//                {
+//                    isDiscouraged = true;
+//                }
 
-                loc++;
-            }
+//                loc++;
+//            }
 
-            if (isDiscouraged)
-            {
-                status = PathStatus.Discouraged;
-                return;
-            }
+//            if (isDiscouraged)
+//            {
+//                status = PathStatus.Discouraged;
+//                return;
+//            }
 
-            status = PathStatus.Legal;
-        }
+//            status = PathStatus.Legal;
+//        }
 
         public const string UncPrefix = "UNC";
 

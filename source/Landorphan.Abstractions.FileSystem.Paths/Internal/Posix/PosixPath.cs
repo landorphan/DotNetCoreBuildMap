@@ -8,95 +8,94 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Posix
 
     class PosixPath : ParsedPath
     {
-        protected override void SetStatus()
-        {
-            SetStatusInternal();
-        }
+//        private void SetStatusInternal2()
+//        {
 
-        private void SetStatusInternal2()
-        {
+//        }
 
-        }
+//        protected override void SetStatus()
+//        {
+////            SetStatusInternal();
+//        }
+//        private void SetStatusInternal()
+//        {
+//            int loc = 0;
+//            bool isDiscouraged = false;
 
-        private void SetStatusInternal()
-        {
-            int loc = 0;
-            bool isDiscouraged = false;
+//            foreach (var segment in Segments)
+//            {
+//                if (!segment.IsLegalForSegmentOffset(loc))
+//                {
+//                    status = PathStatus.Illegal;
+//                    return;
+//                }
 
-            foreach (var segment in Segments)
-            {
-                if (!segment.IsLegalForSegmentOffset(loc))
-                {
-                    status = PathStatus.Illegal;
-                    return;
-                }
+//                switch (segment.SegmentType)
+//                {
+//                    case SegmentType.NullSegment:
+//                        if (loc + 1 < Segments.Length || loc == 0)
+//                        {
+//                            status = PathStatus.Illegal;
+//                            return;
+//                        }
 
-                switch (segment.SegmentType)
-                {
-                    case SegmentType.NullSegment:
-                        if (loc + 1 < Segments.Length || loc == 0)
-                        {
-                            status = PathStatus.Illegal;
-                            return;
-                        }
+//                        break;
+//                    case SegmentType.EmptySegment:
+//                        if (loc == 0)
+//                        {
+//                            status = PathStatus.Illegal;
+//                            return;
+//                        }
 
-                        break;
-                    case SegmentType.EmptySegment:
-                        if (loc == 0)
-                        {
-                            status = PathStatus.Illegal;
-                            return;
-                        }
+//                        break;
+//                    case SegmentType.RootSegment:
+//                    case SegmentType.RemoteSegment:
+//                        if (loc != 0)
+//                        {
+//                            status = PathStatus.Illegal;
+//                            return;
+//                        }
 
-                        break;
-                    case SegmentType.RootSegment:
-                    case SegmentType.RemoteSegment:
-                        if (loc != 0)
-                        {
-                            status = PathStatus.Illegal;
-                            return;
-                        }
+//                        break;
+//                    case SegmentType.DeviceSegment:
+//                    case SegmentType.VolumeRelativeSegment:
+//                    case SegmentType.VolumelessRootSegment:
+//                        status = PathStatus.Illegal;
+//                        return;
+//                }
 
-                        break;
-                    case SegmentType.DeviceSegment:
-                    case SegmentType.VolumeRelativeSegment:
-                    case SegmentType.VolumelessRootSegment:
-                        status = PathStatus.Illegal;
-                        return;
-                }
-
-                if (segment.Name != null)
-                {
-                    foreach (var segmentChar in segment.Name.ToCharArray())
-                    {
-                        if (segmentChar < PosixRelevantPathChars.Space)
-                        {
-                            isDiscouraged = true;
-                        }
-                    }
-                    if (!isDiscouraged &&
-                        (segment.Name.StartsWith(PosixRelevantPathChars.Space.ToString(), StringComparison.Ordinal) ||
-                         segment.Name.EndsWith(PosixRelevantPathChars.Space.ToString(), StringComparison.Ordinal) ||
-                         ((segment.SegmentType != SegmentType.SelfSegment &&
-                           segment.SegmentType != SegmentType.ParentSegment) && 
-                          segment.Name.EndsWith(PosixRelevantPathChars.Period.ToString(), StringComparison.Ordinal))))
-                    {
-                        isDiscouraged = true;
-                    }
-                }
+//                if (segment.Name != null)
+//                {
+//                    foreach (var segmentChar in segment.Name.ToCharArray())
+//                    {
+//                        if (segmentChar < PosixRelevantPathChars.Space)
+//                        {
+//                            isDiscouraged = true;
+//                        }
+//                    }
+//                    if (!isDiscouraged &&
+//                        (segment.Name.StartsWith(PosixRelevantPathChars.Space.ToString(), StringComparison.Ordinal) ||
+//                         segment.Name.EndsWith(PosixRelevantPathChars.Space.ToString(), StringComparison.Ordinal) ||
+//                         ((segment.SegmentType != SegmentType.SelfSegment &&
+//                           segment.SegmentType != SegmentType.ParentSegment) && 
+//                          segment.Name.EndsWith(PosixRelevantPathChars.Period.ToString(), StringComparison.Ordinal))))
+//                    {
+//                        isDiscouraged = true;
+//                    }
+//                }
 
 
-                loc++;
-            }
+//                loc++;
+//            }
 
-            if (isDiscouraged)
-            {
-                status = PathStatus.Discouraged;
-                return;
-            }
+//            if (isDiscouraged)
+//            {
+//                status = PathStatus.Discouraged;
+//                return;
+//            }
 
-            status = PathStatus.Legal;
-        }
+//            status = PathStatus.Legal;
+//        }
 
         public override PathType PathType => PathType.Posix;
         public override PathAnchor Anchor 

@@ -33,7 +33,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
             retval.Segments = segments;
             retval.LeadingSegment = segments[0];
             retval.status = PathStatus.Undetermined;
-            retval.SetStatus();
+//            retval.SetStatus();
             retval.suppliedForm = retval;
             retval.SuppliedPathString = suppliedPath.SuppliedPathString;
             retval.SuppliedPath = suppliedPath;
@@ -64,7 +64,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
             retval.LeadingSegment = segments[0];
             retval.TrailingSegment = segments.Last();
             retval.status = PathStatus.Undetermined;
-            retval.SetStatus();
+//            retval.SetStatus();
             retval.suppliedForm = retval;
             retval.SuppliedPathString = suppliedPath;
             retval.SuppliedPath = retval;
@@ -90,7 +90,8 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
 
             retval.Segments = TraverseSegmentChain(suppliedPath.PathType, simplifiedSegments);
             retval.LeadingSegment = retval.Segments[0];
-            retval.SetStatus();
+            retval.TrailingSegment = retval.Segments.Last();
+//            retval.SetStatus();
             retval.suppliedForm = suppliedPath;
             retval.SuppliedPathString = suppliedPath.SuppliedPathString;
             retval.SuppliedPath = suppliedPath;
@@ -125,7 +126,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
             return retval.ToArray();
         }
 
-        protected abstract void SetStatus();
+        //protected abstract void SetStatus();
 
         public String SuppliedPathString { get; private set; }
         public ISegment LeadingSegment { get; private set; }
@@ -158,7 +159,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
 
         public bool IsDiscouraged => (from s in Segments 
                                      where s.IsDiscouraged()
-                                    select s).Any() && (Status == PathStatus.Legal || Status == PathStatus.Discouraged);
+                                    select s).Any() && (Status == PathStatus.Legal);
 
         public abstract PathType PathType { get; }
         public ISegment[] Segments { get; private set; }
@@ -214,44 +215,44 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
             return segments;
         }
 
-        public long NormalizationDepth
-        {
-            get
-            {
-                int normalizationDepth = 0;
-                int internalDepth = 0;
-                foreach (var segment in Segments)
-                {
-                    switch (segment.SegmentType)
-                    {
-                        case SegmentType.DeviceSegment:
-                            return 0;
-                        case SegmentType.ParentSegment:
-                            internalDepth--;
-                            break;
-//                        case SegmentType.VolumeRelativeSegment:
-                        case SegmentType.GenericSegment:
-                            internalDepth++;
-                            if (normalizationDepth >= 0)
-                            {
-                                normalizationDepth++;
-                            }
-                            break;
-                        default:
-                            // DO NOTHING TO normalization level 
-                            break;
-                    }
-                    if (internalDepth < normalizationDepth)
-                    {
-                        normalizationDepth = internalDepth;
-                    }
-                }
+//        public long NormalizationDepth
+//        {
+//            get
+//            {
+//                int normalizationDepth = 0;
+//                int internalDepth = 0;
+//                foreach (var segment in Segments)
+//                {
+//                    switch (segment.SegmentType)
+//                    {
+//                        case SegmentType.DeviceSegment:
+//                            return 0;
+//                        case SegmentType.ParentSegment:
+//                            internalDepth--;
+//                            break;
+////                        case SegmentType.VolumeRelativeSegment:
+//                        case SegmentType.GenericSegment:
+//                            internalDepth++;
+//                            if (normalizationDepth >= 0)
+//                            {
+//                                normalizationDepth++;
+//                            }
+//                            break;
+//                        default:
+//                            // DO NOTHING TO normalization level 
+//                            break;
+//                    }
+//                    if (internalDepth < normalizationDepth)
+//                    {
+//                        normalizationDepth = internalDepth;
+//                    }
+//                }
 
-                return normalizationDepth;
-            }
-        }
+//                return normalizationDepth;
+//            }
+//        }
 
-        public ISegment RootSegment => this.LeadingSegment.IsRootSegment ? this.LeadingSegment : Segment.GetEmptySegment(this.PathType);
+        public ISegment RootSegment => this.simplifiedForm.LeadingSegment.IsRootSegment ? this.simplifiedForm.LeadingSegment : Segment.GetEmptySegment(this.PathType);
 
         public NormalizationLevel NormalizationLevel => simplificationLevel;
 
@@ -292,14 +293,14 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
             return retval;
         }
 
-        public string Name => TrailingSegment.Name;
-        public string NameWithoutExtension => TrailingSegment.NameWithoutExtension;
-        public string Extension => TrailingSegment.Extension;
-        public bool HasExtension => TrailingSegment.HasExtension;
+        public string Name => simplifiedForm.TrailingSegment.Name;
+        public string NameWithoutExtension => simplifiedForm.TrailingSegment.NameWithoutExtension;
+        public string Extension => simplifiedForm.TrailingSegment.Extension;
+        public bool HasExtension => simplifiedForm.TrailingSegment.HasExtension;
 
-        public bool IsFullyQualified => LeadingSegment.SegmentType == SegmentType.RootSegment ||
-                                        LeadingSegment.SegmentType == SegmentType.VolumeRelativeSegment ||
-                                        LeadingSegment.SegmentType == SegmentType.RemoteSegment;
+        public bool IsFullyQualified => simplifiedForm.LeadingSegment.SegmentType == SegmentType.RootSegment ||
+                                        simplifiedForm.LeadingSegment.SegmentType == SegmentType.VolumeRelativeSegment ||
+                                        simplifiedForm.LeadingSegment.SegmentType == SegmentType.RemoteSegment;
 
         public override string ToString()
         {
@@ -481,76 +482,76 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
             return result.ToArray();
         }
 
-        internal static Segment[] NormalizeSegments(PathType pathType, Segment[] suppliedSegments)
-        {
-            Stack<Segment> newSegments = new Stack<Segment>();
-            bool isSelfSegmentsOnly = true;
-            foreach (ISegment originalSegment in suppliedSegments)
-            {
-                Segment clone = (Segment) originalSegment.Clone();
-                Segment topOfStack = null;
-                Action setTopOfStack = () =>
-                {
-                    if (newSegments.Count > 0)
-                    {
-                        topOfStack = newSegments.Peek();
-                    }
-                };
-                setTopOfStack();
-                switch (originalSegment.SegmentType)
-                {
-                    case SegmentType.ParentSegment:
-                        if (topOfStack != null && topOfStack.IsRootSegment)
-                        {
-                            // We can't traverse backwards before a root segment.
-                            continue;
-                        }
-                        else if (topOfStack != null && topOfStack.SegmentType != SegmentType.ParentSegment)
-                        {
-                            newSegments.Pop();
-                        }
-                        else
-                        {
-                            newSegments.Push(clone);
-                        }
+        //internal static Segment[] NormalizeSegments(PathType pathType, Segment[] suppliedSegments)
+        //{
+        //    Stack<Segment> newSegments = new Stack<Segment>();
+        //    bool isSelfSegmentsOnly = true;
+        //    foreach (ISegment originalSegment in suppliedSegments)
+        //    {
+        //        Segment clone = (Segment) originalSegment.Clone();
+        //        Segment topOfStack = null;
+        //        Action setTopOfStack = () =>
+        //        {
+        //            if (newSegments.Count > 0)
+        //            {
+        //                topOfStack = newSegments.Peek();
+        //            }
+        //        };
+        //        setTopOfStack();
+        //        switch (originalSegment.SegmentType)
+        //        {
+        //            case SegmentType.ParentSegment:
+        //                if (topOfStack != null && topOfStack.IsRootSegment)
+        //                {
+        //                    // We can't traverse backwards before a root segment.
+        //                    continue;
+        //                }
+        //                else if (topOfStack != null && topOfStack.SegmentType != SegmentType.ParentSegment)
+        //                {
+        //                    newSegments.Pop();
+        //                }
+        //                else
+        //                {
+        //                    newSegments.Push(clone);
+        //                }
 
-                        isSelfSegmentsOnly = false;
-                        break;
-                    case SegmentType.EmptySegment:
-                    case SegmentType.NullSegment:
-                    case SegmentType.SelfSegment:
-                        continue;
-                    case SegmentType.DeviceSegment:
-                        return new[] {clone};
-                        // N + R
-                    case SegmentType.GenericSegment:
-                        // Q + R
-                    case SegmentType.VolumeRelativeSegment:
-                        // Q + A
-                    case SegmentType.RootSegment:
-                        // N + A
-                    case SegmentType.VolumelessRootSegment:
-                        // Q + A
-                    case SegmentType.RemoteSegment:
-                        isSelfSegmentsOnly = false;
-                        newSegments.Push(clone);
-                        break;
-                }
-            }
+        //                isSelfSegmentsOnly = false;
+        //                break;
+        //            case SegmentType.EmptySegment:
+        //            case SegmentType.NullSegment:
+        //            case SegmentType.SelfSegment:
+        //                continue;
+        //            case SegmentType.DeviceSegment:
+        //                return new[] {clone};
+        //                // N + R
+        //            case SegmentType.GenericSegment:
+        //                // Q + R
+        //            case SegmentType.VolumeRelativeSegment:
+        //                // Q + A
+        //            case SegmentType.RootSegment:
+        //                // N + A
+        //            case SegmentType.VolumelessRootSegment:
+        //                // Q + A
+        //            case SegmentType.RemoteSegment:
+        //                isSelfSegmentsOnly = false;
+        //                newSegments.Push(clone);
+        //                break;
+        //        }
+        //    }
 
-            if (newSegments.Count == 0 || isSelfSegmentsOnly)
-            {
-                if (pathType == PathType.Posix)
-                {
-                    return new[] {PosixSegment.SelfSegment};
-                }
-                else
-                {
-                    return new[] {WindowsSegment.SelfSegment};
-                }
-            }
-            return newSegments.Reverse().ToArray();
-        }
+        //    if (newSegments.Count == 0 || isSelfSegmentsOnly)
+        //    {
+        //        if (pathType == PathType.Posix)
+        //        {
+        //            return new[] {PosixSegment.SelfSegment};
+        //        }
+        //        else
+        //        {
+        //            return new[] {WindowsSegment.SelfSegment};
+        //        }
+        //    }
+        //    return newSegments.Reverse().ToArray();
+        //}
 
         public IPath ChangeExtension(string newExtension)
         {
