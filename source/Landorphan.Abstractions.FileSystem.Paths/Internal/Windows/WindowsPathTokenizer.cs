@@ -17,7 +17,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
                 return null;
             }
 
-            if (path.StartsWith(@"\\?\UNC\"))
+            if (path.StartsWith(@"\\?\UNC\", StringComparison.Ordinal))
             {
                 // Converts the (\\?\UNC\server\...) pattern into (UNC:server\...)
                 path = "UNC:" + path.Substring(8);
@@ -27,7 +27,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
                 // Converts the (\\?\C:...) pattern into (C:...)
                 path = path.Substring(4);
             }
-            else if (path.StartsWith(@"\\") || path.StartsWith("//"))
+            else if (path.StartsWith(@"\\", StringComparison.Ordinal) || path.StartsWith("//", StringComparison.Ordinal))
             {
                 // Converts the (\\server\...) pattern into (UNC:server\...)
                 path = "UNC:" + path.Substring(2);

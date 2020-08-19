@@ -20,9 +20,9 @@ namespace Landorphan.Abstractions.FileSystem.Paths.UnitTests.Specifications.Path
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "3.3.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [NUnit.Framework.TestFixtureAttribute()]
-    [NUnit.Framework.DescriptionAttribute("Posix Path Normalization")]
+    [NUnit.Framework.DescriptionAttribute("Posix Path Simplification")]
     [NUnit.Framework.CategoryAttribute("Check-In")]
-    public partial class PosixPathNormalizationFeature
+    public partial class PosixPathSimplificationFeature
     {
         
         private TechTalk.SpecFlow.ITestRunner testRunner;
@@ -37,7 +37,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.UnitTests.Specifications.Path
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Posix Path Normalization", "\tIn order to develop a reliable Windows Path parser \r\n\tAs a member of the Landorp" +
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Posix Path Simplification", "\tIn order to develop a reliable Windows Path parser \r\n\tAs a member of the Landorp" +
                     "han Team\r\n\tI want to to be able to convert incoming paths into a more managable " +
                     "form", ProgrammingLanguage.CSharp, new string[] {
                         "Check-In"});
@@ -79,7 +79,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.UnitTests.Specifications.Path
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Posix Paths can be normalized to best available form.")]
+        [NUnit.Framework.DescriptionAttribute("Posix Paths can be simplified to best available form.")]
         [NUnit.Framework.TestCaseAttribute("(null)", "Legal", "Relative", "false", "{E} (empty)", ".", "SelfReferenceOnly", "Imposible for Null path to normalize", null)]
         [NUnit.Framework.TestCaseAttribute("(empty)", "Legal", "Relative", "false", "{E} (empty)", ".", "SelfReferenceOnly", "Imposible for Empty path to normalize", null)]
         [NUnit.Framework.TestCaseAttribute("C:/", "Legal", "Relative", "false", "{E} (empty)", "C:", "Fully", "The trailing slash adds an empty segment thus it\'s not normalized", null)]
@@ -131,7 +131,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.UnitTests.Specifications.Path
         [NUnit.Framework.TestCaseAttribute("/../..", "Legal", "Absolute", "true", "{R}", "/", "Fully", "Parrent trversal stops at the first \"rooted\" segment", null)]
         [NUnit.Framework.TestCaseAttribute("//server/..", "Legal", "Absolute", "true", "{U} server", "//server", "Fully", "Parrent trversal stops at the first \"rooted\" segment", null)]
         [NUnit.Framework.TestCaseAttribute("//server/../..", "Legal", "Absolute", "true", "{U} server", "//server", "Fully", "Parrent trversal stops at the first \"rooted\" segment", null)]
-        public virtual void PosixPathsCanBeNormalizedToBestAvailableForm_(string path, string pathStatus, string anchor, string fullyQualified, string rootSegment, string normalizedPath, string normalizationLevel, string notes, string[] exampleTags)
+        public virtual void PosixPathsCanBeSimplifiedToBestAvailableForm_(string path, string pathStatus, string anchor, string fullyQualified, string rootSegment, string normalizedPath, string simplificationLevel, string notes, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
@@ -141,9 +141,9 @@ namespace Landorphan.Abstractions.FileSystem.Paths.UnitTests.Specifications.Path
             argumentsOfScenario.Add("Fully Qualified", fullyQualified);
             argumentsOfScenario.Add("Root Segment", rootSegment);
             argumentsOfScenario.Add("Normalized Path", normalizedPath);
-            argumentsOfScenario.Add("Normalization Level", normalizationLevel);
+            argumentsOfScenario.Add("Simplification Level", simplificationLevel);
             argumentsOfScenario.Add("Notes", notes);
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Posix Paths can be normalized to best available form.", null, tagsOfScenario, argumentsOfScenario);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Posix Paths can be simplified to best available form.", null, tagsOfScenario, argumentsOfScenario);
 #line 7
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -204,7 +204,7 @@ this.ScenarioInitialize(scenarioInfo);
    testRunner.And(string.Format("the resulting path\'s root segment should return: {0}", rootSegment), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 21
-   testRunner.And(string.Format("the resulting path should have the following Normalization Level: {0}", normalizationLevel), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+   testRunner.And(string.Format("the resulting path should have the following Simplification Level: {0}", simplificationLevel), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             }
             this.ScenarioCleanup();

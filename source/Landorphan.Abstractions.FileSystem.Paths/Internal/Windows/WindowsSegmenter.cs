@@ -12,7 +12,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
         {
             IList<WindowsSegment> segments = new List<WindowsSegment>();
 
-            if (tokens.Length == 0)
+            if (tokens == null || tokens.Length == 0)
             {
                 segments.Add(WindowsSegment.NullSegment);
                 return segments.ToArray();
@@ -22,7 +22,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
             {
                 if (i == 0)
                 {
-                    if (tokens[i].StartsWith("UNC:"))
+                    if (tokens[i].StartsWith("UNC:", StringComparison.Ordinal))
                     {
                         segments.Add(new WindowsSegment(SegmentType.RemoteSegment, tokens[i].Substring(4)));
                         continue;
@@ -33,7 +33,6 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
                         if (parts.Length > 1 && !string.IsNullOrWhiteSpace(parts[1]))
                         {
                             segments.Add(new WindowsSegment(SegmentType.VolumeRelativeSegment, parts[0]));
-//                            segments.Add(new WindowsSegment(SegmentType.VolumeRelativeSegment, parts[0] + ":"));
                             segments.Add(WindowsSegment.ParseFromString(parts[1]));
                         }
                         else
@@ -45,7 +44,6 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
                             else
                             {
                                 segments.Add(new WindowsSegment(SegmentType.RootSegment, parts[0]));
-//                                segments.Add(new WindowsSegment(SegmentType.RootSegment, parts[0] + ":"));
                             }
                         }
                     }
@@ -56,7 +54,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
                             segments.Add(WindowsSegment.NullSegment);
                         }
 
-                        if (tokens[i] == string.Empty)
+                        if (string.IsNullOrEmpty(tokens[i]))
                         {
                             segments.Add(WindowsSegment.EmptySegment);
                         }
@@ -65,7 +63,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
                             segments.Add(WindowsSegment.ParseFromString(tokens[i]));
                         }
                     }
-                    else if (tokens[i] == string.Empty)
+                    else if (string.IsNullOrEmpty(tokens[i]))
                     {
                         segments.Add(new WindowsSegment(SegmentType.VolumelessRootSegment, string.Empty));
                     }
@@ -82,7 +80,6 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
                         if (parts.Length > 1 && !string.IsNullOrWhiteSpace(parts[1]))
                         {
                             segments.Add(new WindowsSegment(SegmentType.VolumeRelativeSegment, parts[0]));
-//                            segments.Add(new WindowsSegment(SegmentType.VolumeRelativeSegment, parts[0] + ":"));
                             segments.Add(WindowsSegment.ParseFromString(parts[1]));
                         }
                         else
@@ -94,7 +91,6 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
                             else
                             {
                                 segments.Add(new WindowsSegment(SegmentType.RootSegment, parts[0]));
-//                                segments.Add(new WindowsSegment(SegmentType.RootSegment, parts[0] + ":"));
                             }
                         }
                     }

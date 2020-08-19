@@ -155,7 +155,7 @@ namespace Landorphan.BuildMap.Construction.SolutionModel
                             retval.ProjectContents = document;
                             retval.Status = FileStatus.Valid;
                         }
-                        catch (XmlException ex) 
+                        catch (XmlException ex)
                         {
                             retval.Status = FileStatus.Malformed;
                         }

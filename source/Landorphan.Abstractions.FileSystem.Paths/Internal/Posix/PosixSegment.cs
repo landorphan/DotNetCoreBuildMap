@@ -4,6 +4,7 @@ using System.Text;
 
 namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Posix
 {
+    using System.Globalization;
     using System.Linq;
 
     public class PosixSegment : Segment
@@ -77,18 +78,18 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Posix
         {
             if (this.Name != null)
             {
-                foreach (var segmentChar in this.Name.ToCharArray())
+                foreach (var segmentChar in Name)
                 {
                     if (segmentChar < PosixRelevantPathChars.Space)
                     {
                         return true;
                     }
                 }
-                if ((this.Name.StartsWith(PosixRelevantPathChars.Space.ToString(), StringComparison.Ordinal) ||
-                     this.Name.EndsWith(PosixRelevantPathChars.Space.ToString(), StringComparison.Ordinal) ||
+                if ((this.Name.StartsWith(PosixRelevantPathChars.Space.ToString(CultureInfo.InvariantCulture), StringComparison.Ordinal) ||
+                     this.Name.EndsWith(PosixRelevantPathChars.Space.ToString(CultureInfo.InvariantCulture), StringComparison.Ordinal) ||
                      ((this.SegmentType != SegmentType.SelfSegment &&
                        this.SegmentType != SegmentType.ParentSegment) && 
-                      this.Name.EndsWith(PosixRelevantPathChars.Period.ToString(), StringComparison.Ordinal))))
+                      this.Name.EndsWith(PosixRelevantPathChars.Period.ToString(CultureInfo.InvariantCulture), StringComparison.Ordinal))))
                 {
                     return true;
                 }

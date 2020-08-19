@@ -17,7 +17,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Posix
                 return null;
             }
 
-            if (path.StartsWith(@"//"))
+            if (path.StartsWith(@"//", StringComparison.Ordinal))
             {
                 // Converts the (\\server\...) pattern into (UNC:server\...)
                 path = "UNC:" + path.Substring(2);

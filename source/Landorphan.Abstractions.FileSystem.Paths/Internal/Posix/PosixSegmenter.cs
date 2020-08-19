@@ -8,12 +8,12 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Posix
 
     public class PosixSegmenter : ISegmenter
     {
-        private const string DoubleForwardSlash = "//";
+//        private const string DoubleForwardSlash = "//";
 
         public IEnumerable<Segment> GetSegments(string[] tokens)
         {
             IList<PosixSegment> segments = new List<PosixSegment>();
-            if (tokens.Length == 0)
+            if (tokens == null || tokens.Length == 0)
             {
                 segments.Add(PosixSegment.NullSegment);
                 return segments;
@@ -29,7 +29,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Posix
                         continue;
                     }
 
-                    if (tokens[i] == string.Empty)
+                    if (string.IsNullOrEmpty(tokens[i]))
                     {
                         segments.Add(PosixSegment.EmptySegment);
                         continue;
@@ -37,13 +37,13 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Posix
                 }
                 if (i == 0)
                 {
-                    if (tokens[i].StartsWith("UNC:"))
+                    if (tokens[i].StartsWith("UNC:", StringComparison.Ordinal))
                     {
                         segments.Add(new PosixSegment(SegmentType.RemoteSegment, tokens[i].Substring(4)));
                         continue;
                     }
 
-                    if (tokens[i] == string.Empty)
+                    if (string.IsNullOrEmpty(tokens[i]))
                     {
                         segments.Add(new PosixSegment(SegmentType.RootSegment, string.Empty));
                         continue;

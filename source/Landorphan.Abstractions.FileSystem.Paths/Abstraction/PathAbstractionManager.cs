@@ -7,7 +7,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Abstraction
     using System.Runtime.CompilerServices;
     using System.Security.Cryptography.X509Certificates;
 
-    public class PathAbstractionManager
+    public static class PathAbstractionManager
     {
         public static IRuntimeInformation InternalGetRuntimeInformation()
         {

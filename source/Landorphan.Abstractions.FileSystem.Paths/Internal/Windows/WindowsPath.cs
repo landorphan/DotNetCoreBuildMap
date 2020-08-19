@@ -2,6 +2,7 @@
 
 namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
 {
+    using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
     using System.Text;
@@ -18,9 +19,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
                 {
                     if ((this.LeadingSegment.SegmentType == SegmentType.RemoteSegment ||
                          this.LeadingSegment.SegmentType == SegmentType.RootSegment ||
-                         this.LeadingSegment.SegmentType == SegmentType.VolumelessRootSegment)
-//                    && NormalizationDepth >= 0
-                    )
+                         this.LeadingSegment.SegmentType == SegmentType.VolumelessRootSegment))
                     {
                         return PathAnchor.Absolute;
                     }
@@ -38,135 +37,37 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
             }
         }
 
-//        protected override void SetStatus()
-//        {
-////            SetStatusInternal();
-//        }
-//        private void SetStatusInternal()
-//        {
-//            int loc = 0;
-//            bool isDiscouraged = false;
-
-//            foreach (var segment in Segments)
-//            {
-//                if (!segment.IsLegalForSegmentOffset(loc))
-//                {
-//                    status = PathStatus.Illegal;
-//                    return;
-//                }
-
-//                if (loc > 0)
-//                {
-//                    if (segment.Name != null)
-//                    {
-//                        foreach (char illegalAfterFirstSegment in WindowsRelevantPathCharacters.IllegalAfterFirstSegment)
-//                        {
-//                            if (segment.Name.ToCharArray().Contains(illegalAfterFirstSegment))
-//                            {
-//                                status = PathStatus.Illegal;
-//                                return;
-//                            }
-//                        }
-//                    }
-//                }
-
-//                switch (segment.SegmentType)
-//                {
-//                    case SegmentType.NullSegment:
-//                        if (loc + 1 < Segments.Length || loc == 0)
-//                        {
-//                            status = PathStatus.Illegal;
-//                        }
-
-//                        return;
-
-//                    case SegmentType.EmptySegment:
-//                        if (loc == 0)
-//                        {
-//                            status = PathStatus.Illegal;
-//                            return;
-//                        }
-
-//                        break;
-
-//                    case SegmentType.RootSegment:
-//                    case SegmentType.RemoteSegment:
-//                    case SegmentType.VolumeRelativeSegment:
-//                    case SegmentType.VolumelessRootSegment:
-//                        if (loc != 0)
-//                        {
-//                            status = PathStatus.Illegal;
-//                            return;
-//                        }
-
-//                        break;
-//                    //case SegmentType.VolumeRelativeSegment:
-//                    //case SegmentType.VolumelessRootSegment:
-//                    //    if (loc > 0)
-//                    //    {
-//                    //        Status = PathStatus.Illegal;
-//                    //        return;
-//                    //    }
-//                    //    break;
-
-//                    // TODO: Ensure proper handling of Device Segment when determining anchor.
-//                    case SegmentType.DeviceSegment:
-//                        break;
-//                }
-
-//                if (segment.SegmentType != SegmentType.DeviceSegment)
-//                {
-//                    foreach (var deviceName in WindowsSegment.DeviceNames)
-//                    {
-//                        if (segment.Name.StartsWith(deviceName, StringComparison.OrdinalIgnoreCase))
-//                        {
-//                            isDiscouraged = true;
-//                        }
-//                    }
-//                }
-
-//                if (segment.Name.StartsWith(WindowsRelevantPathCharacters.Space.ToString(), StringComparison.Ordinal))
-//                {
-//                    isDiscouraged = true;
-//                }
-
-//                loc++;
-//            }
-
-//            if (isDiscouraged)
-//            {
-//                status = PathStatus.Discouraged;
-//                return;
-//            }
-
-//            status = PathStatus.Legal;
-//        }
-
-        public const string UncPrefix = "UNC";
-
-        public static string ConvertToString(ParsedPath path)
+        public override ISegment CreateSegment(SegmentType segmentType, string name)
         {
-            var seperator = '\\';
-            if (path.Segments.Length == 1 && path.LeadingSegment.SegmentType == SegmentType.VolumelessRootSegment)
+            switch (segmentType)
             {
-                return seperator.ToString();
+                case SegmentType.EmptySegment:
+                    return WindowsSegment.EmptySegment;
+                case SegmentType.NullSegment:
+                    return WindowsSegment.NullSegment;
+                case SegmentType.SelfSegment:
+                    return WindowsSegment.SelfSegment;
+                case SegmentType.ParentSegment:
+                    return WindowsSegment.ParentSegment;
+                default:
+                    return new WindowsSegment(segmentType, name);
+            }
+        }
+
+        protected override string ConvertToString(IEnumerable<ISegment> segments)
+        {
+            const char seperator = WindowsRelevantPathCharacters.BackSlash;
+            var segmentArray = segments.ToArray();
+            if (segmentArray.Length == 1 && segmentArray[0].SegmentType == SegmentType.VolumelessRootSegment)
+            {
+                return seperator.ToString(CultureInfo.InvariantCulture);
             }
             StringBuilder builder = new StringBuilder();
-            //if (style == ToStringStyle.Long)
-            //{
-            //    builder.Append(seperator);
-            //    builder.Append(seperator);
-            //    builder.Append(WindowsRelevantPathCharacters.QuestionMark);
-            //    builder.Append(seperator);
-            //    builder.Append(UncPrefix);
-            //    builder.Append(seperator);
-            //}
             
-            var segments = path.Segments.ToArray();
             bool skipNextSeperator = false;
-            for (int i = 0; i < segments.Length; i++)
+            for (int i = 0; i < segmentArray.Length; i++)
             {
-                var currentSegment = segments[i];
+                var currentSegment = segmentArray[i];
                 if (i > 0 && !skipNextSeperator)
                 {
                     builder.Append(seperator);
@@ -186,15 +87,15 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
                         break;
                     case SegmentType.VolumeRelativeSegment:
                         builder.Append(currentSegment);
-//                        builder.Append(WindowsRelevantPathCharacters.Colon);
                         skipNextSeperator = true;
                         break;
                     case SegmentType.RootSegment:
                         builder.Append(currentSegment);
-//                        builder.Append(WindowsRelevantPathCharacters.Colon);
                         builder.Append(seperator);
                         skipNextSeperator = true;
                         break;
+                    // Comments here are just to show the cases covered by this 
+                    // default clause.
                     //case SegmentType.NullSegment:
                     //case SegmentType.EmptySegment:
                     //case SegmentType.GenericSegment:

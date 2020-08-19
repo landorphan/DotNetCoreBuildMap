@@ -1,5 +1,7 @@
 namespace Landorphan.Abstractions.FileSystem.Paths
 {
+    using System.Collections.Generic;
+
     public enum PathStatus
     {
         Undetermined,
@@ -20,7 +22,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths
         Relative
     }
 
-    public enum NormalizationLevel
+    public enum SimplificationLevel
     {
         NotNormalized,
         LeadingParentsOnly,
@@ -44,17 +46,15 @@ namespace Landorphan.Abstractions.FileSystem.Paths
 
         PathAnchor Anchor { get; }
 
-        ISegment[] Segments { get; }
+        IReadOnlyList<ISegment> Segments { get; }
 
         IPath SuppliedPath { get; }
 
-        IPath Parent { get; }
-
-//        long NormalizationDepth { get; }
+        IPath GetParent();
 
         ISegment RootSegment { get; }
 
-        NormalizationLevel NormalizationLevel { get; }
+        SimplificationLevel SimplificationLevel { get; }
 
         string Name { get; }
         string NameWithoutExtension { get; }
@@ -64,6 +64,11 @@ namespace Landorphan.Abstractions.FileSystem.Paths
 
         IPath ChangeExtension(string newExtension);
         IPath ConvertToRelativePath();
-        IPath Normalize();
+        IPath Simplify();
+
+        IPath ReplaceSegment(int offset, ISegment segment);
+
+        ISegment CreateSegment(SegmentType segmentType, string name);
+        IPath AppendSegment(ISegment segment);
     }
 }

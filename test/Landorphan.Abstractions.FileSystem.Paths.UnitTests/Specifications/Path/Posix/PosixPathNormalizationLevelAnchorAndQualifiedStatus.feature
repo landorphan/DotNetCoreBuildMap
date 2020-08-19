@@ -1,5 +1,5 @@
 @Check-In
-Feature: Posix Path Normalization Level, Anchor And Qualifed Status
+Feature: Posix Path Simplification Level, Anchor And Qualifed Status
 	In order to develop a reliable Windows Path parser 
 	As a member of the Landorphan Team
 	I want to to be able to convert incoming paths into a more managable form
@@ -8,11 +8,11 @@ Scenario Outline: Posix Paths can be normalized to best available form.
 	Given I have the following path: <Path>
 	  And I'm running on the following Operating System: Linux
      When I parse the path 
-	 Then the resulting path should have the following Normalization Level: <Normalization Level>
+	 Then the resulting path should have the following Simplification Level: <Simplification Level>
 Examples:
 # NOTE: Due to Gherkin parsing rules, \ needs to be escaped.  In order to avoid that necissity and
 # make the following examples easier to read (/) will be used in place of the (\) character
-| Path                         | Anchor   | Fully Qualified | Normalization Level | Notes                                                                                              |
+| Path                         | Anchor   | Fully Qualified | Simplification Level | Notes                                                                                              |
 | (null)                       | Relative | false           | SelfReferenceOnly   | Null and Empty paths are equivilent to '.'                                                         |
 | (empty)                      | Relative | false           | SelfReferenceOnly   | Null and Empty paths are equivilent to '.'                                                         |
 | C:/                          | Relative | false           | NotNormalized       | The trailing slash adds an empty segment thus it's not normalized                                  |

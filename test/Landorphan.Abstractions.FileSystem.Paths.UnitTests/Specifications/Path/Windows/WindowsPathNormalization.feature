@@ -1,5 +1,5 @@
 @Check-In
-Feature: Windows Path Normalization
+Feature: Windows Path Simplification
 	In order to develop a reliable Windows Path parser 
 	As a member of the Landorphan Team
 	I want to to be able to convert incoming paths into a more managable form
@@ -18,11 +18,11 @@ Scenario Outline: Windows Paths can be normalized to best available form.
 	  And the resulting path should be anchored to <Anchor>
 	  And the resulting path's FullyQualified property should be: <Fully Qualified>
 	  And the resulting path's root segment should return: <Root Segment>
-	  And the resulting path should have the following Normalization Level: <Normalization Level>
+	  And the resulting path should have the following Simplification Level: <Simplification Level>
 Examples:
 # NOTE: Due to Gherkin parsing rules, \ needs to be escaped.  In order to avoid that necissity and
 # make the following examples easier to read (/) will be used in place of the (\) character
-| Path                         | Path Status | Anchor   | Fully Qualified | Root Segment | Normalized Path             | Normalization Level | Notes                                                                                              |
+| Path                         | Path Status | Anchor   | Fully Qualified | Root Segment | Normalized Path             | Simplification Level | Notes                                                                                              |
 | (null)                       | Legal       | Relative | false           | {E} (empty)  | .                           | SelfReferenceOnly   | Imposible for Null path to normalize                                                               |
 | (empty)                      | Legal       | Relative | false           | {E} (empty)  | .                           | SelfReferenceOnly   | Imposible for Empty path to normalize                                                              |
 | C:/                          | Legal       | Absolute | true            | {R} C        | C:`                         | Fully               | This is a root segment and must key the trailing slash or it will become a volume relative segment |

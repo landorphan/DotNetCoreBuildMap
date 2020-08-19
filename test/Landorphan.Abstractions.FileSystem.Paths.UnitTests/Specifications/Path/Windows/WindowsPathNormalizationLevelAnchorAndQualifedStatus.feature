@@ -1,5 +1,5 @@
 @Check-In
-Feature: Windows Path Normalization Level, Anchor and Qualified Status
+Feature: Windows Path Simplification Level, Anchor and Qualified Status
 	In order to develop a reliable Windows Path parser 
 	As a member of the Landorphan Team
 	I want to to be able to convert incoming paths into a more managable form
@@ -8,14 +8,14 @@ Scenario Outline: Windows Paths can be normalized to best available form.
 	Given I have the following path: <Path>
 	  And I'm running on the following Operating System: Windows
      When I parse the path 
-	 Then the resulting path should have the following Normalization Level: <Normalization Level>
+	 Then the resulting path should have the following Simplification Level: <Simplification Level>
 	  And the psth's anchor property should be <Anchor>
 	  And the parse path's FullyQualified property should be: <Fully Qualified>
 Examples:
 # NOTE: We are using the "Alt" Path seperator here ... to keep consistantcy with the Posix paths.
 # The path parser accepts both back and forward slash carachters as path seperators for Windows Paths 
 # BUT NOTE: It only accepts foward slash characters for Posix paths.
-| Path                         | Anchor   | Fully Qualified | Normalization Level | Notes                                                                                              |
+| Path                         | Anchor   | Fully Qualified | Simplification Level | Notes                                                                                              |
 | (null)                       | Relative | false           | SelfReferenceOnly   | Null and Empty paths are equivilent to '.'                                                         |
 | (empty)                      | Relative | false           | SelfReferenceOnly   | Null and Empty paths are equivilent to '.'                                                         |
 | C:/                          | Absolute | true            | NotNormalized       | The trailing slash adds an empty segment thus it's not normalized                                  |

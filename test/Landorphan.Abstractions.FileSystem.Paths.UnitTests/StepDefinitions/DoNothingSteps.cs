@@ -14,6 +14,9 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
       [Then(@"nothing should occur")]
       public void GivenIHaveDoneNothing()
       {
+          // Used to "test the test system" 
+          // and for places where the Gherkin needs 
+          // to be complete but no action is necessary.
       }
    }
 }

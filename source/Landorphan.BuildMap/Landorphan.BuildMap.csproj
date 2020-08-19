@@ -5,9 +5,9 @@
       <CodeAnalysisRuleSet>..\..\CodeAnalysis\Default.Source.16.5.WithSonarLint.ruleset</CodeAnalysisRuleSet>
     </PropertyGroup>
 
-  <ItemGroup>
-    <CodeAnalysisDictionary Include="..\..\CodeAnalysis\CustomDictionary.xml" Link="CustomDictionary.xml" />
-  </ItemGroup>
+    <ItemGroup>
+      <CodeAnalysisDictionary Include="..\..\CodeAnalysis\CustomDictionary.xml" Link="CustomDictionary.xml" />
+    </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="DotNet.Glob" Version="3.0.9" />

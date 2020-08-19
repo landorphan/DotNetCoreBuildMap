@@ -1,13 +1,14 @@
 namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
 {
     using System;
+    using System.Globalization;
     using System.Linq;
     using System.Runtime.CompilerServices;
 
     // TODO: Make this internal once we have enough build system to do InternalsVisibleTo
     public class WindowsSegment : Segment
     {
-        public static readonly string[] DeviceNames = new String[]
+        public static readonly string[] DeviceNames = new []
         {
             "CON", "PRN", "AUX", "NUL", "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8",
             "COM9", "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9"
@@ -92,12 +93,12 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
                 }
             }
 
-            if (Name.EndsWith(WindowsRelevantPathCharacters.Space.ToString(), StringComparison.Ordinal))
+            if (Name.EndsWith(WindowsRelevantPathCharacters.Space.ToString(CultureInfo.InvariantCulture), StringComparison.Ordinal))
             {
                 return false;
             }
 
-            if (Name.EndsWith(WindowsRelevantPathCharacters.Period.ToString(), StringComparison.Ordinal) &&
+            if (Name.EndsWith(WindowsRelevantPathCharacters.Period.ToString(CultureInfo.InvariantCulture), StringComparison.Ordinal) &&
                 (this.SegmentType != SegmentType.ParentSegment && this.SegmentType != SegmentType.SelfSegment))
             {
                 return false;
@@ -119,7 +120,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
                 }
             }
 
-            if (this.Name.StartsWith(WindowsRelevantPathCharacters.Space.ToString(), StringComparison.Ordinal))
+            if (this.Name.StartsWith(WindowsRelevantPathCharacters.Space.ToString(CultureInfo.InvariantCulture), StringComparison.Ordinal))
             {
                 return true;
             }

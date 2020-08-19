@@ -20,9 +20,9 @@ namespace Landorphan.Abstractions.FileSystem.Paths.UnitTests.Specifications.Path
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "3.3.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [NUnit.Framework.TestFixtureAttribute()]
-    [NUnit.Framework.DescriptionAttribute("Windows Path Normalization Level, Anchor and Qualified Status")]
+    [NUnit.Framework.DescriptionAttribute("Windows Path Simplification Level, Anchor and Qualified Status")]
     [NUnit.Framework.CategoryAttribute("Check-In")]
-    public partial class WindowsPathNormalizationLevelAnchorAndQualifiedStatusFeature
+    public partial class WindowsPathSimplificationLevelAnchorAndQualifiedStatusFeature
     {
         
         private TechTalk.SpecFlow.ITestRunner testRunner;
@@ -37,7 +37,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.UnitTests.Specifications.Path
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Windows Path Normalization Level, Anchor and Qualified Status", "\tIn order to develop a reliable Windows Path parser \r\n\tAs a member of the Landorp" +
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Windows Path Simplification Level, Anchor and Qualified Status", "\tIn order to develop a reliable Windows Path parser \r\n\tAs a member of the Landorp" +
                     "han Team\r\n\tI want to to be able to convert incoming paths into a more managable " +
                     "form", ProgrammingLanguage.CSharp, new string[] {
                         "Check-In"});
@@ -124,14 +124,14 @@ namespace Landorphan.Abstractions.FileSystem.Paths.UnitTests.Specifications.Path
         [NUnit.Framework.TestCaseAttribute("../dir/file.txt/", "Relative", "false", "NotNormalized", "Trailing slash", null)]
         [NUnit.Framework.TestCaseAttribute("a/b/./c/../../d/../../../e", "Relative", "false", "NotNormalized", "To many resons to mention", null)]
         [NUnit.Framework.TestCaseAttribute("a/b/./c/../d/../../e", "Relative", "false", "NotNormalized", "To many resons to mention", null)]
-        public virtual void WindowsPathsCanBeNormalizedToBestAvailableForm_(string path, string anchor, string fullyQualified, string normalizationLevel, string notes, string[] exampleTags)
+        public virtual void WindowsPathsCanBeNormalizedToBestAvailableForm_(string path, string anchor, string fullyQualified, string simplificationLevel, string notes, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             argumentsOfScenario.Add("Path", path);
             argumentsOfScenario.Add("Anchor", anchor);
             argumentsOfScenario.Add("Fully Qualified", fullyQualified);
-            argumentsOfScenario.Add("Normalization Level", normalizationLevel);
+            argumentsOfScenario.Add("Simplification Level", simplificationLevel);
             argumentsOfScenario.Add("Notes", notes);
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Windows Paths can be normalized to best available form.", null, tagsOfScenario, argumentsOfScenario);
 #line 7
@@ -164,7 +164,7 @@ this.ScenarioInitialize(scenarioInfo);
      testRunner.When("I parse the path", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 11
-  testRunner.Then(string.Format("the resulting path should have the following Normalization Level: {0}", normalizationLevel), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+  testRunner.Then(string.Format("the resulting path should have the following Simplification Level: {0}", simplificationLevel), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
 #line 12
    testRunner.And(string.Format("the psth\'s anchor property should be {0}", anchor), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
