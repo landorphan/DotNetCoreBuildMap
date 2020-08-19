@@ -8,6 +8,8 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
 
     public class WindowsSegmenter : ISegmenter
     {
+        public const string UncIndicator = "UNC:";
+
         public IEnumerable<Segment> GetSegments(string[] tokens)
         {
             IList<WindowsSegment> segments = new List<WindowsSegment>();
@@ -22,9 +24,9 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
             {
                 if (i == 0)
                 {
-                    if (tokens[i].StartsWith("UNC:", StringComparison.Ordinal))
+                    if (tokens[i].StartsWith(UncIndicator, StringComparison.Ordinal))
                     {
-                        segments.Add(new WindowsSegment(SegmentType.RemoteSegment, tokens[i].Substring(4)));
+                        segments.Add(new WindowsSegment(SegmentType.RemoteSegment, tokens[i].Substring(UncIndicator.Length)));
                         continue;
                     }
                     if (tokens[i].Contains(":"))

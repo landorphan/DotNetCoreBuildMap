@@ -8,7 +8,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Posix
 
     public class PosixSegmenter : ISegmenter
     {
-//        private const string DoubleForwardSlash = "//";
+        private const string UncIndicator = "UNC:";
 
         public IEnumerable<Segment> GetSegments(string[] tokens)
         {
@@ -37,9 +37,9 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Posix
                 }
                 if (i == 0)
                 {
-                    if (tokens[i].StartsWith("UNC:", StringComparison.Ordinal))
+                    if (tokens[i].StartsWith(UncIndicator, StringComparison.Ordinal))
                     {
-                        segments.Add(new PosixSegment(SegmentType.RemoteSegment, tokens[i].Substring(4)));
+                        segments.Add(new PosixSegment(SegmentType.RemoteSegment, tokens[i].Substring(UncIndicator.Length)));
                         continue;
                     }
 
@@ -54,7 +54,9 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Posix
             }
 
             // Special case for Root Segment to avoid a Root+Empty combination
+#pragma warning disable S109 // Magic numbers should not be used
             if (segments.Count == 2 && segments[0].SegmentType == SegmentType.RootSegment && segments[1].SegmentType == SegmentType.EmptySegment)
+#pragma warning restore S109 // Magic numbers should not be used
             {
                 return segments.Take(1);
             }
