@@ -4,6 +4,7 @@ using System.Text;
 
 namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Posix
 {
+    using System.Globalization;
     using System.Linq;
 
     public class PosixSegment : Segment
@@ -12,6 +13,11 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Posix
         public static readonly PosixSegment EmptySegment = new PosixSegment(SegmentType.EmptySegment, string.Empty);
         public static readonly PosixSegment SelfSegment = new PosixSegment(SegmentType.SelfSegment, ".");
         public static readonly PosixSegment ParentSegment = new PosixSegment(SegmentType.ParentSegment, "..");
+
+        public override string ToString()
+        {
+            return this.Name;
+        }
 
         public PosixSegment(SegmentType type, string name)
         {
@@ -47,7 +53,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Posix
         }
 
 
-        public override bool IsLegal()
+        public override bool IsLegalForSegmentOffset(int offset)
         {
             if (this == ParentSegment || this == EmptySegment || this == SelfSegment || this == NullSegment)
             {
@@ -67,5 +73,35 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Posix
 
             return true;
         }
+
+        public override bool IsDiscouraged()
+        {
+            if (this.Name != null)
+            {
+                foreach (var segmentChar in Name)
+                {
+                    if (segmentChar < PosixRelevantPathChars.Space)
+                    {
+                        return true;
+                    }
+                }
+                if ((this.Name.StartsWith(PosixRelevantPathChars.Space.ToString(CultureInfo.InvariantCulture), StringComparison.Ordinal) ||
+                     this.Name.EndsWith(PosixRelevantPathChars.Space.ToString(CultureInfo.InvariantCulture), StringComparison.Ordinal) ||
+                     ((this.SegmentType != SegmentType.SelfSegment &&
+                       this.SegmentType != SegmentType.ParentSegment) && 
+                      this.Name.EndsWith(PosixRelevantPathChars.Period.ToString(CultureInfo.InvariantCulture), StringComparison.Ordinal))))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public override ISegment Clone()
+        {
+            return new PosixSegment(this.SegmentType, this.Name);
+        }
+
     }
 }

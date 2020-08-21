@@ -1,12 +1,14 @@
 namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
 {
     using System;
+    using System.Globalization;
     using System.Linq;
+    using System.Runtime.CompilerServices;
 
     // TODO: Make this internal once we have enough build system to do InternalsVisibleTo
     public class WindowsSegment : Segment
     {
-        public static readonly string[] DeviceNames = new String[]
+        public static readonly string[] DeviceNames = new []
         {
             "CON", "PRN", "AUX", "NUL", "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8",
             "COM9", "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9"
@@ -15,6 +17,17 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
         public static readonly WindowsSegment EmptySegment = new WindowsSegment(SegmentType.EmptySegment, string.Empty);
         public static readonly WindowsSegment SelfSegment = new WindowsSegment(SegmentType.SelfSegment, ".");
         public static readonly WindowsSegment ParentSegment = new WindowsSegment(SegmentType.ParentSegment, "..");
+
+        public override string ToString()
+        {
+            if (SegmentType == SegmentType.VolumeRelativeSegment ||
+                SegmentType == SegmentType.RootSegment)
+            {
+                return $"{Name}:";
+            }
+
+            return Name;
+        }
 
         public static WindowsSegment ParseFromString(string input)
         {
@@ -58,8 +71,12 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
             this.Name = name;
         }
 
-        public override bool IsLegal()
+        public override bool IsLegalForSegmentOffset(int offset)
         {
+            if (offset > 0 && (this.SegmentType == SegmentType.VolumeRelativeSegment || this.SegmentType == SegmentType.RootSegment))
+            {
+                return false;
+            }
             if (this == ParentSegment || this == EmptySegment || this == SelfSegment || this == NullSegment)
             {
                 return true;
@@ -76,18 +93,44 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
                 }
             }
 
-            if (Name.EndsWith(WindowsRelevantPathCharacters.Space.ToString(), StringComparison.Ordinal))
+            if (Name.EndsWith(WindowsRelevantPathCharacters.Space.ToString(CultureInfo.InvariantCulture), StringComparison.Ordinal))
             {
                 return false;
             }
 
-            if (Name.EndsWith(WindowsRelevantPathCharacters.Period.ToString(), StringComparison.Ordinal) &&
-                (this != ParentSegment || this != SelfSegment))
+            if (Name.EndsWith(WindowsRelevantPathCharacters.Period.ToString(CultureInfo.InvariantCulture), StringComparison.Ordinal) &&
+                (this.SegmentType != SegmentType.ParentSegment && this.SegmentType != SegmentType.SelfSegment))
             {
                 return false;
             }
 
             return true;
+        }
+
+        public override bool IsDiscouraged()
+        {
+            if (this.SegmentType != SegmentType.DeviceSegment)
+            {
+                foreach (var deviceName in WindowsSegment.DeviceNames)
+                {
+                    if (this.Name.StartsWith(deviceName, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            if (this.Name.StartsWith(WindowsRelevantPathCharacters.Space.ToString(CultureInfo.InvariantCulture), StringComparison.Ordinal))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public override ISegment Clone()
+        {
+            return new WindowsSegment(this.SegmentType, this.Name);
         }
     }
 }

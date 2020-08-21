@@ -8,11 +8,13 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
 
     public class WindowsSegmenter : ISegmenter
     {
+        public const string UncIndicator = "UNC:";
+
         public IEnumerable<Segment> GetSegments(string[] tokens)
         {
             IList<WindowsSegment> segments = new List<WindowsSegment>();
 
-            if (tokens.Length == 0)
+            if (tokens == null || tokens.Length == 0)
             {
                 segments.Add(WindowsSegment.NullSegment);
                 return segments.ToArray();
@@ -22,9 +24,9 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
             {
                 if (i == 0)
                 {
-                    if (tokens[i].StartsWith("UNC:"))
+                    if (tokens[i].StartsWith(UncIndicator, StringComparison.Ordinal))
                     {
-                        segments.Add(new WindowsSegment(SegmentType.RemoteSegment, tokens[i].Substring(4)));
+                        segments.Add(new WindowsSegment(SegmentType.RemoteSegment, tokens[i].Substring(UncIndicator.Length)));
                         continue;
                     }
                     if (tokens[i].Contains(":"))
@@ -32,7 +34,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
                         var parts = tokens[i].Split(':');
                         if (parts.Length > 1 && !string.IsNullOrWhiteSpace(parts[1]))
                         {
-                            segments.Add(new WindowsSegment(SegmentType.VolumeRelativeSegment, parts[0] + ":"));
+                            segments.Add(new WindowsSegment(SegmentType.VolumeRelativeSegment, parts[0]));
                             segments.Add(WindowsSegment.ParseFromString(parts[1]));
                         }
                         else
@@ -43,7 +45,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
                             }
                             else
                             {
-                                segments.Add(new WindowsSegment(SegmentType.RootSegment, parts[0] + ":"));
+                                segments.Add(new WindowsSegment(SegmentType.RootSegment, parts[0]));
                             }
                         }
                     }
@@ -54,7 +56,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
                             segments.Add(WindowsSegment.NullSegment);
                         }
 
-                        if (tokens[i] == string.Empty)
+                        if (string.IsNullOrEmpty(tokens[i]))
                         {
                             segments.Add(WindowsSegment.EmptySegment);
                         }
@@ -63,11 +65,9 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
                             segments.Add(WindowsSegment.ParseFromString(tokens[i]));
                         }
                     }
-                    else if (tokens[i] == string.Empty)
+                    else if (string.IsNullOrEmpty(tokens[i]))
                     {
-                        segments.Add(WindowsSegment.EmptySegment);
-                        var name = tokens[++i];
-                        segments.Add(new WindowsSegment(SegmentType.VolumelessRootSegment, name));
+                        segments.Add(new WindowsSegment(SegmentType.VolumelessRootSegment, string.Empty));
                     }
                     else
                     {
@@ -76,8 +76,37 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
                 }
                 else if (i >= 1)
                 {
-                    segments.Add(WindowsSegment.ParseFromString(tokens[i]));
+                    if (tokens[i].Contains(":"))
+                    {
+                        var parts = tokens[i].Split(':');
+                        if (parts.Length > 1 && !string.IsNullOrWhiteSpace(parts[1]))
+                        {
+                            segments.Add(new WindowsSegment(SegmentType.VolumeRelativeSegment, parts[0]));
+                            segments.Add(WindowsSegment.ParseFromString(parts[1]));
+                        }
+                        else
+                        {
+                            if (WindowsSegment.IsDeviceSegment(parts[0]))
+                            {
+                                segments.Add(new WindowsSegment(SegmentType.DeviceSegment, parts[0]));
+                            }
+                            else
+                            {
+                                segments.Add(new WindowsSegment(SegmentType.RootSegment, parts[0]));
+                            }
+                        }
+                    }
+                    else
+                    {
+                        segments.Add(WindowsSegment.ParseFromString(tokens[i]));
+                    }
                 }
+            }
+
+            // Special case for Root Segment to avoid a Root+Empty combination
+            if (segments.Count == 2 && segments[0].SegmentType == SegmentType.VolumelessRootSegment && segments[1].SegmentType == SegmentType.EmptySegment)
+            {
+                return segments.Take(1);
             }
 
             return segments;

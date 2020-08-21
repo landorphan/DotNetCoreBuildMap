@@ -25,7 +25,7 @@ namespace Landorphan.BuildMap.Abstractions.FileSystem
         {
             var baseFilePaths =
                 (from p in Directory.GetFiles(NormalizePath(path), "*.*", SearchOption.AllDirectories) 
-               select new FilePaths() {
+               select new FilePaths {
                    Absolute = NormalizePath(p),
                    Relative = p.Length > path.Length ? p.Substring(path.Length + 1) : p,
                    Real = GetRealPath(NormalizePath(p))

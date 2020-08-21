@@ -26,6 +26,11 @@ namespace Landorphan.Abstractions.FileSystem.Paths
         // HOW  NORMALIZED:
         //      Always Kept
         //   LevelIncrease = 0
+        // EXAMPLE:
+        // On Windows
+        //      C:\
+        // On Posix
+        //      /
         RemoteSegment,
         // WHEN LEGAL: 
         //      Always LEGAL on Windows
@@ -78,8 +83,18 @@ namespace Landorphan.Abstractions.FileSystem.Paths
 
         string Name { get; }
 
-        ISegment NextSegment { get; }
+        bool IsRootSegment { get; }
 
-        bool IsLegal();
+        bool IsLegalForSegmentOffset(int offset);
+
+        bool IsDiscouraged();
+        
+        string NameWithoutExtension { get; }
+
+        string Extension { get; }
+
+        bool HasExtension { get; }
+
+        ISegment Clone();
     }
 }
