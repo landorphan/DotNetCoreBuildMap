@@ -119,9 +119,39 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
             segments = segmenter.GetSegments(tokens).ToArray();
         }
 
+
+        [When(@"I manipulate the path by adding the segment \((.*)\) (insert before|append after) offset (.*)")]
+        public void WhenIManipulateThePathByAddingTheSegmentOffset(string segmentString, string location, int offset)
+        {
+            var segment = ParseSegment(segmentString);
+            if (location == "insert before")
+            {
+                parsedPath = parsedPath.InsertSegmentBefore(offset, segment);
+            }
+            else
+            {
+                parsedPath = parsedPath.AppendSegmentAfter(offset, segment);
+            }
+
+        }
+
         public void CompareSegment(ISegment actualSegment, string value)
         {
             value = PreparePathForTest(value);
+            var expected = ParseSegment(value);
+            if (PatyType == PathType.Posix)
+            {
+                actualSegment.ToString().Should().Be(expected.ToString());
+            }
+            else
+            {
+                actualSegment.ToString().Should().BeEquivalentTo(expected.ToString());
+            }
+            actualSegment.SegmentType.Should().Be(expected.SegmentType);
+        }
+
+        private ISegment ParseSegment(string value)
+        {
             ISegment expected = null;
             if (value == "{N} (null)")
             {
@@ -177,15 +207,8 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
             {
                 expected = new WindowsSegment(SegmentType.GenericSegment, value.Substring(4));
             }
-            if (PatyType == PathType.Posix)
-            {
-                actualSegment.ToString().Should().Be(expected.ToString());
-            }
-            else
-            {
-                actualSegment.ToString().Should().BeEquivalentTo(expected.ToString());
-            }
-            actualSegment.SegmentType.Should().Be(expected.SegmentType);
+
+            return expected;
         }
 
         [Then(@"segment '(.*)' should be: (.*)")]

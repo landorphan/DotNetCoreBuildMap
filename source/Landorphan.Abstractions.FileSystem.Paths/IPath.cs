@@ -69,6 +69,12 @@ namespace Landorphan.Abstractions.FileSystem.Paths
         IPath ReplaceSegment(int offset, ISegment segment);
 
         ISegment CreateSegment(SegmentType segmentType, string name);
-        IPath AppendSegment(ISegment segment);
+
+        IPath InsertSegmentAtBegining(ISegment segment);
+        IPath InsertSegmentBefore(int offset, ISegment segment);
+        IPath AppendSegmentAfter(int offset, ISegment segment);
+        IPath AppendSegmentAtEnd(ISegment segment);
+
+        string ToPathSegmentNotation();
     }
 }

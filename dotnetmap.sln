@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.30320.27
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "source", "source", "{D524C632-A572-4AAD-9AB6-F80832FC2FEB}"
+	ProjectSection(SolutionItems) = preProject
+		source\Landorphan.Abstractions.FileSystem.Paths\Internal\Windows\WindowsSegmenter.cs = source\Landorphan.Abstractions.FileSystem.Paths\Internal\Windows\WindowsSegmenter.cs
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dotnetmap", "source\dotnetmap\dotnetmap.csproj", "{1DBC9C5A-B63C-4E71-B74E-09C56C9E572B}"
 EndProject

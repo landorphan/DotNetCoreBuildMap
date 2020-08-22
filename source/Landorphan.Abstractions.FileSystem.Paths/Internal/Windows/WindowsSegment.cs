@@ -31,32 +31,42 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
 
         public static WindowsSegment ParseFromString(string input)
         {
-            if (input == ".")
+            var match = PathSegmentNotationSegmentRegex.Match(input);
+            if (match.Success)
             {
-                return SelfSegment;
-            }
-
-            if (input == "..")
-            {
-                return ParentSegment;
-            }
-
-            if (input == null)
-            {
-                return NullSegment;
-            }
-
-            if (input.Length == 0)
-            {
-                return EmptySegment;
-            }
-            else if (IsDeviceSegment(input))
-            {
-                return new WindowsSegment(SegmentType.DeviceSegment, input);
+                SegmentType segmentType = PathSegmentNotationComponents.StringToSegmentType[match.Groups[SegmentTypeGroupName].Value];
+                string name = match.Groups[SegmentNameGroupName].Value;
+                return new WindowsSegment(segmentType, name);
             }
             else
             {
-                return new WindowsSegment(SegmentType.GenericSegment, input);
+                if (input == ".")
+                {
+                    return SelfSegment;
+                }
+
+                if (input == "..")
+                {
+                    return ParentSegment;
+                }
+
+                if (input == null)
+                {
+                    return NullSegment;
+                }
+
+                if (input.Length == 0)
+                {
+                    return EmptySegment;
+                }
+                else if (IsDeviceSegment(input))
+                {
+                    return new WindowsSegment(SegmentType.DeviceSegment, input);
+                }
+                else
+                {
+                    return new WindowsSegment(SegmentType.GenericSegment, input);
+                }
             }
         }
 

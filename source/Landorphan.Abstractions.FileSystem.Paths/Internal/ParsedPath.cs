@@ -7,6 +7,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
     using System.IO;
     using System.Linq;
     using System.Runtime.CompilerServices;
+    using System.Text;
     using System.Transactions;
     using Landorphan.Abstractions.FileSystem.Paths.Internal.Posix;
     using Landorphan.Abstractions.FileSystem.Paths.Internal.Windows;
@@ -14,6 +15,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
     public abstract class ParsedPath : IPath
     {
         public abstract ISegment CreateSegment(SegmentType segmentType, string name);
+
         protected abstract string ConvertToString(IEnumerable<ISegment> segments);
         public abstract PathType PathType { get; }
         public abstract PathAnchor Anchor { get; }
@@ -132,7 +134,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
 
         public IPath GetParent()
         {
-            var parrentPath = this.AppendSegment(Segment.GetParentSegment(PathType));
+            var parrentPath = this.AppendSegmentAtEnd(Segment.GetParentSegment(PathType));
             return parrentPath.Simplify();
         }
 
@@ -380,15 +382,62 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
             return this.simplifiedForm;
         }
 
-        public IPath AppendSegment(ISegment segment)
+        internal IPath AddToSegments(int offset, bool after, ISegment segment)
         {
+            if (after)
+            {
+                offset++;
+            }
+
+            List<ISegment> newSegments = new List<ISegment>();
             if (segment == null)
             {
                 segment = Segment.GetEmptySegment(PathType);
             }
             var clones = CloneSegments(this.Segments);
-            clones.Add(segment.Clone());
-            return CreateFromSegments(clones);
+
+            newSegments.AddRange(clones.Take(offset));
+            newSegments.Add(segment);
+            newSegments.AddRange(clones.Skip(offset));
+
+            return CreateFromSegments(newSegments);
+        }
+
+        public IPath InsertSegmentAtBegining(ISegment segment)
+        {
+            return AddToSegments(0, false, segment);
+        }
+
+        public IPath InsertSegmentBefore(int offset, ISegment segment)
+        {
+            return AddToSegments(offset, false, segment);
+        }
+
+        public IPath AppendSegmentAfter(int offset, ISegment segment)
+        {
+            return AddToSegments(offset, true, segment);
+        }
+
+        public IPath AppendSegmentAtEnd(ISegment segment)
+        {
+            return AddToSegments(this.Segments.Count, true, segment);
+            //if (segment == null)
+            //{
+            //    segment = Segment.GetEmptySegment(PathType);
+            //}
+            //var clones = CloneSegments(this.Segments);
+            //clones.Add(segment.Clone());
+            //return CreateFromSegments(clones);
+        }
+
+        public string ToPathSegmentNotation()
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.Append(PathSegmentNotationComponents.OpenBracket);
+            builder.Append(PathSegmentNotationComponents.PathSegmentNotationHeader);
+            builder.Append(PathSegmentNotationComponents.Colon);
+            builder.Append(PathSegmentNotationComponents.CloseBracket);
+            return builder.ToString();
         }
 
         public IPath ReplaceSegment(int offset, ISegment segment)
@@ -397,5 +446,6 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
             clonedSegments[offset] = segment;
             return CreateFromSegments(clonedSegments);
         }
+
     }
 }
