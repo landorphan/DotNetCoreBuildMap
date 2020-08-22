@@ -32,7 +32,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths
                 { SegmentType.DeviceSegment, "D" },
                 { SegmentType.GenericSegment, "G" },
                 { SegmentType.RemoteSegment, "X" },
-                { SegmentType.VolumelessRootSegment, "A" },
+                { SegmentType.VolumelessRootSegment, "$" },
                 { SegmentType.NullSegment, "0" }
             });
 

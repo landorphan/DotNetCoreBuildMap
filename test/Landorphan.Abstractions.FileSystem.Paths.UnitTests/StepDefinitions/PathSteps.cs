@@ -25,7 +25,7 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
         public IPath originalForm;
         public IPath normalizedPath;
         public IPath pathChangeResult;
-        private PathType PatyType { get; set; }
+        private PathType PathType { get; set; }
         private static OSPlatform osPlatform;
         private string toStringReturned;
         private Exception thrownException;
@@ -104,18 +104,18 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
         [When(@"I segment the (Windows|Posix) path")]
         public void WhenISegmentThePath(string osPath)
         {
-            PatyType = PathType.Posix;
+            PathType = PathType.Posix;
             WhenITokenizeThePathWithTheTokenizer(osPath);
             switch (osPath)
             {
                 case "Windows":
-                    PatyType = PathType.Windows;
+                    PathType = PathType.Windows;
                     break;
                 default:
                     break;
             }
 
-            var segmenter = pathParser.GetSegmenter(PatyType);
+            var segmenter = pathParser.GetSegmenter(PathType);
             segments = segmenter.GetSegments(tokens).ToArray();
         }
 
@@ -137,9 +137,9 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
 
         public void CompareSegment(ISegment actualSegment, string value)
         {
-            value = PreparePathForTest(value);
+//            value = PreparePathForTest(value);
             var expected = ParseSegment(value);
-            if (PatyType == PathType.Posix)
+            if (PathType == PathType.Posix)
             {
                 actualSegment.ToString().Should().Be(expected.ToString());
             }
@@ -153,7 +153,17 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
         private ISegment ParseSegment(string value)
         {
             ISegment expected = null;
-            if (value == "{N} (null)")
+            if (PathType == PathType.Posix)
+            {
+                expected = PosixSegment.ParseFromString(value);
+            }
+            else
+            {
+                expected = WindowsSegment.ParseFromString(value);
+            }
+
+            return expected;
+            if (value == "{0} (null)")
             {
                 expected = WindowsSegment.NullSegment;
             }
@@ -161,17 +171,17 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
             {
                 expected = WindowsSegment.EmptySegment;
             }
-            else if (value == "{.} .")
+            else if (value == "{S} .")
             {
                 expected = WindowsSegment.SelfSegment;
             }
-            else if (value == "{..} ..")
+            else if (value == "{P} ..")
             {
                 expected = WindowsSegment.ParentSegment;
             }
-            else if (value.StartsWith("{U}", StringComparison.Ordinal))
+            else if (value.StartsWith("{X}", StringComparison.Ordinal))
             {
-                if (PatyType == PathType.Posix)
+                if (PathType == PathType.Posix)
                 {
                     expected = new PosixSegment(SegmentType.RemoteSegment, value.Substring(4));
                 }
@@ -182,7 +192,7 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
             }
             else if (value.StartsWith("{R}", StringComparison.Ordinal))
             {
-                if (PatyType == PathType.Posix)
+                if (PathType == PathType.Posix)
                 {
                     expected = new PosixSegment(SegmentType.RootSegment, string.Empty);
                 }
@@ -195,7 +205,7 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
             {
                 expected = new WindowsSegment(SegmentType.DeviceSegment, value.Substring(4));
             }
-            else if (value.StartsWith("{/}", StringComparison.Ordinal))
+            else if (value.StartsWith("{$}", StringComparison.Ordinal))
             {
                 expected = new WindowsSegment(SegmentType.VolumelessRootSegment, string.Empty);
             }
@@ -379,7 +389,7 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
         public void WhenIParseThePath()
         {
             parsedPath = pathParser.Parse(suppliedPath);
-            PatyType = parsedPath.PathType;
+            PathType = parsedPath.PathType;
             // NOTE: Unless this is overriden by a test step ... the normalized path = the parsedPath on first parsing 
             normalizedPath = parsedPath;
         }
@@ -388,7 +398,7 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
         [When(@"I parse the path as a (Windows|Posix) Path")]
         public void WhenIParseThePathAsA_pathType_Path(PathType pathtype)
         {
-            PatyType = pathtype;
+            PathType = pathtype;
             parsedPath = pathParser.Parse(suppliedPath, pathtype);
         }
 

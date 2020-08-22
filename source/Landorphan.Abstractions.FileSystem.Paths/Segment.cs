@@ -13,7 +13,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths
     public abstract class Segment : ISegment
     {
         public static readonly string PathSegmentNotationSegmentRegexPattern =
-            @$"/?\{{(?<{SegmentTypeGroupName}>[{string.Join(string.Empty, PathSegmentNotationComponents.SegmentTypeStrings)}])\}}?(?<{SegmentNameGroupName}>[^/]*)";
+            @$"/?\{{(?<{SegmentTypeGroupName}>[{string.Join(string.Empty, PathSegmentNotationComponents.SegmentTypeStrings)}])\}} ?(?<{SegmentNameGroupName}>[^/]*)";
         public static readonly Regex PathSegmentNotationSegmentRegex = new Regex(PathSegmentNotationSegmentRegexPattern,
             RegexOptions.Compiled);
         public const string SegmentTypeGroupName = "Type";
@@ -112,7 +112,8 @@ namespace Landorphan.Abstractions.FileSystem.Paths
             StringBuilder builder = new StringBuilder(pathSegmentNotationName);
             for (char i = (char) 0; i <= PathSegmentNotationComponents.Space; i++)
             {
-                builder.Replace($"%{i:X2}", i.ToString(CultureInfo.InvariantCulture));
+                var search = $"%{(int)i:X2}";
+                builder.Replace(search, i.ToString(CultureInfo.InvariantCulture));
             }
 
             builder.Replace($"%{PathSegmentNotationComponents.ForwardSlash:X2}",

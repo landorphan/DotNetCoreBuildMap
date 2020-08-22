@@ -22,33 +22,63 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Posix
         public PosixSegment(SegmentType type, string name)
         {
             this.SegmentType = type;
-            this.Name = name;
+            switch (type)
+            {
+                case SegmentType.DeviceSegment:
+                case SegmentType.GenericSegment:
+                case SegmentType.RemoteSegment:
+                case SegmentType.RootSegment:
+                case SegmentType.VolumeRelativeSegment:
+                case SegmentType.ParentSegment:
+                case SegmentType.SelfSegment:
+                    this.Name = NameFromPathSegmentNotationEncodedName(name);
+                    break;
+                case SegmentType.VolumelessRootSegment:
+                case SegmentType.EmptySegment:
+                case SegmentType.NullSegment:
+                    this.Name = string.Empty;
+                    break;
+#pragma warning disable S3532 // Empty "default" clauses should be removed
+                default:
+                    break;
+#pragma warning restore S3532 // Empty "default" clauses should be removed
+            }
         }
 
         public static PosixSegment ParseFromString(string input)
         {
-            if (input == ".")
+            var match = PathSegmentNotationSegmentRegex.Match(input);
+            if (match.Success)
             {
-                return SelfSegment;
-            }
-
-            if (input == "..")
-            {
-                return ParentSegment;
-            }
-
-            if (input == null)
-            {
-                return NullSegment;
-            }
-
-            if (input.Length == 0)
-            {
-                return EmptySegment;
+                SegmentType segmentType = PathSegmentNotationComponents.StringToSegmentType[match.Groups[SegmentTypeGroupName].Value];
+                string name = match.Groups[SegmentNameGroupName].Value;
+                return new PosixSegment(segmentType, name);
             }
             else
             {
-                return new PosixSegment(SegmentType.GenericSegment, input);
+                if (input == ".")
+                {
+                    return SelfSegment;
+                }
+
+                if (input == "..")
+                {
+                    return ParentSegment;
+                }
+
+                if (input == null)
+                {
+                    return NullSegment;
+                }
+
+                if (input.Length == 0)
+                {
+                    return EmptySegment;
+                }
+                else
+                {
+                    return new PosixSegment(SegmentType.GenericSegment, input);
+                }
             }
         }
 

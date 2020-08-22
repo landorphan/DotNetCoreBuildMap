@@ -15,11 +15,11 @@ Scenario Outline: Get Path Root, Ancor and Relative Paths
 	  And the parse path's root segment should return: <Root Segment>
 Examples:
 | Path                    | Path Status | Anchor   | Root Segment | Relative Path       | Resulting Status |
-| /                       | Legal       | Absolute | {/}          | .                   | Legal            |
-| /dir                    | Legal       | Absolute | {/}          | dir                 | Legal            |
-| /dir/dir/file           | Legal       | Absolute | {/}          | dir`dir`file        | Legal            |
+| /                       | Legal       | Absolute | {$}          | .                   | Legal            |
+| /dir                    | Legal       | Absolute | {$}          | dir                 | Legal            |
+| /dir/dir/file           | Legal       | Absolute | {$}          | dir`dir`file        | Legal            |
 | dir/dir/file            | Legal       | Relative | {E} (empty)  | dir`dir`file        | Legal            |
-| //server/share/dir/file | Legal       | Absolute | {U} server   | share`dir`file      | Legal            |
+| //server/share/dir/file | Legal       | Absolute | {X} server   | share`dir`file      | Legal            |
 | C:`                     | Legal       | Absolute | {R} C        | .                   | Legal            |
 | C:`dir`file             | Legal       | Absolute | {R} C        | dir`file            | Legal            |
 | C:`C:`dir`file          | Illegal     | Absolute | {R} C        | dir`file            | Legal            |

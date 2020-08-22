@@ -84,8 +84,8 @@ namespace Landorphan.Abstractions.FileSystem.Paths.UnitTests.Specifications.Path
         [NUnit.Framework.TestCaseAttribute("(empty)", "Legal", "Relative", "false", "{E} (empty)", ".", "SelfReferenceOnly", "Imposible for Empty path to normalize", null)]
         [NUnit.Framework.TestCaseAttribute("C:/", "Legal", "Absolute", "true", "{R} C", "C:`", "Fully", "This is a root segment and must key the trailing slash or it will become a volume" +
             " relative segment", null)]
-        [NUnit.Framework.TestCaseAttribute("/", "Legal", "Absolute", "false", "{/}", "`", "Fully", "A root only segment should be created and this path is normalized", null)]
-        [NUnit.Framework.TestCaseAttribute("/foo/bar", "Legal", "Absolute", "false", "{/}", "`foo`bar", "Fully", "This path only contains root and generic segments", null)]
+        [NUnit.Framework.TestCaseAttribute("/", "Legal", "Absolute", "false", "{$}", "`", "Fully", "A root only segment should be created and this path is normalized", null)]
+        [NUnit.Framework.TestCaseAttribute("/foo/bar", "Legal", "Absolute", "false", "{$}", "`foo`bar", "Fully", "This path only contains root and generic segments", null)]
         [NUnit.Framework.TestCaseAttribute("foo/bar", "Legal", "Relative", "false", "{E} (empty)", "foo`bar", "Fully", "This path is relative but fully normalized", null)]
         [NUnit.Framework.TestCaseAttribute("foo/../bar", "Legal", "Relative", "false", "{E} (empty)", "bar", "Fully", "This path is not normal because of the parent segment but can be fully normalized" +
             "", null)]
@@ -105,12 +105,12 @@ namespace Landorphan.Abstractions.FileSystem.Paths.UnitTests.Specifications.Path
         [NUnit.Framework.TestCaseAttribute("C:dir/", "Legal", "Relative", "true", "{E} (empty)", "C:dir", "Fully", "Trailing slash prevents normalziaiton", null)]
         [NUnit.Framework.TestCaseAttribute("C:dir/file.txt", "Legal", "Relative", "true", "{E} (empty)", "C:dir`file.txt", "Fully", "Fully normalized", null)]
         [NUnit.Framework.TestCaseAttribute("C:dir/file.txt/", "Legal", "Relative", "true", "{E} (empty)", "C:dir`file.txt", "Fully", "Trailing Slash", null)]
-        [NUnit.Framework.TestCaseAttribute("//server/share", "Legal", "Absolute", "true", "{U} server", "``server`share", "Fully", "Fully normalized remote path", null)]
-        [NUnit.Framework.TestCaseAttribute("//server/share/", "Legal", "Absolute", "true", "{U} server", "``server`share", "Fully", "Trailing Slash", null)]
-        [NUnit.Framework.TestCaseAttribute("//server/file.txt", "Legal", "Absolute", "true", "{U} server", "``server`file.txt", "Fully", "Fully normalized remote path", null)]
-        [NUnit.Framework.TestCaseAttribute("//server/file.txt/", "Legal", "Absolute", "true", "{U} server", "``server`file.txt", "Fully", "Trailing Slash", null)]
-        [NUnit.Framework.TestCaseAttribute("//server/share/dir/file.txt", "Legal", "Absolute", "true", "{U} server", "``server`share`dir`file.txt", "Fully", "Fully normalized remote path", null)]
-        [NUnit.Framework.TestCaseAttribute("//server/share/dir/file.txt/", "Legal", "Absolute", "true", "{U} server", "``server`share`dir`file.txt", "Fully", "Trailing Slash", null)]
+        [NUnit.Framework.TestCaseAttribute("//server/share", "Legal", "Absolute", "true", "{X} server", "``server`share", "Fully", "Fully normalized remote path", null)]
+        [NUnit.Framework.TestCaseAttribute("//server/share/", "Legal", "Absolute", "true", "{X} server", "``server`share", "Fully", "Trailing Slash", null)]
+        [NUnit.Framework.TestCaseAttribute("//server/file.txt", "Legal", "Absolute", "true", "{X} server", "``server`file.txt", "Fully", "Fully normalized remote path", null)]
+        [NUnit.Framework.TestCaseAttribute("//server/file.txt/", "Legal", "Absolute", "true", "{X} server", "``server`file.txt", "Fully", "Trailing Slash", null)]
+        [NUnit.Framework.TestCaseAttribute("//server/share/dir/file.txt", "Legal", "Absolute", "true", "{X} server", "``server`share`dir`file.txt", "Fully", "Fully normalized remote path", null)]
+        [NUnit.Framework.TestCaseAttribute("//server/share/dir/file.txt/", "Legal", "Absolute", "true", "{X} server", "``server`share`dir`file.txt", "Fully", "Trailing Slash", null)]
         [NUnit.Framework.TestCaseAttribute(".", "Legal", "Relative", "false", "{E} (empty)", ".", "SelfReferenceOnly", "This is normalized as best as posilbe, its a special case where the path only has" +
             " a self reference", null)]
         [NUnit.Framework.TestCaseAttribute("./", "Legal", "Relative", "false", "{E} (empty)", ".", "SelfReferenceOnly", "Self Reference ant Trailing Slash", null)]
@@ -131,10 +131,10 @@ namespace Landorphan.Abstractions.FileSystem.Paths.UnitTests.Specifications.Path
             "es", null)]
         [NUnit.Framework.TestCaseAttribute("C:`..", "Legal", "Absolute", "true", "{R} C", "C:`", "Fully", "Parrent trversal stops at the first \"rooted\" segment", null)]
         [NUnit.Framework.TestCaseAttribute("C:`../..", "Legal", "Absolute", "true", "{R} C", "C:`", "Fully", "Parrent trversal stops at the first \"rooted\" segment", null)]
-        [NUnit.Framework.TestCaseAttribute("/..", "Legal", "Absolute", "false", "{/}", "`", "Fully", "Parrent trversal stops at the first \"rooted\" segment", null)]
-        [NUnit.Framework.TestCaseAttribute("/../..", "Legal", "Absolute", "false", "{/}", "`", "Fully", "Parrent trversal stops at the first \"rooted\" segment", null)]
-        [NUnit.Framework.TestCaseAttribute("``server`..", "Legal", "Absolute", "true", "{U} server", "``server", "Fully", "Parrent trversal stops at the first \"rooted\" segment", null)]
-        [NUnit.Framework.TestCaseAttribute("``server`..`..", "Legal", "Absolute", "true", "{U} server", "``server", "Fully", "Parrent trversal stops at the first \"rooted\" segment", null)]
+        [NUnit.Framework.TestCaseAttribute("/..", "Legal", "Absolute", "false", "{$}", "`", "Fully", "Parrent trversal stops at the first \"rooted\" segment", null)]
+        [NUnit.Framework.TestCaseAttribute("/../..", "Legal", "Absolute", "false", "{$}", "`", "Fully", "Parrent trversal stops at the first \"rooted\" segment", null)]
+        [NUnit.Framework.TestCaseAttribute("``server`..", "Legal", "Absolute", "true", "{X} server", "``server", "Fully", "Parrent trversal stops at the first \"rooted\" segment", null)]
+        [NUnit.Framework.TestCaseAttribute("``server`..`..", "Legal", "Absolute", "true", "{X} server", "``server", "Fully", "Parrent trversal stops at the first \"rooted\" segment", null)]
         public virtual void WindowsPathsCanBeNormalizedToBestAvailableForm_(string path, string pathStatus, string anchor, string fullyQualified, string rootSegment, string normalizedPath, string simplificationLevel, string notes, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;

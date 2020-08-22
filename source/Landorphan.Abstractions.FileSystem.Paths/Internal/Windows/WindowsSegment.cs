@@ -78,7 +78,27 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
         public WindowsSegment(SegmentType type, string name)
         {
             this.SegmentType = type;
-            this.Name = name;
+            switch (type)
+            {
+                case SegmentType.DeviceSegment:
+                case SegmentType.GenericSegment:
+                case SegmentType.RemoteSegment:
+                case SegmentType.RootSegment:
+                case SegmentType.VolumeRelativeSegment:
+                case SegmentType.ParentSegment:
+                case SegmentType.SelfSegment:
+                    this.Name = NameFromPathSegmentNotationEncodedName(name);
+                    break;
+                case SegmentType.VolumelessRootSegment:
+                case SegmentType.EmptySegment:
+                case SegmentType.NullSegment:
+                    this.Name = string.Empty;
+                    break;
+#pragma warning disable S3532 // Empty "default" clauses should be removed
+                default:
+                    break;
+#pragma warning restore S3532 // Empty "default" clauses should be removed
+            }
         }
 
         public override bool IsLegalForSegmentOffset(int offset)
