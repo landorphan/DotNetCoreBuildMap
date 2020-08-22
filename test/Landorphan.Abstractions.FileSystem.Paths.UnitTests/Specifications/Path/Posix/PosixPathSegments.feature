@@ -19,7 +19,7 @@ Examples:
 #
 # Path Segment Type Shorthand:
 # {N} = NullSegment, {E} = EmptySegment, {R} = RootSegment, {D} = DeviceSegment, {/} = VolumelessRootSegment
-# {V} = VolumeRelativeSegment, {U} = UncSegment, {G} = Segment, {.} = SelfSegmentk, {..} = ParentSegment
+# {V} = VolumeRelativeSegment, {U} = RemoteSegment, {G} = Segment, {.} = SelfSegmentk, {..} = ParentSegment
 | Path                              | Segment 0      | Segment 1    | Segment 2    | Segment 3    | Segment 4    | Segment 5    |
 | (null)                            | {N} (null)     | {N} (null)   | {N} (null)   | {N} (null)   | {N} (null)   | {N} (null)   |
 | (empty)                           | {E} (empty)    | {N} (null)   | {N} (null)   | {N} (null)   | {N} (null)   | {N} (null)   |
