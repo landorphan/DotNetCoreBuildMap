@@ -110,10 +110,10 @@ namespace Landorphan.Abstractions.FileSystem.Paths
         public static string NameFromPathSegmentNotationEncodedName(string pathSegmentNotationName)
         {
             StringBuilder builder = new StringBuilder(pathSegmentNotationName);
-            for (char i = (char) 0; i <= PathSegmentNotationComponents.Space; i++)
+            for (int i = 0; i <= PathSegmentNotationComponents.Space; i++)
             {
-                var search = $"%{(int)i:X2}";
-                builder.Replace(search, i.ToString(CultureInfo.InvariantCulture));
+                var search = $"%{i:X2}";
+                builder.Replace(search, ((char)i).ToString(CultureInfo.InvariantCulture));
             }
 
             builder.Replace($"%{PathSegmentNotationComponents.ForwardSlash:X2}",
@@ -128,9 +128,9 @@ namespace Landorphan.Abstractions.FileSystem.Paths
         public string PathSegmentNotationEncodedName { get
             {
                 StringBuilder builder = new StringBuilder(Name);
-                for (char i = (char) 0; i <= PathSegmentNotationComponents.Space; i++)
+                for (int i = (char) 0; i <= PathSegmentNotationComponents.Space; i++)
                 {
-                    builder.Replace(i.ToString(CultureInfo.InvariantCulture), $"%{i:X2}");
+                    builder.Replace(((char)i).ToString(CultureInfo.InvariantCulture), $"%{i:X2}");
                 }
 
                 builder.Replace(PathSegmentNotationComponents.ForwardSlash.ToString(CultureInfo.InvariantCulture),
