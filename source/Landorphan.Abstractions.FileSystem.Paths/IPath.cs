@@ -10,6 +10,12 @@ namespace Landorphan.Abstractions.FileSystem.Paths
         Illegal
     }
 
+    public enum SerializationForm
+    {
+        Simple,
+        PathSegmentNotation
+    }
+
     public enum PathType
     {
         Windows,
@@ -32,6 +38,8 @@ namespace Landorphan.Abstractions.FileSystem.Paths
 
     public interface IPath
     {
+        SerializationForm SerializationMethod { get; set; }
+
         string SuppliedPathString { get; }
 
         ISegment LeadingSegment { get; }

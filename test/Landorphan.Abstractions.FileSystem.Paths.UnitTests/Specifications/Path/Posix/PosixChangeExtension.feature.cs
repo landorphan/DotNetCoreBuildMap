@@ -20,8 +20,8 @@ namespace Landorphan.Abstractions.FileSystem.Paths.UnitTests.Specifications.Path
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "3.3.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [NUnit.Framework.TestFixtureAttribute()]
-    [NUnit.Framework.DescriptionAttribute("Change Extension feature")]
-    public partial class ChangeExtensionFeatureFeature
+    [NUnit.Framework.DescriptionAttribute("Posix Change Extension feature")]
+    public partial class PosixChangeExtensionFeatureFeature
     {
         
         private TechTalk.SpecFlow.ITestRunner testRunner;
@@ -35,7 +35,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.UnitTests.Specifications.Path
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Change Extension feature", "\tIn order to reliably interact with the file systems of multiple platforms\r\n\tAs a" +
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Posix Change Extension feature", "\tIn order to reliably interact with the file systems of multiple platforms\r\n\tAs a" +
                     " developer\r\n\tI want to change the extension on a ptah.", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }

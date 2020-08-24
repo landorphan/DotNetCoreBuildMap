@@ -4,7 +4,7 @@ Feature: Segment Manipulation
 	As a Landorphan OSS consumer
 	I want to to be able to manipulate the segments in a path 
 
-Scenario: I can insert and append segments to any point in a path
+Scenario Outline: I can insert and append segments to any point in a path
 	Given I have the following path: <Path>
 	  And I'm running on the following Operating System: <OS>
 	  And I parse the path 

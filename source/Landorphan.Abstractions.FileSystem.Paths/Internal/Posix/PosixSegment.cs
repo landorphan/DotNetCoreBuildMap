@@ -31,7 +31,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Posix
                 case SegmentType.VolumeRelativeSegment:
                 case SegmentType.ParentSegment:
                 case SegmentType.SelfSegment:
-                    this.Name = NameFromPathSegmentNotationEncodedName(name);
+                    this.Name = name;
                     break;
                 case SegmentType.VolumelessRootSegment:
                 case SegmentType.EmptySegment:
@@ -52,7 +52,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Posix
             {
                 SegmentType segmentType = PathSegmentNotationComponents.StringToSegmentType[match.Groups[SegmentTypeGroupName].Value];
                 string name = match.Groups[SegmentNameGroupName].Value;
-                return new PosixSegment(segmentType, name);
+                return new PosixSegment(segmentType, NameFromPathSegmentNotationEncodedName(name));
             }
             else
             {
@@ -82,23 +82,33 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Posix
             }
         }
 
-
         public override bool IsLegalForSegmentOffset(int offset)
         {
-            if (this == ParentSegment || this == EmptySegment || this == SelfSegment || this == NullSegment)
+            switch (this.SegmentType)
             {
-                return true;
-            }
-
-            if (Name != null)
-            {
-                foreach (var alwaysIllegalCharacter in PosixRelevantPathChars.AlwaysIllegalCharacters)
-                {
-                    if (Name.ToCharArray().Contains(alwaysIllegalCharacter))
+                case SegmentType.EmptySegment:
+                case SegmentType.NullSegment:
+                    return string.IsNullOrWhiteSpace(Name);
+                case SegmentType.SelfSegment:
+                    return string.IsNullOrWhiteSpace(Name) || Name == ".";
+                case SegmentType.ParentSegment:
+                    return string.IsNullOrWhiteSpace(Name) || Name == "..";
+                case SegmentType.VolumeRelativeSegment:
+                case SegmentType.VolumelessRootSegment:
+                case SegmentType.DeviceSegment:
+                    return false;
+                default:
+                    if (Name != null)
                     {
-                        return false;
+                        foreach (var alwaysIllegalCharacter in PosixRelevantPathChars.AlwaysIllegalCharacters)
+                        {
+                            if (Name.ToCharArray().Contains(alwaysIllegalCharacter))
+                            {
+                                return false;
+                            }
+                        }
                     }
-                }
+                    break;
             }
 
             return true;

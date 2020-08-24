@@ -186,7 +186,7 @@ this.ScenarioInitialize(scenarioInfo);
    testRunner.And(string.Format("the parse path\'s FullyQualified property should be: {0}", fullyQualified), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 15
-     testRunner.When("I normalize the path", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+     testRunner.When("I simplify the path", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 16
   testRunner.Then(string.Format("the resulting path should read: {0}", normalizedPath), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");

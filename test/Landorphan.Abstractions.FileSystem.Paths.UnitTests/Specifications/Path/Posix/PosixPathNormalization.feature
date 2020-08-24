@@ -12,7 +12,7 @@ Scenario Outline: Posix Paths can be simplified to best available form.
 	  And the parse path should be anchored to <Anchor>
 	  And the parse path's root segment should return: <Root Segment>
 	  And the parse path's FullyQualified property should be: <Fully Qualified>
-     When I normalize the path
+     When I simplify the path
 	 Then the resulting path should read: <Normalized Path>
 	  And the resulting status should be <Path Status>
 	  And the resulting path should be anchored to <Anchor>

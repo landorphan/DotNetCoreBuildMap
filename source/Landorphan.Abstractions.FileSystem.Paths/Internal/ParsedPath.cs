@@ -9,10 +9,16 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
     using System.Runtime.CompilerServices;
     using System.Text;
     using System.Transactions;
+    using Landorphan.Abstractions.FileSystem.Paths.Internal.Converters;
     using Landorphan.Abstractions.FileSystem.Paths.Internal.Posix;
     using Landorphan.Abstractions.FileSystem.Paths.Internal.Windows;
+    using Newtonsoft.Json;
+    using YamlDotNet.Core;
+    using YamlDotNet.Core.Events;
+    using YamlDotNet.Serialization;
 
-    public abstract class ParsedPath : IPath
+    [JsonConverter(typeof(ParsedPathConverter))]
+    public abstract class ParsedPath : IPath //, IYamlConvertible
     {
         public abstract ISegment CreateSegment(SegmentType segmentType, string name);
 
@@ -33,8 +39,6 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
 
         internal static IPath CreateFromSegments(PathType pathType, string suppliedPath, IEnumerable<ISegment> segments)
         {
-            segments = TraverseSegmentChain(pathType, segments);
-
             ParsedPath retval = null;
             if (Paths.PathType.Windows == pathType)
             {
@@ -44,16 +48,21 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
             {
                 retval = new PosixPath();
             }
-
-            retval.Segments = segments.ToArray();
-            retval.LeadingSegment = retval.Segments[0];
-            retval.TrailingSegment = segments.Last();
-            retval.suppliedForm = retval;
-            retval.SuppliedPathString = suppliedPath;
-            retval.SuppliedPath = retval;
-            retval.simplifiedForm = CreateSimplifiedForm(retval);
-            retval.simplification = GetSimplificationLevel(retval);
+            retval.InitializeFromSuppliedPathAndSegments(suppliedPath, segments);
             return retval;
+        }
+
+        private void InitializeFromSuppliedPathAndSegments(string suppliedPath, IEnumerable<ISegment> segments)
+        {
+            segments = TraverseSegmentChain(this.PathType, segments);
+            Segments = segments.ToArray();
+            LeadingSegment = this.Segments[0];
+            TrailingSegment = segments.Last();
+            suppliedForm = this;
+            SuppliedPathString = suppliedPath;
+            SuppliedPath = this;
+            simplifiedForm = CreateSimplifiedForm(this);
+            simplification = GetSimplificationLevel(this);
         }
 
         internal static IPath CreateSimplifiedForm(IPath suppliedPath)
@@ -100,6 +109,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
             return retval.ToArray();
         }
 
+        public SerializationForm SerializationMethod { get; set; } = PathDefaults.DefaultSerializationMethod;
         public String SuppliedPathString { get; private set; }
         public ISegment LeadingSegment { get; private set; }
         public ISegment TrailingSegment { get; private set; }
@@ -206,7 +216,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
             Stack<ISegment> stack = new Stack<ISegment>(segments);
             Stack<ISegment> result = new Stack<ISegment>();
 
-           int popDepth = 0;
+            int popDepth = 0;
             Func<bool> ShouldDiscard = () =>
             {
                 if (popDepth > 0)
@@ -291,7 +301,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
                         //}
                         break;
                     // case SegmentType.GenericSegment:
-                    default: 
+                    default:
                         if (!ShouldDiscard())
                         {
                             result.Push(current);
@@ -436,7 +446,20 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
             builder.Append(PathSegmentNotationComponents.OpenBracket);
             builder.Append(PathSegmentNotationComponents.PathSegmentNotationHeader);
             builder.Append(PathSegmentNotationComponents.Colon);
+            if (PathType == PathType.Windows)
+            {
+                builder.Append(PathSegmentNotationComponents.WindowsPathType);
+            }
+            else
+            {
+                builder.Append(PathSegmentNotationComponents.PosixPathType);
+            }
             builder.Append(PathSegmentNotationComponents.CloseBracket);
+            foreach (var segment in Segments)
+            {
+                builder.Append(PathSegmentNotationComponents.ForwardSlash);
+                builder.Append(segment.ToPathSegmentNotation());
+            }
             return builder.ToString();
         }
 
@@ -447,5 +470,19 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
             return CreateFromSegments(clonedSegments);
         }
 
+        //public void Read(IParser parser, Type expectedType, ObjectDeserializer nestedObjectDeserializer)
+        //{
+        //    var value = parser.Consume<Scalar>().Value;
+        //    IPathParser pathParser = new PathParser();
+        //    var tempPath = pathParser.Parse(value);
+        //    this.PathType = tempPath.PathType;
+        //    InitializeFromSuppliedPathAndSegments(value, tempPath.Segments);
+        //}
+
+        //public void Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
+        //{
+        //    emitter.Emit(new Scalar(null, null, this.ToString(),
+        //        ScalarStyle.Any, true, false));
+        //}
     }
 }

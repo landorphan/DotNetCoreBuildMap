@@ -1,4 +1,4 @@
-﻿Feature: Change Extension feature
+﻿Feature: Posix Change Extension feature
 	In order to reliably interact with the file systems of multiple platforms
 	As a developer
 	I want to change the extension on a ptah.

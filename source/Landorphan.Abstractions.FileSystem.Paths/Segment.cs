@@ -103,7 +103,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths
             builder.Append(PathSegmentNotationComponents.OpenBrace);
             builder.Append(PathSegmentNotationComponents.SegmentTypeToString[this.SegmentType]);
             builder.Append(PathSegmentNotationComponents.CloseBrace);
-            builder.Append(this.Name);
+            builder.Append(this.PathSegmentNotationEncodedName);
             return builder.ToString();
         }
 
@@ -116,10 +116,11 @@ namespace Landorphan.Abstractions.FileSystem.Paths
                 builder.Replace(search, ((char)i).ToString(CultureInfo.InvariantCulture));
             }
 
-            builder.Replace($"%{PathSegmentNotationComponents.ForwardSlash:X2}",
+            builder.Replace($"%{(int)PathSegmentNotationComponents.ForwardSlash:X2}",
                 PathSegmentNotationComponents.ForwardSlash.ToString(CultureInfo.InvariantCulture));
 
-            builder.Replace($"%{PathSegmentNotationComponents.Percent:X2}",
+            // When Decoding an escaped '%' character must be decoded last, otherwise it will halt other decoding efforts.
+            builder.Replace($"%{(int)PathSegmentNotationComponents.Percent:X2}",
                 PathSegmentNotationComponents.Percent.ToString(CultureInfo.InvariantCulture));
 
             return builder.ToString();
@@ -128,16 +129,18 @@ namespace Landorphan.Abstractions.FileSystem.Paths
         public string PathSegmentNotationEncodedName { get
             {
                 StringBuilder builder = new StringBuilder(Name);
+
+                // When encoding, '%' characters must be encoded first or the result will contain double '%' characters
+                builder.Replace(PathSegmentNotationComponents.Percent.ToString(CultureInfo.InvariantCulture),
+                    $"%{(int)PathSegmentNotationComponents.Percent:X2}");
+
                 for (int i = (char) 0; i <= PathSegmentNotationComponents.Space; i++)
                 {
                     builder.Replace(((char)i).ToString(CultureInfo.InvariantCulture), $"%{i:X2}");
                 }
 
                 builder.Replace(PathSegmentNotationComponents.ForwardSlash.ToString(CultureInfo.InvariantCulture),
-                    $"%{PathSegmentNotationComponents.ForwardSlash:X2}");
-
-                builder.Replace(PathSegmentNotationComponents.Percent.ToString(CultureInfo.InvariantCulture),
-                    $"%{PathSegmentNotationComponents.Percent:X2}");
+                    $"%{(int)PathSegmentNotationComponents.ForwardSlash:X2}");
 
                 return builder.ToString();
             }

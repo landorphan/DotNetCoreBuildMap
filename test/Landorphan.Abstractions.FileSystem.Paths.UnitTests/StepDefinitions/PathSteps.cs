@@ -6,12 +6,19 @@ using TechTalk.SpecFlow;
 
 namespace Landorphan.Abstractions.Tests.StepDefinitions
 {
+    using System.IO;
     using System.Runtime.InteropServices;
+    using System.Xml;
+    using System.Xml.Serialization;
     using FluentAssertions;
     using Landorphan.Abstractions.FileSystem.Paths;
     using Landorphan.Abstractions.FileSystem.Paths.Abstraction;
+    using Landorphan.Abstractions.FileSystem.Paths.Internal;
     using Landorphan.Abstractions.FileSystem.Paths.Internal.Posix;
     using Landorphan.Abstractions.FileSystem.Paths.Internal.Windows;
+    using Newtonsoft.Json;
+    using YamlDotNet.Serialization;
+    using Formatting = Newtonsoft.Json.Formatting;
 
     [Binding]
     public sealed class PathSteps
@@ -30,6 +37,8 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
         private string toStringReturned;
         private Exception thrownException;
         private string nameRequestResult;
+        private string psnForm;
+        private string seralizedForm;
 
         internal class MockRuntimeInformation : IRuntimeInformation
         {
@@ -76,7 +85,14 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
         [Given(@"I have the following path: (.*)")]
         public void GivenIHaveTheFollowingPath(string path)
         {
-            suppliedPath = PreparePathForTest(path);
+            if (path.Contains("PSN:", StringComparison.Ordinal))
+            {
+                suppliedPath = path.Replace('`', '\\');
+            }
+            else
+            {
+                suppliedPath = PreparePathForTest(path);
+            }
         }
 
         public string PreparePathForTest(string path)
@@ -135,9 +151,43 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
 
         }
 
+        [When(@"I re-parse the path")]
+        public void WhenIRe_ParseThePath()
+        {
+            pathChangeResult = pathParser.Parse(suppliedPath);
+        }
+        
+        [Then(@"the two paths should be the same")]
+        public void ComparePaths()
+        {
+            pathChangeResult.PathType.Should().Be(parsedPath.PathType);
+            pathChangeResult.Anchor.Should().Be(parsedPath.Anchor);
+            pathChangeResult.IsDiscouraged.Should().Be(parsedPath.IsDiscouraged);
+            pathChangeResult.IsFullyQualified.Should().Be(parsedPath.IsFullyQualified);
+            pathChangeResult.Segments.Count.Should().Be(parsedPath.Segments.Count);
+            for (int i = 0; i < pathChangeResult.Segments.Count; i++)
+            {
+                CompareSegment(pathChangeResult.Segments[i], parsedPath.Segments[i].ToPathSegmentNotation());
+            }
+        }
+
+
+        [When(@"I convert the path to path segment notation")]
+        public void WhenIConvertThePathToPathSegmentNotation()
+        {
+            psnForm = parsedPath.ToPathSegmentNotation();
+        }
+
+        [Then(@"The following PSN string should be produced: (.*)")]
+        public void ThenTheFollowingPSNStringShouldBeProduced(string expectedPsn)
+        {
+            psnForm.Should().Be(expectedPsn.Replace('`', '\\'));
+        }
+
+
         public void CompareSegment(ISegment actualSegment, string value)
         {
-//            value = PreparePathForTest(value);
+            //            value = PreparePathForTest(value);
             var expected = ParseSegment(value);
             if (PathType == PathType.Posix)
             {
@@ -265,7 +315,7 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
             preParsedPath.Should().Be(expected);
         }
 
-        [When(@"I normalize the path")]
+        [When(@"I simplify the path")]
         public void WhenINormalizeThePath()
         {
             normalizedPath = parsedPath.Simplify();
@@ -376,13 +426,56 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
 
             nameOperation.Should().Be(value);
         }
-        
+
         [Then(@"the result should be: (.*)")]
         public void ThenTheResultShouldBeValue(string value)
         {
             value = PreparePathForTest(value);
             nameRequestResult.Should().Be(value);
         }
+
+        private string serializeTo;
+        [When(@"I serialize the path to (Json|Xml|Yaml) as (Simple|PathSegmentNotation)")]
+        public void WhenISerializeThePathToJsonAsSimple(string serializeTo, SerializationForm serializationForm)
+        {
+            this.serializeTo = serializeTo;
+            parsedPath.SerializationMethod = serializationForm;
+            switch (serializeTo)
+            {
+                case "Json":
+                    this.seralizedForm = JsonConvert.SerializeObject(parsedPath);
+                    break;
+                case "Xml":
+                    System.Xml.Serialization.XmlSerializer XmlSer = new System.Xml.Serialization.XmlSerializer(typeof(ParsedPath));
+                    using (MemoryStream stream = new MemoryStream())
+                    using (XmlTextWriter writer = new XmlTextWriter(stream, Encoding.UTF8))
+                    {
+                        writer.Formatting = System.Xml.Formatting.Indented;
+                        XmlSer.Serialize(writer, parsedPath);
+                        seralizedForm = Encoding.UTF8.GetString(stream.ToArray());
+                    }
+                    break;
+                case "Yaml":
+                    var YamlSer = new Serializer();
+                    this.seralizedForm = YamlSer.Serialize(parsedPath);
+                    break;
+            }
+        }
+
+        [Then(@"the following should be the serialized form: (.*)")]
+        public void ThenTheFollowingShouldBeTheSerializedForm(string serializedForm)
+        {
+            if (serializeTo == "Json")
+            {
+                // Json has to escape '\' characters so we make that adjustment here.
+                seralizedForm.Should().Be(serializedForm.Replace("`", @"\\"));
+            }
+            else
+            {
+                seralizedForm.Should().Be(serializedForm);
+            }
+        }
+
 
         [Given(@"I parse the path")]
         [When(@"I parse the path")]

@@ -36,7 +36,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
             {
                 SegmentType segmentType = PathSegmentNotationComponents.StringToSegmentType[match.Groups[SegmentTypeGroupName].Value];
                 string name = match.Groups[SegmentNameGroupName].Value;
-                return new WindowsSegment(segmentType, name);
+                return new WindowsSegment(segmentType, NameFromPathSegmentNotationEncodedName(name));
             }
             else
             {
@@ -87,7 +87,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
                 case SegmentType.VolumeRelativeSegment:
                 case SegmentType.ParentSegment:
                 case SegmentType.SelfSegment:
-                    this.Name = NameFromPathSegmentNotationEncodedName(name);
+                    this.Name = name;
                     break;
                 case SegmentType.VolumelessRootSegment:
                 case SegmentType.EmptySegment:
