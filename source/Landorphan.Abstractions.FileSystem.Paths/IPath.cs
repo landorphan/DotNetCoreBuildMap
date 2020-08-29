@@ -70,6 +70,10 @@ namespace Landorphan.Abstractions.FileSystem.Paths
         bool HasExtension { get; }
         bool IsFullyQualified { get; }
 
+        public IPathComparerAndEquator CaseInsensitiveComparerAndEquator { get; }
+        public IPathComparerAndEquator CaseSensitiveComparerAndEquator { get; }
+        public IPathComparerAndEquator DefaultComparerAndEquator { get; }
+
         IPath ChangeExtension(string newExtension);
         IPath ConvertToRelativePath();
         IPath Simplify();

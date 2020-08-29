@@ -28,6 +28,8 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Posix
             }
         }
 
+        public override IPathComparerAndEquator DefaultComparerAndEquator => CaseSensitiveComparerAndEquator;
+
         public override ISegment CreateSegment(SegmentType segmentType, string name)
         {
             switch (segmentType)

@@ -1,11 +1,16 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
 
     <IsPackable>false</IsPackable>
     <CodeAnalysisRuleSet>..\..\CodeAnalysis\Default.Test.16.5.WithSonarLint.ruleset</CodeAnalysisRuleSet>
+    <DefaultItemExcludes>$(DefaultItemExcludes);TestAssets\SolutionFiles\**</DefaultItemExcludes>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="TestAssets\SolutionFiles\SimpleSolution\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\..\CodeAnalysis\CustomDictionary.xml" Link="CustomDictionary.xml" />
@@ -40,6 +45,10 @@
   <ItemGroup>
     <ProjectReference Include="..\..\source\dotnetmap\dotnetmap.csproj" />
     <ProjectReference Include="..\..\source\Landorphan.BuildMap\Landorphan.BuildMap.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="TestAssets\SolutionFiles\" />
   </ItemGroup>
 
 </Project>

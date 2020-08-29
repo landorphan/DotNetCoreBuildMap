@@ -307,6 +307,70 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
             preParsedPath = parsedPath.GetParent().ToString();
         }
 
+        private IPath path1;
+        private IPath path2;
+        [Given(@"I parse the following as path (1|2): (.*)")]
+        public void GivenIParseTheFollowingAsPath(int pathNumber, string path)
+        {
+            var parser = new PathParser();
+            if (pathNumber == 1)
+            {
+                path1 = parser.Parse(path);
+                PathType = path1.PathType;
+            }
+            else
+            {
+                path2 = parser.Parse(path, PathType);
+            }
+        }
+
+        private int compareResult = 0;
+        private int path1HashCode = 0;
+        private int path2HashCode = 0;
+        private bool areEqual = false;
+
+        [When(@"I compare the paths using the (Sensitive|Insensitive|Default) comparer")]
+        public void WhenICompareThePaths(string Comparer)
+        {
+            IPathComparerAndEquator comparer = null;
+            switch (Comparer)
+            {
+                case "Sensitive":
+                    comparer = path1.CaseSensitiveComparerAndEquator;
+                    break;
+                case "Insensitive":
+                    comparer = path1.CaseInsensitiveComparerAndEquator;
+                    break;
+                default:
+                    comparer = path1.DefaultComparerAndEquator;
+                    break;
+            }
+            compareResult = comparer.Compare(path1, path2);
+            path1HashCode = comparer.GetHashCode(path1);
+            path2HashCode = comparer.GetHashCode(path2);
+            areEqual = comparer.Equals(path1, path2);
+        }
+        
+        [Then(@"path 1 should be (equal to|less than|greater than) path 2")]
+        public void ThenPathShouldBeEqualToPath(string comparison)
+        {
+            switch (comparison)
+            {
+                case "less than":
+                    compareResult.Should().BeLessThan(0);
+                    areEqual.Should().BeFalse();
+                    break;
+                case "greater than":
+                    compareResult.Should().BeGreaterThan(0);
+                    areEqual.Should().BeFalse();
+                    break;
+                default:
+                    compareResult.Should().Be(0);
+                    areEqual.Should().BeTrue();
+                    path1HashCode.Should().Be(path2HashCode);
+                    break;
+            }
+        }
 
         [Then(@"the resulting path should read: (.*)")]
         public void ThenTheResultingPathShouldRead(string expected)

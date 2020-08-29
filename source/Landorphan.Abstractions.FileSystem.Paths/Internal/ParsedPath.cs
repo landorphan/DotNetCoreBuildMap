@@ -206,6 +206,10 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
                                         simplifiedForm.LeadingSegment.SegmentType == SegmentType.VolumeRelativeSegment ||
                                         simplifiedForm.LeadingSegment.SegmentType == SegmentType.RemoteSegment;
 
+        public IPathComparerAndEquator CaseInsensitiveComparerAndEquator { get; } = PathComparerAndEquator.CaseInsensitive;
+        public IPathComparerAndEquator CaseSensitiveComparerAndEquator { get; } = PathComparerAndEquator.CaseSensitive;
+        public abstract IPathComparerAndEquator DefaultComparerAndEquator { get; }
+
         public override string ToString()
         {
             return ConvertToString(this.Segments);
