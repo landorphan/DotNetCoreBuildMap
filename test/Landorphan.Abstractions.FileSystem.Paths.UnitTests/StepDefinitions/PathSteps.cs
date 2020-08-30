@@ -532,7 +532,7 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
             if (serializeTo == "Json")
             {
                 // Json has to escape '\' characters so we make that adjustment here.
-                seralizedForm.Should().Be(serializedForm.Replace("`", @"\\"));
+                seralizedForm.Should().Be(serializedForm.Replace("`", @"\\", StringComparison.OrdinalIgnoreCase));
             }
             else
             {

@@ -6,6 +6,7 @@ namespace Landorphan.BuildMap.Model
         Missing = 1,
         Malformed = 2,
         Empty = 3,
-        Valid = 4
+        Valid = 4,
+        ProjCircularReference = 5,
     }
 }

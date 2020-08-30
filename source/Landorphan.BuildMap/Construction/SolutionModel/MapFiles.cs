@@ -61,9 +61,10 @@ namespace Landorphan.BuildMap.Construction.SolutionModel
             {
                 Encoding utf8 = new UTF8Encoding(false);
                 SuppliedFile item = new SuppliedFile();
+                var fileNameHash = ComputeId(utf8.GetBytes(locatedFile.Absolute));
                 if (!fs.FileExists(locatedFile.Absolute))
                 {
-                    item.Id = ComputeId(utf8.GetBytes(locatedFile.Absolute));
+                    item.Id = fileNameHash;
                     item.Directory = directory;
                     item.Paths = locatedFile;
                     item.Status = FileStatus.Missing;
@@ -71,9 +72,12 @@ namespace Landorphan.BuildMap.Construction.SolutionModel
                 }
                 else
                 {
+                    List<byte> fullBuffer = new List<byte>();
                     var content = fs.ReadFileContents(locatedFile.Absolute);
-                    byte[] buffer = utf8.GetBytes(content);
-                    Guid id = ComputeId(buffer);
+                    byte[] contentBuffer = utf8.GetBytes(content);
+                    fullBuffer.AddRange(fileNameHash.ToByteArray());
+                    fullBuffer.AddRange(contentBuffer);
+                    Guid id = ComputeId(fullBuffer.ToArray());
                     item.Id = id;
                     item.Paths = locatedFile;
                     item.RawText = content;

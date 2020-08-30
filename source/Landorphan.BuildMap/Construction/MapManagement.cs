@@ -97,9 +97,9 @@ namespace Landorphan.BuildMap.Construction
                             var dependentOnHashGuid = solutionFile.SlnGuidToHashGuidLookup[dependentOnSlnGuid];
                             if (mapFiles.TryGetProjectFileByHashId(dependentOnHashGuid, out var dependentOnProject))
                             {
-                                if (!currentProjectFile.DependentOn.TryGetValue(dependentOnHashGuid, out _))
+                                if (!currentProjectFile.ProjectDependentOn.TryGetValue(dependentOnHashGuid, out _))
                                 {
-                                    currentProjectFile.DependentOn.Add(dependentOnHashGuid, dependentOnProject);
+                                    currentProjectFile.ProjectDependentOn.Add(dependentOnHashGuid, dependentOnProject);
                                 }
                             }
                         }
@@ -122,9 +122,9 @@ namespace Landorphan.BuildMap.Construction
                 // Guid includedProjectHashGuid;
                 // First attempt to lookup the project based on the "safe path".
                 if (mapFiles.TryGetProjectFileBySafePath(includePath, out includedSuppliedProjectFile) && 
-                    !suppliedProjectFile.DependentOn.TryGetValue(includedSuppliedProjectFile.Id, out _))
+                    !suppliedProjectFile.ProjectDependentOn.TryGetValue(includedSuppliedProjectFile.Id, out _))
                 {
-                    suppliedProjectFile.DependentOn.Add(includedSuppliedProjectFile.Id, includedSuppliedProjectFile);
+                    suppliedProjectFile.ProjectDependentOn.Add(includedSuppliedProjectFile.Id, includedSuppliedProjectFile);
                 }
                 // I think after refactor this is no longer necissary but keeping the code until we test ... just in case.
                 // else
@@ -191,7 +191,7 @@ namespace Landorphan.BuildMap.Construction
                 project.AbsolutePath = projectFile.Paths.Absolute;
                 project.RealPath = projectFile.Paths.Real;
                 project.Status = projectFile.Status;
-                project.DependentOn.AddRange(projectFile.DependentOn.Keys);
+                project.DependentOn.AddRange(projectFile.ProjectDependentOn.Keys);
                 map.Build.Projects.Add(project);
             }
 
