@@ -32,12 +32,12 @@ namespace dotnetmap.Commands
 
         public void CreateMap(FileInfo map, IEnumerable<string> input, string workingDirectory)
         {
-            MapManagement mapManager = new MapManagement();
-            var files = mapManager.LocateFiles(workingDirectory, input);
-            foreach (var file in files)
-            {
-                Console.WriteLine(file);
-            }
+            //MapManagement mapManager = new MapManagement();
+            //var files = mapManager.LocateFiles(workingDirectory, input);
+            //foreach (var file in files)
+            //{
+            //    Console.WriteLine(file);
+            //}
         }
     }
 }

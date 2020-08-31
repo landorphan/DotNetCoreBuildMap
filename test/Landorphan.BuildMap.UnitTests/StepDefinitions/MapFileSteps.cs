@@ -32,7 +32,7 @@ namespace Landorphan.BuildMap.UnitTests.StepDefinitions
         public MapFileSteps(ScenarioContext scenario)
         {
             this.scenario = scenario;
-            testName = scenario.ScenarioInfo.Title.Replace(" ", string.Empty, StringComparison.Ordinal);
+            testName = scenario.ScenarioInfo.Title.Replace(" ", string.Empty, StringComparison.Ordinal).TrimEnd(new char[] {'.', ' '});
             currentLocation = Path.GetDirectoryName(typeof(MapFileSteps).Assembly.Location);
             testDirectory = Path.Combine(currentLocation, "TestExecution", testName, testId);
         }
@@ -42,18 +42,21 @@ namespace Landorphan.BuildMap.UnitTests.StepDefinitions
         public void BeforeScenario()
         {
             var root = Path.Combine(currentLocation, "TestExecution");
-            var files = Directory.GetFiles(root, "*.*", SearchOption.AllDirectories);
-            foreach (var file in files)
+            if (Directory.Exists(root))
             {
-                File.Delete(file);
-            }
-
-            var directories = Directory.GetDirectories(root, "*.*", SearchOption.AllDirectories);
-            foreach (var directory in directories)
-            {
-                if (Directory.Exists(directory))
+                var files = Directory.GetFiles(root, "*.*", SearchOption.AllDirectories);
+                foreach (var file in files)
                 {
-                    Directory.Delete(directory, true);
+                    File.Delete(file);
+                }
+
+                var directories = Directory.GetDirectories(root, "*.*", SearchOption.AllDirectories);
+                foreach (var directory in directories)
+                {
+                    if (Directory.Exists(directory))
+                    {
+                        Directory.Delete(directory, true);
+                    }
                 }
             }
         }
@@ -71,10 +74,25 @@ namespace Landorphan.BuildMap.UnitTests.StepDefinitions
             {
                 var projectLocation = Path.Combine(testDirectory, project.RelativePath);
                 Directory.CreateDirectory(Path.GetDirectoryName(projectLocation));
-                using (var stream = File.Open(projectLocation, FileMode.Create, FileAccess.ReadWrite, FileShare.Read))
-                using (var writer = new StreamWriter(stream, Encoding.UTF8))
+                if (project.Status != FileStatus.Missing)
                 {
-                    writer.Write(project.GetFileContent());
+                    using (var stream = File.Open(projectLocation, FileMode.Create, FileAccess.ReadWrite, FileShare.Read))
+                    using (var writer = new StreamWriter(stream, Encoding.UTF8))
+                    {
+                        if (project.Status != FileStatus.Empty)
+                        {
+                            writer.Write(project.GetFileContent());
+                            if (project.Status == FileStatus.Malformed)
+                            {
+                                // This adds an additional "root" node ... which makes the document malformed.
+                                writer.Write("<Malformed />");
+                            }
+                        }
+                        else
+                        {
+                            writer.WriteLine(string.Empty);
+                        }
+                    }
                 }
             }
             foreach (var solution in allSolutions.Values)
@@ -117,7 +135,8 @@ namespace Landorphan.BuildMap.UnitTests.StepDefinitions
         public void ThenTheMapFileShouldContainTheFollowingProjects(Table table)
         {
             List<Project> expectedProjectLists = new List<Project>();
-            foreach (var testMapProject in table.CreateSet<TestMapProject>())
+            var orderedExpected = table.CreateSet<TestMapProject>().OrderBy(p => p.Name);
+            foreach (var testMapProject in orderedExpected)
             {
                 var project = new Project();
                 project.Id = idMap[testMapProject.Id];
@@ -175,7 +194,7 @@ namespace Landorphan.BuildMap.UnitTests.StepDefinitions
             foreach (var locatedProjectInSolutions in table.CreateSet<LocatedProjectsInSolutions>())
             {
                 var solution = projectsAndSolutions.Solutions[locatedProjectInSolutions.Solution];
-                var project = projectsAndSolutions.Projects[locatedProjectInSolutions.Project];
+                var project = allProjects[locatedProjectInSolutions.Project];
                 solution.Projects.Add(project);
             }
         }
@@ -204,13 +223,26 @@ namespace Landorphan.BuildMap.UnitTests.StepDefinitions
             }
         }
 
+        private List<FileStatus> setableStatuses = new List<FileStatus>(){
+                FileStatus.Empty,
+                FileStatus.Malformed,
+                FileStatus.Missing,
+                FileStatus.Valid
+            };
 
         [Given(@"I locate the following project files:")]
         public void GivenIHaveTheFollowingProjectFiles(Table table)
         {
             foreach (var project in table.CreateSet<TestProject>())
             {
-                projectsAndSolutions.Projects.Add(project.Name, project);
+                if (!setableStatuses.Contains(project.Status))
+                {
+                    throw new ArgumentException("Can not create projects of that status here.  Use a different test step.");
+                }
+                if (project.Status != FileStatus.Missing)
+                {
+                    projectsAndSolutions.Projects.Add(project.Name, project);
+                }
                 allProjects.Add(project.Name, project);
             }
         }

@@ -20,9 +20,9 @@ namespace Landorphan.BuildMap.UnitTests.Specifications.MapFileCreation
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "3.4.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [NUnit.Framework.TestFixtureAttribute()]
-    [NUnit.Framework.DescriptionAttribute("Map File Creation")]
+    [NUnit.Framework.DescriptionAttribute("Map File Emnpty Files")]
     [NUnit.Framework.CategoryAttribute("Check-In")]
-    public partial class MapFileCreationFeature
+    public partial class MapFileEmnptyFilesFeature
     {
         
         private TechTalk.SpecFlow.ITestRunner testRunner;
@@ -30,14 +30,14 @@ namespace Landorphan.BuildMap.UnitTests.Specifications.MapFileCreation
         private string[] _featureTags = new string[] {
                 "Check-In"};
         
-#line 1 "MapFileSimpleCreation.feature"
+#line 1 "MapFileEmptyFiles.feature"
 #line hidden
         
         [NUnit.Framework.OneTimeSetUpAttribute()]
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Specifications/MapFileCreation", "Map File Creation", "\tIn order to build complicated project structures\r\n\tAs a developer\r\n\tI want to to" +
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Specifications/MapFileCreation", "Map File Emnpty Files", "\tIn order to build complicated project structures\r\n\tAs a developer\r\n\tI want to to" +
                     " be able to create a mapping of all projects, their dependencies and their build" +
                     " order.", ProgrammingLanguage.CSharp, new string[] {
                         "Check-In"});
@@ -79,12 +79,12 @@ namespace Landorphan.BuildMap.UnitTests.Specifications.MapFileCreation
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Build a Simple Project")]
-        public virtual void BuildASimpleProject()
+        [NUnit.Framework.DescriptionAttribute("Single Solution with missing project files")]
+        public virtual void SingleSolutionWithMissingProjectFiles()
         {
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Build a Simple Project", null, tagsOfScenario, argumentsOfScenario);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Single Solution with missing project files", null, tagsOfScenario, argumentsOfScenario);
 #line 7
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -105,64 +105,67 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-                TechTalk.SpecFlow.Table table25 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table1 = new TechTalk.SpecFlow.Table(new string[] {
                             "Name",
-                            "Language"});
-                table25.AddRow(new string[] {
+                            "Language",
+                            "Status"});
+                table1.AddRow(new string[] {
                             "Project1",
-                            "CSharp"});
-                table25.AddRow(new string[] {
+                            "CSharp",
+                            "Valid"});
+                table1.AddRow(new string[] {
                             "Project2",
-                            "CSharp"});
+                            "CSharp",
+                            "Empty"});
 #line 8
- testRunner.Given("I locate the following project files:", ((string)(null)), table25, "Given ");
+ testRunner.Given("I locate the following project files:", ((string)(null)), table1, "Given ");
 #line hidden
-                TechTalk.SpecFlow.Table table26 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table2 = new TechTalk.SpecFlow.Table(new string[] {
                             "Name"});
-                table26.AddRow(new string[] {
+                table2.AddRow(new string[] {
                             "Solution1"});
 #line 12
-      testRunner.And("I locate the following solution files:", ((string)(null)), table26, "And ");
+      testRunner.And("I locate the following solution files:", ((string)(null)), table2, "And ");
 #line hidden
-                TechTalk.SpecFlow.Table table27 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table3 = new TechTalk.SpecFlow.Table(new string[] {
                             "Solution",
                             "Project"});
-                table27.AddRow(new string[] {
+                table3.AddRow(new string[] {
                             "Solution1",
                             "Project1"});
-                table27.AddRow(new string[] {
+                table3.AddRow(new string[] {
                             "Solution1",
                             "Project2"});
 #line 15
-   testRunner.And("the following solutions contain the following located projects:", ((string)(null)), table27, "And ");
+   testRunner.And("the following solutions contain the following located projects:", ((string)(null)), table3, "And ");
 #line hidden
-                TechTalk.SpecFlow.Table table28 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table4 = new TechTalk.SpecFlow.Table(new string[] {
                             "Project",
                             "Reference"});
-                table28.AddRow(new string[] {
+                table4.AddRow(new string[] {
                             "Project2",
                             "Project1"});
 #line 19
-   testRunner.And("the following projects contain the following references:", ((string)(null)), table28, "And ");
+   testRunner.And("the following projects contain the following references:", ((string)(null)), table4, "And ");
 #line hidden
-                TechTalk.SpecFlow.Table table29 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table5 = new TechTalk.SpecFlow.Table(new string[] {
                             "Solution",
                             "Base Project",
                             "Dependent On"});
-                table29.AddRow(new string[] {
+                table5.AddRow(new string[] {
                             "Solution1",
                             "Project2",
                             "Project1"});
-#line 22
-   testRunner.And("the following solutions define the following additional dependencies:", ((string)(null)), table29, "And ");
-#line hidden
-#line 25
-      testRunner.And("the projects and solutions are saved on disk", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 23
+   testRunner.And("the following solutions define the following additional dependencies:", ((string)(null)), table5, "And ");
 #line hidden
 #line 26
-  testRunner.When("I create the map file with the following search patterns: **/*.sln;**/*.csproj", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+      testRunner.And("the projects and solutions are saved on disk", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-                TechTalk.SpecFlow.Table table30 = new TechTalk.SpecFlow.Table(new string[] {
+#line 27
+  testRunner.When("I create the map file with the following search patterns: **/*.sln", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+                TechTalk.SpecFlow.Table table6 = new TechTalk.SpecFlow.Table(new string[] {
                             "Group",
                             "Item",
                             "Types",
@@ -173,7 +176,7 @@ this.ScenarioInitialize(scenarioInfo);
                             "Id",
                             "Relative Path",
                             "Dependent On"});
-                table30.AddRow(new string[] {
+                table6.AddRow(new string[] {
                             "0",
                             "0",
                             "Library",
@@ -184,32 +187,32 @@ this.ScenarioInitialize(scenarioInfo);
                             "1",
                             "Project1`Project1.csproj",
                             ""});
-                table30.AddRow(new string[] {
-                            "0",
+                table6.AddRow(new string[] {
+                            "-1",
                             "0",
                             "Library",
                             "CSharp",
                             "Project2",
-                            "Valid",
+                            "Empty",
                             "Solution1",
                             "2",
                             "Project2`Project2.csproj",
-                            "1"});
-#line 27
-  testRunner.Then("the map file should contain the following projects:", ((string)(null)), table30, "Then ");
+                            ""});
+#line 28
+  testRunner.Then("the map file should contain the following projects:", ((string)(null)), table6, "Then ");
 #line hidden
             }
             this.ScenarioCleanup();
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Build a Project with multiple languages")]
-        public virtual void BuildAProjectWithMultipleLanguages()
+        [NUnit.Framework.DescriptionAttribute("Multiple solution with missing project files.")]
+        public virtual void MultipleSolutionWithMissingProjectFiles_()
         {
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Build a Project with multiple languages", null, tagsOfScenario, argumentsOfScenario);
-#line 32
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Multiple solution with missing project files.", null, tagsOfScenario, argumentsOfScenario);
+#line 33
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -229,74 +232,90 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-                TechTalk.SpecFlow.Table table31 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table7 = new TechTalk.SpecFlow.Table(new string[] {
                             "Name",
-                            "Language"});
-                table31.AddRow(new string[] {
+                            "Language",
+                            "Status"});
+                table7.AddRow(new string[] {
                             "Project1",
-                            "CSharp"});
-                table31.AddRow(new string[] {
+                            "CSharp",
+                            "Valid"});
+                table7.AddRow(new string[] {
                             "Project2",
-                            "FSharp"});
-                table31.AddRow(new string[] {
+                            "FSharp",
+                            "Valid"});
+                table7.AddRow(new string[] {
                             "Project3",
-                            "VisualBasic"});
-#line 33
- testRunner.Given("I locate the following project files:", ((string)(null)), table31, "Given ");
+                            "VisualBasic",
+                            "Valid"});
+                table7.AddRow(new string[] {
+                            "Project4",
+                            "CSharp",
+                            "Missing"});
+#line 34
+ testRunner.Given("I locate the following project files:", ((string)(null)), table7, "Given ");
 #line hidden
-                TechTalk.SpecFlow.Table table32 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table8 = new TechTalk.SpecFlow.Table(new string[] {
                             "Name"});
-                table32.AddRow(new string[] {
+                table8.AddRow(new string[] {
                             "Solution1"});
-#line 38
-      testRunner.And("I locate the following solution files:", ((string)(null)), table32, "And ");
+                table8.AddRow(new string[] {
+                            "Solution2"});
+#line 40
+      testRunner.And("I locate the following solution files:", ((string)(null)), table8, "And ");
 #line hidden
-                TechTalk.SpecFlow.Table table33 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table9 = new TechTalk.SpecFlow.Table(new string[] {
                             "Solution",
                             "Project"});
-                table33.AddRow(new string[] {
+                table9.AddRow(new string[] {
                             "Solution1",
                             "Project1"});
-                table33.AddRow(new string[] {
+                table9.AddRow(new string[] {
                             "Solution1",
                             "Project2"});
-                table33.AddRow(new string[] {
+                table9.AddRow(new string[] {
                             "Solution1",
                             "Project3"});
-#line 41
-   testRunner.And("the following solutions contain the following located projects:", ((string)(null)), table33, "And ");
+                table9.AddRow(new string[] {
+                            "Solution2",
+                            "Project1"});
+                table9.AddRow(new string[] {
+                            "Solution2",
+                            "Project4"});
+#line 44
+   testRunner.And("the following solutions contain the following located projects:", ((string)(null)), table9, "And ");
 #line hidden
-                TechTalk.SpecFlow.Table table34 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table10 = new TechTalk.SpecFlow.Table(new string[] {
                             "Project",
                             "Reference"});
-                table34.AddRow(new string[] {
+                table10.AddRow(new string[] {
                             "Project2",
                             "Project1"});
-                table34.AddRow(new string[] {
+                table10.AddRow(new string[] {
                             "Project3",
                             "Project1"});
-#line 46
-   testRunner.And("the following projects contain the following references:", ((string)(null)), table34, "And ");
+#line 51
+   testRunner.And("the following projects contain the following references:", ((string)(null)), table10, "And ");
 #line hidden
-                TechTalk.SpecFlow.Table table35 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table11 = new TechTalk.SpecFlow.Table(new string[] {
                             "Solution",
                             "Base Project",
                             "Dependent On"});
-                table35.AddRow(new string[] {
+                table11.AddRow(new string[] {
                             "Solution1",
                             "Project3",
                             "Project2"});
-#line 50
-   testRunner.And("the following solutions define the following additional dependencies:", ((string)(null)), table35, "And ");
+#line 55
+   testRunner.And("the following solutions define the following additional dependencies:", ((string)(null)), table11, "And ");
 #line hidden
-#line 53
+#line 58
       testRunner.And("the projects and solutions are saved on disk", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 54
+#line 59
   testRunner.When("I create the map file with the following search patterns: **/*.sln;**/*.csproj;**" +
                         "/*.vbproj;**/*.fsproj", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-                TechTalk.SpecFlow.Table table36 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table12 = new TechTalk.SpecFlow.Table(new string[] {
                             "Group",
                             "Item",
                             "Types",
@@ -307,18 +326,18 @@ this.ScenarioInitialize(scenarioInfo);
                             "Id",
                             "Relative Path",
                             "Dependent On"});
-                table36.AddRow(new string[] {
+                table12.AddRow(new string[] {
                             "0",
                             "0",
                             "Library",
                             "CSharp",
                             "Project1",
                             "Valid",
-                            "Solution1",
+                            "Solution1,Solution2",
                             "1",
                             "Project1`Project1.csproj",
                             ""});
-                table36.AddRow(new string[] {
+                table12.AddRow(new string[] {
                             "0",
                             "0",
                             "Library",
@@ -329,7 +348,7 @@ this.ScenarioInitialize(scenarioInfo);
                             "2",
                             "Project2`Project2.fsproj",
                             "1"});
-                table36.AddRow(new string[] {
+                table12.AddRow(new string[] {
                             "0",
                             "0",
                             "Library",
@@ -340,8 +359,19 @@ this.ScenarioInitialize(scenarioInfo);
                             "3",
                             "Project3`Project3.vbproj",
                             "1"});
-#line 55
-  testRunner.Then("the map file should contain the following projects:", ((string)(null)), table36, "Then ");
+                table12.AddRow(new string[] {
+                            "-1",
+                            "0",
+                            "Library",
+                            "CSharp",
+                            "Project4",
+                            "Missing",
+                            "Solution2",
+                            "4",
+                            "Project4`Project4.csproj",
+                            ""});
+#line 60
+  testRunner.Then("the map file should contain the following projects:", ((string)(null)), table12, "Then ");
 #line hidden
             }
             this.ScenarioCleanup();

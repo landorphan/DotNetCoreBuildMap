@@ -10,6 +10,7 @@ namespace Landorphan.BuildMap.UnitTests.TestAssets.TestHelpers
     using System.Reflection.Metadata.Ecma335;
     using System.Xml;
     using System.Xml.Linq;
+    using Landorphan.BuildMap.Model;
 
     public class TestProject
     {
@@ -30,6 +31,7 @@ namespace Landorphan.BuildMap.UnitTests.TestAssets.TestHelpers
         public Guid Id { get; set; } = Guid.NewGuid();
         public string Name { get; set; }
         public string Language { get; set; }
+        public FileStatus Status { get; set; } = FileStatus.Valid;
         public List<TestProject> References { get; set; } = new List<TestProject>();
 
         public string GetFileContent()

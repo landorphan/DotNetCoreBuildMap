@@ -54,7 +54,7 @@ namespace Landorphan.BuildMap.Construction.SolutionModel
         {
             SuppliedFile retval;
             var fs = AbstractionManager.GetFileSystem();
-            var absolutPath = fs.GetAbsolutePath(locatedFile.Absolute);
+            var absolutPath = fs.GetAbsolutePath(fs.NormalizePath(locatedFile.Absolute));
             var directory = fs.GetParentDirectory(locatedFile.Absolute);
             
             if (!FilesBySafePath.TryGetValue(absolutPath, out retval))
@@ -178,13 +178,14 @@ namespace Landorphan.BuildMap.Construction.SolutionModel
             return ProjectFiles.TryGetValue(id, out suppliedProjectFile);
         }
 
-        public bool TryGetProjectFileBySafePath(string path, out SuppliedProjectFile suppliedProjectFile)
+        public bool TryGetProjectFileBySafePath(string relativePath, string path, out SuppliedProjectFile suppliedProjectFile)
         {
             var fs = AbstractionManager.GetFileSystem();
+            path = fs.NormalizePath(path);
             SuppliedFile suppliedFile;
             FilePaths paths = new FilePaths()
             {
-                Relative = path,
+                Relative = relativePath,
                 Absolute = fs.GetAbsolutePath(path),
                 Real = fs.GetRealPath(path)
             };
