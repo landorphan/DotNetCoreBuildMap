@@ -38,7 +38,7 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
         private int path2HashCode;
         private string psnForm;
         private ISegment[] segments;
-        private string seralizedForm;
+        private string serializedForm;
         private string serializeTo;
         private Exception thrownException;
         private string[] tokens;
@@ -225,7 +225,7 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
         }
 
         [Then(@"token '(.*)' should be: (.*)")]
-        public void ThenSetmentShouldBe(int loc, string expected)
+        public void ThenSegmentShouldBe(int loc, string expected)
         {
             string actual = null;
             if (loc < tokens.Length)
@@ -263,11 +263,11 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
             if (serializeTo == "Json")
             {
                 // Json has to escape '\' characters so we make that adjustment here.
-                seralizedForm.Should().Be(serializedForm.Replace("`", @"\\", StringComparison.OrdinalIgnoreCase));
+                this.serializedForm.Should().Be(serializedForm.Replace("`", @"\\", StringComparison.OrdinalIgnoreCase));
             }
             else
             {
-                seralizedForm.Should().Be(serializedForm);
+                this.serializedForm.Should().Be(serializedForm);
             }
         }
 
@@ -335,7 +335,7 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
         }
 
         [Then(@"the psth's anchor property should be (Relative|Absolute)")]
-        public void ThenThePsthSIsNoramlizedPropertyShouldBeTrue(PathAnchor anchor)
+        public void ThenThePsthSIsNormalizedPropertyShouldBeTrue(PathAnchor anchor)
         {
             parsedPath.Anchor.Should().Be(anchor);
         }
@@ -428,7 +428,7 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
         }
 
         [When(@"I evaluate the original form")]
-        public void WhenIEvaluteTheNonnormalizedForm()
+        public void WhenIEvaluateTheNonNormalizedForm()
         {
             originalForm = parsedPath.SuppliedPath;
             segments = originalForm.Segments.ToArray();
@@ -469,10 +469,10 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
 
         [Given(@"I parse the path as a (Windows|Posix) Path")]
         [When(@"I parse the path as a (Windows|Posix) Path")]
-        public void WhenIParseThePathAsA_pathType_Path(PathType pathtype)
+        public void WhenIParseThePathAsA_pathType_Path(PathType pathType)
         {
-            PathType = pathtype;
-            parsedPath = pathParser.Parse(suppliedPath, pathtype);
+            PathType = pathType;
+            parsedPath = pathParser.Parse(suppliedPath, pathType);
         }
 
         [When(@"I preparse the path as a (Posix|Windows) style path")]
@@ -496,7 +496,7 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
 
         [When(@"the (parsed|resulting) path's (Name|NameWithoutExtension|Extension) should be: (.*)")]
         [Then(@"the (parsed|resulting) path's (Name|NameWithoutExtension|Extension) should be: (.*)")]
-        public void WhenIRetreiveTheNameOfTheLastSegment(string whichPath, string nameFunction, string value)
+        public void WhenIRetrieveTheNameOfTheLastSegment(string whichPath, string nameFunction, string value)
         {
             value = PreparePathForTest(value);
             var path = whichPath == "parsed" ? parsedPath : pathChangeResult;
@@ -541,7 +541,7 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
             switch (serializeTo)
             {
                 case "Json":
-                    seralizedForm = JsonConvert.SerializeObject(parsedPath);
+                    serializedForm = JsonConvert.SerializeObject(parsedPath);
                     break;
                 case "Xml":
                     var XmlSer = new XmlSerializer(typeof(ParsedPath));
@@ -550,12 +550,12 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
                     {
                         writer.Formatting = Formatting.Indented;
                         XmlSer.Serialize(writer, parsedPath);
-                        seralizedForm = Encoding.UTF8.GetString(stream.ToArray());
+                        serializedForm = Encoding.UTF8.GetString(stream.ToArray());
                     }
                     break;
                 case "Yaml":
                     var YamlSer = new Serializer();
-                    seralizedForm = YamlSer.Serialize(parsedPath);
+                    serializedForm = YamlSer.Serialize(parsedPath);
                     break;
             }
         }

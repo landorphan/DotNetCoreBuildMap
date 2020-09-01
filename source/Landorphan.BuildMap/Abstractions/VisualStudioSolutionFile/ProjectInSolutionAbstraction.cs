@@ -6,7 +6,7 @@ namespace Landorphan.BuildMap.Abstractions.VisualStudioSolutionFile
     using Landorphan.BuildMap.Model.Support;
     using Microsoft.Build.Construction;
 
-    public class ProjectInSolutionAbstraction : IProjectInSoltuion
+    public class ProjectInSolutionAbstraction : IProjectInSolution
     {
         private ProjectInSolution projectInSolution;
 

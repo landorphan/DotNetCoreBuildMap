@@ -1,8 +1,9 @@
 ﻿namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
 {
+    [JetBrains.Annotations.NoReorder]
     public static class WindowsRelevantPathCharacters
     {
-        // @formatter:off
+// @formatter:off
         public const char Null =                             (char) 0x00;
         public const char StartOfHeader =                    (char) 0x01;
         public const char StartOfText =                      (char) 0x02;

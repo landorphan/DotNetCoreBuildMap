@@ -4,15 +4,15 @@ namespace Landorphan.BuildMap.Abstractions.VisualStudioSolutionFile
     using System.Collections.Generic;
     using Microsoft.Build.Construction;
 
-    public interface IProjectInSoltuion
+    public interface IProjectInSolution
     {
-        IEnumerable<Guid> GetProjectsThisProjectDependsOn();
         string AbsolutePath { get; }
         string ProjectName { get; }
 
-        Guid SlnGuid { get; }
-        
         SolutionProjectType ProjectType { get; }
         string RelativePath { get; }
+
+        Guid SlnGuid { get; }
+        IEnumerable<Guid> GetProjectsThisProjectDependsOn();
     }
 }

@@ -1,12 +1,10 @@
-using System.Collections.Generic;
-using System.IO;
-using Landorphan.BuildMap.Model;
-
 namespace Landorphan.BuildMap.Serialization
 {
-    using YamlDotNet.Core.Events;
+    using System.Collections.Generic;
+    using System.IO;
+    using Landorphan.BuildMap.Model;
 
-    public interface IMapWritter
+    public interface IMapWriter
     {
         void Write(Stream stream, Map map);
 

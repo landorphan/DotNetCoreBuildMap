@@ -1,28 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Landorphan.Abstractions.FileSystem.Paths
+﻿namespace Landorphan.Abstractions.FileSystem.Paths
 {
+    using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Linq;
 
     public static class PathSegmentNotationComponents
     {
-        public const char Space = ' ';
-        public const char Percent = '%';
-        public const char OpenBrace = '{';
         public const char CloseBrace = '}';
-        public const char OpenBracket = '[';
         public const char CloseBracket = ']';
         public const char Colon = ':';
         public const char ForwardSlash = '/';
+        public const char OpenBrace = '{';
+        public const char OpenBracket = '[';
 
         public const string PathSegmentNotationHeader = "PSN";
-        public const string WindowsPathType = "WIN";
+        public const char Percent = '%';
         public const string PosixPathType = "POS";
+        public const char Space = ' ';
+        public const string WindowsPathType = "WIN";
         public static readonly IReadOnlyDictionary<SegmentType, string> SegmentTypeToString = new ReadOnlyDictionary<SegmentType, string>(
-            new Dictionary<SegmentType, string>()
+            new Dictionary<SegmentType, string>
             {
                 { SegmentType.ParentSegment , "P" },
                 { SegmentType.RootSegment, "R"},

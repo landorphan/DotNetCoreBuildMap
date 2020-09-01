@@ -1,6 +1,6 @@
 using Landorphan.BuildMap.Construction.SolutionModel;
 
-namespace Landorphan.BuildMap.ProjectAssesment
+namespace Landorphan.BuildMap.ProjectAssessment
 {
     public class ExeOrLibraryAssessor : IProjectTypeAssessor
     {

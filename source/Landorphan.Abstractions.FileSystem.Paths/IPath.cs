@@ -77,7 +77,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths
 
         IPath GetParent();
 
-        IPath InsertSegmentAtBegining(ISegment segment);
+        IPath InsertSegmentAtBeginning(ISegment segment);
         IPath InsertSegmentBefore(int offset, ISegment segment);
 
         IPath ReplaceSegment(int offset, ISegment segment);

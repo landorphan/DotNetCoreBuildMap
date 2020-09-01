@@ -24,7 +24,7 @@ namespace dotnetmap.Commands
 
             Console.Error.WriteLine("Listing projects...");
             IMapReader reader = new MapReader();
-            IMapWritter writer = new MapWritter();
+            IMapWriter writer = new MapWriter();
             Map mapObject = null;
             ReadFormat formatHint;
 
@@ -57,11 +57,11 @@ namespace dotnetmap.Commands
             {
                 Console.Error.WriteLine($"Map successfully read ... ");
                 byte[] data;
-                using (var memstream = new MemoryStream())
+                using (var memoryStream = new MemoryStream())
                 {
                     Console.Error.WriteLine("Writing output");
-                    writer.Write(memstream, mapObject, format, items);
-                    data = memstream.GetBuffer();
+                    writer.Write(memoryStream, mapObject, format, items);
+                    data = memoryStream.GetBuffer();
                 }
                 Stream outputStream = null;
                 try

@@ -54,24 +54,24 @@
 
         protected override string ConvertToString(IEnumerable<ISegment> segments)
         {
-            const char seperator = WindowsRelevantPathCharacters.BackSlash;
+            const char separator = WindowsRelevantPathCharacters.BackSlash;
             var segmentArray = segments.ToArray();
             if (segmentArray.Length == 1 && segmentArray[0].SegmentType == SegmentType.VolumelessRootSegment)
             {
-                return seperator.ToString(CultureInfo.InvariantCulture);
+                return separator.ToString(CultureInfo.InvariantCulture);
             }
             var builder = new StringBuilder();
-            
-            var skipNextSeperator = false;
+
+            var skipNextSeparator = false;
             for (var i = 0; i < segmentArray.Length; i++)
             {
                 var currentSegment = segmentArray[i];
-                if (i > 0 && !skipNextSeperator)
+                if (i > 0 && !skipNextSeparator)
                 {
-                    builder.Append(seperator);
+                    builder.Append(separator);
                 }
 
-                skipNextSeperator = false;
+                skipNextSeparator = false;
                 switch (currentSegment.SegmentType)
                 {
                     // As device segments throw out all but the device ...
@@ -79,18 +79,18 @@
                     case SegmentType.DeviceSegment:
                         return currentSegment.ToString();
                     case SegmentType.RemoteSegment:
-                        builder.Append(seperator);
-                        builder.Append(seperator);
+                        builder.Append(separator);
+                        builder.Append(separator);
                         builder.Append(currentSegment);
                         break;
                     case SegmentType.VolumeRelativeSegment:
                         builder.Append(currentSegment);
-                        skipNextSeperator = true;
+                        skipNextSeparator = true;
                         break;
                     case SegmentType.RootSegment:
                         builder.Append(currentSegment);
-                        builder.Append(seperator);
-                        skipNextSeperator = true;
+                        builder.Append(separator);
+                        skipNextSeparator = true;
                         break;
                     // Comments here are just to show the cases covered by this 
                     // default clause.

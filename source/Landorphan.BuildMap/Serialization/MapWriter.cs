@@ -8,7 +8,7 @@ using Landorphan.BuildMap.Serialization.Formatters.Interfaces;
 
 namespace Landorphan.BuildMap.Serialization
 {
-    public class MapWritter : IMapWritter
+    public class MapWriter : IMapWriter
     {
         public void Write(Stream stream, Map map)
         {

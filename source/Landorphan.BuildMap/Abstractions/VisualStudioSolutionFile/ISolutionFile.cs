@@ -6,7 +6,7 @@ namespace Landorphan.BuildMap.Abstractions.VisualStudioSolutionFile
 
     public interface ISolutionFile
     {
-        bool TryGetProjectBySlnGuid(Guid slnGuid, out IProjectInSoltuion projectInSolution);
-        IEnumerable<IProjectInSoltuion> GetAllProjects();
+        bool TryGetProjectBySlnGuid(Guid slnGuid, out IProjectInSolution projectInSolution);
+        IEnumerable<IProjectInSolution> GetAllProjects();
     }
 }

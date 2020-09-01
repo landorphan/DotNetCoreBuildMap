@@ -54,10 +54,10 @@ namespace Landorphan.BuildMap.Construction.SolutionModel
         {
             SuppliedFile retval;
             var fs = AbstractionManager.GetFileSystem();
-            var absolutPath = fs.GetAbsolutePath(fs.NormalizePath(locatedFile.Absolute));
+            var absolutePath = fs.GetAbsolutePath(fs.NormalizePath(locatedFile.Absolute));
             var directory = fs.GetParentDirectory(locatedFile.Absolute);
             
-            if (!FilesBySafePath.TryGetValue(absolutPath, out retval))
+            if (!FilesBySafePath.TryGetValue(absolutePath, out retval))
             {
                 Encoding utf8 = new UTF8Encoding(false);
                 SuppliedFile item = new SuppliedFile();
@@ -85,7 +85,7 @@ namespace Landorphan.BuildMap.Construction.SolutionModel
                     item.Status = FileStatus.Unknown;
                 }
 
-                return DeterminFileType(item);
+                return DetermineFileType(item);
             }
             return retval;
         }
@@ -103,7 +103,7 @@ namespace Landorphan.BuildMap.Construction.SolutionModel
             return suppliedFile.RawText.Contains(SolutionFileHeader, StringComparison.InvariantCultureIgnoreCase);
         }
         
-        public SuppliedFile DeterminFileType(SuppliedFile suppliedFile)
+        public SuppliedFile DetermineFileType(SuppliedFile suppliedFile)
         {
             if (IsSolutionFile(suppliedFile))
             {

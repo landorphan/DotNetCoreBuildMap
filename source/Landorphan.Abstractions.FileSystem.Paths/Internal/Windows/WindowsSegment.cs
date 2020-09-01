@@ -3,81 +3,22 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
     using System;
     using System.Globalization;
     using System.Linq;
-    using System.Runtime.CompilerServices;
 
     // TODO: Make this internal once we have enough build system to do InternalsVisibleTo
     public class WindowsSegment : Segment
     {
-        public static readonly string[] DeviceNames = new []
-        {
+        public static readonly string[] DeviceNames = {
             "CON", "PRN", "AUX", "NUL", "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8",
             "COM9", "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9"
         };
-        public static readonly WindowsSegment NullSegment = new WindowsSegment(SegmentType.NullSegment, null);
         public static readonly WindowsSegment EmptySegment = new WindowsSegment(SegmentType.EmptySegment, string.Empty);
-        public static readonly WindowsSegment SelfSegment = new WindowsSegment(SegmentType.SelfSegment, ".");
+        public static readonly WindowsSegment NullSegment = new WindowsSegment(SegmentType.NullSegment, null);
         public static readonly WindowsSegment ParentSegment = new WindowsSegment(SegmentType.ParentSegment, "..");
-
-        public override string ToString()
-        {
-            if (SegmentType == SegmentType.VolumeRelativeSegment ||
-                SegmentType == SegmentType.RootSegment)
-            {
-                return $"{Name}:";
-            }
-
-            return Name;
-        }
-
-        public static WindowsSegment ParseFromString(string input)
-        {
-            var match = PathSegmentNotationSegmentRegex.Match(input);
-            if (match.Success)
-            {
-                SegmentType segmentType = PathSegmentNotationComponents.StringToSegmentType[match.Groups[SegmentTypeGroupName].Value];
-                string name = match.Groups[SegmentNameGroupName].Value;
-                return new WindowsSegment(segmentType, NameFromPathSegmentNotationEncodedName(name));
-            }
-            else
-            {
-                if (input == ".")
-                {
-                    return SelfSegment;
-                }
-
-                if (input == "..")
-                {
-                    return ParentSegment;
-                }
-
-                if (input == null)
-                {
-                    return NullSegment;
-                }
-
-                if (input.Length == 0)
-                {
-                    return EmptySegment;
-                }
-                else if (IsDeviceSegment(input))
-                {
-                    return new WindowsSegment(SegmentType.DeviceSegment, input);
-                }
-                else
-                {
-                    return new WindowsSegment(SegmentType.GenericSegment, input);
-                }
-            }
-        }
-
-        public static bool IsDeviceSegment(string input)
-        {
-            return DeviceNames.Contains(input);
-        }
+        public static readonly WindowsSegment SelfSegment = new WindowsSegment(SegmentType.SelfSegment, ".");
 
         public WindowsSegment(SegmentType type, string name)
         {
-            this.SegmentType = type;
+            SegmentType = type;
             switch (type)
             {
                 case SegmentType.DeviceSegment:
@@ -87,12 +28,12 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
                 case SegmentType.VolumeRelativeSegment:
                 case SegmentType.ParentSegment:
                 case SegmentType.SelfSegment:
-                    this.Name = name;
+                    Name = name;
                     break;
                 case SegmentType.VolumelessRootSegment:
                 case SegmentType.EmptySegment:
                 case SegmentType.NullSegment:
-                    this.Name = string.Empty;
+                    Name = string.Empty;
                     break;
 #pragma warning disable S3532 // Empty "default" clauses should be removed
                 default:
@@ -101,9 +42,78 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
             }
         }
 
+        public override ISegment Clone()
+        {
+            return new WindowsSegment(SegmentType, Name);
+        }
+
+        public static bool IsDeviceSegment(string input)
+        {
+            return DeviceNames.Contains(input);
+        }
+
+        public static WindowsSegment ParseFromString(string input)
+        {
+            var match = PathSegmentNotationSegmentRegex.Match(input);
+            if (match.Success)
+            {
+                var segmentType = PathSegmentNotationComponents.StringToSegmentType[match.Groups[SegmentTypeGroupName].Value];
+                var name = match.Groups[SegmentNameGroupName].Value;
+                return new WindowsSegment(segmentType, NameFromPathSegmentNotationEncodedName(name));
+            }
+
+            if (input == ".")
+            {
+                return SelfSegment;
+            }
+
+            if (input == "..")
+            {
+                return ParentSegment;
+            }
+
+            if (input == null)
+            {
+                return NullSegment;
+            }
+
+            if (input.Length == 0)
+            {
+                return EmptySegment;
+            }
+
+            if (IsDeviceSegment(input))
+            {
+                return new WindowsSegment(SegmentType.DeviceSegment, input);
+            }
+
+            return new WindowsSegment(SegmentType.GenericSegment, input);
+        }
+
+        public override bool IsDiscouraged()
+        {
+            if (SegmentType != SegmentType.DeviceSegment)
+            {
+                foreach (var deviceName in DeviceNames)
+                {
+                    if (Name.StartsWith(deviceName, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            if (Name.StartsWith(WindowsRelevantPathCharacters.Space.ToString(CultureInfo.InvariantCulture), StringComparison.Ordinal))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         public override bool IsLegalForSegmentOffset(int offset)
         {
-            if (offset > 0 && (this.SegmentType == SegmentType.VolumeRelativeSegment || this.SegmentType == SegmentType.RootSegment))
+            if (offset > 0 && (SegmentType == SegmentType.VolumeRelativeSegment || SegmentType == SegmentType.RootSegment))
             {
                 return false;
             }
@@ -128,8 +138,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
                 return false;
             }
 
-            if (Name.EndsWith(WindowsRelevantPathCharacters.Period.ToString(CultureInfo.InvariantCulture), StringComparison.Ordinal) &&
-                (this.SegmentType != SegmentType.ParentSegment && this.SegmentType != SegmentType.SelfSegment))
+            if (Name.EndsWith(WindowsRelevantPathCharacters.Period.ToString(CultureInfo.InvariantCulture), StringComparison.Ordinal) && SegmentType != SegmentType.ParentSegment && SegmentType != SegmentType.SelfSegment)
             {
                 return false;
             }
@@ -137,30 +146,15 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
             return true;
         }
 
-        public override bool IsDiscouraged()
+        public override string ToString()
         {
-            if (this.SegmentType != SegmentType.DeviceSegment)
+            if (SegmentType == SegmentType.VolumeRelativeSegment ||
+                SegmentType == SegmentType.RootSegment)
             {
-                foreach (var deviceName in WindowsSegment.DeviceNames)
-                {
-                    if (this.Name.StartsWith(deviceName, StringComparison.OrdinalIgnoreCase))
-                    {
-                        return true;
-                    }
-                }
+                return $"{Name}:";
             }
 
-            if (this.Name.StartsWith(WindowsRelevantPathCharacters.Space.ToString(CultureInfo.InvariantCulture), StringComparison.Ordinal))
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        public override ISegment Clone()
-        {
-            return new WindowsSegment(this.SegmentType, this.Name);
+            return Name;
         }
     }
 }

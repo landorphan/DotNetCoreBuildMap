@@ -14,7 +14,7 @@ namespace Landorphan.BuildMap.Abstractions.VisualStudioSolutionFile
             this.slnFile = slnFile;
         }
 
-        public bool TryGetProjectBySlnGuid(Guid slnGuid, out IProjectInSoltuion projectInSolution)
+        public bool TryGetProjectBySlnGuid(Guid slnGuid, out IProjectInSolution projectInSolution)
         {
             projectInSolution = null;
             ProjectInSolution projectSolution;
@@ -26,9 +26,9 @@ namespace Landorphan.BuildMap.Abstractions.VisualStudioSolutionFile
             return retval;
         }
 
-        public IEnumerable<IProjectInSoltuion> GetAllProjects()
+        public IEnumerable<IProjectInSolution> GetAllProjects()
         {
-            List<IProjectInSoltuion> retval = new List<IProjectInSoltuion>(
+            List<IProjectInSolution> retval = new List<IProjectInSolution>(
                 (from p in slnFile.ProjectsInOrder
                     select new ProjectInSolutionAbstraction(p)));
             return retval;

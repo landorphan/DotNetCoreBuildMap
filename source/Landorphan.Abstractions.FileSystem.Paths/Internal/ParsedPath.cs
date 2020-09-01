@@ -100,7 +100,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
                 newExtension = newExtension.Substring(1);
             }
 
-            var newName = string.Empty;
+            string newName;
             if (string.IsNullOrWhiteSpace(newExtension))
             {
                 newName = NameWithoutExtension;
@@ -134,11 +134,11 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
 
         public IPath GetParent()
         {
-            var parrentPath = AppendSegmentAtEnd(Segment.GetParentSegment(PathType));
-            return parrentPath.Simplify();
+            var parentPath = AppendSegmentAtEnd(Segment.GetParentSegment(PathType));
+            return parentPath.Simplify();
         }
 
-        public IPath InsertSegmentAtBegining(ISegment segment)
+        public IPath InsertSegmentAtBeginning(ISegment segment)
         {
             return AddToSegments(0, false, segment);
         }
@@ -190,7 +190,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
 
         internal static IPath CreateFromSegments(PathType pathType, string suppliedPath, IEnumerable<ISegment> segments)
         {
-            ParsedPath retval = null;
+            ParsedPath retval;
             if (PathType.Windows == pathType)
             {
                 retval = new WindowsPath();
@@ -205,7 +205,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
 
         internal static IPath CreateSimplifiedForm(IPath suppliedPath)
         {
-            ParsedPath retval = null;
+            ParsedPath retval;
             if (PathType.Windows == suppliedPath.PathType)
             {
                 retval = new WindowsPath();
@@ -245,7 +245,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
             };
 
             ISegment forcedRoot = null;
-            ISegment current = null;
+            ISegment current;
             while (stack.Count > 0)
             {
                 current = stack.Pop();

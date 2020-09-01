@@ -5,10 +5,10 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
     // TODO: Make this internal once we have enough of the build system working to use InternalsVisibleTo
     public class WindowsPathTokenizer : PathTokenizer
     {
-        public const string LongFormUncIndicator = @"\\?\UNC\";
-        public const string LongFormIndicator = @"\\?\";
         public const string DoubleBackSlash = @"\\";
         public const string DoubleForwardSlash = "//";
+        public const string LongFormIndicator = @"\\?\";
+        public const string LongFormUncIndicator = @"\\?\UNC\";
 
         public WindowsPathTokenizer(string path) : base(PreParsePath(path))
         {

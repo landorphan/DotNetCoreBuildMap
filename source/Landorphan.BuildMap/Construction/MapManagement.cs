@@ -47,10 +47,10 @@ namespace Landorphan.BuildMap.Construction
             var slnFiles = mapFiles.GetAllSolutionFiles().Where(sf => sf.Status == FileStatus.Valid);
             foreach (var solutionFile in slnFiles)
             {
-                Dictionary<Guid, IProjectInSoltuion> solutionProjects = new Dictionary<Guid, IProjectInSoltuion>(
+                Dictionary<Guid, IProjectInSolution> solutionProjects = new Dictionary<Guid, IProjectInSolution>(
                 (   from sp in solutionFile.SolutionContents.GetAllProjects()
                    where sp.ProjectType != SolutionProjectType.SolutionFolder 
-                  select new KeyValuePair<Guid, IProjectInSoltuion>(sp.SlnGuid, sp)));
+                  select new KeyValuePair<Guid, IProjectInSolution>(sp.SlnGuid, sp)));
                 // First pass through ... create the ProjectFile entries and map
                 // sln guids to HashGuids.
                 foreach (var projectReference in solutionProjects)
@@ -106,7 +106,7 @@ namespace Landorphan.BuildMap.Construction
                 {
                     suppliedProjectFile.ProjectDependentOn.Add(includedSuppliedProjectFile.Id, includedSuppliedProjectFile);
                 }
-                // I think after refactor this is no longer necissary but keeping the code until we test ... just in case.
+                // I think after refactor this is no longer necessary but keeping the code until we test ... just in case.
                 // else
                 // {
                 //     // The Safe path did not work ... attempt to resolve via hashGuid.
