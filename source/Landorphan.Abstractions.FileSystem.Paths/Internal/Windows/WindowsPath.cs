@@ -1,29 +1,25 @@
-﻿using System;
-
-namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
+﻿namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
 {
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
     using System.Text;
 
-    class WindowsPath : ParsedPath
+    internal class WindowsPath : ParsedPath
     {
-        public override PathType PathType => PathType.Windows;
-
         public override PathAnchor Anchor
         {
             get
             {
                 if (this == simplifiedForm)
                 {
-                    if ((this.LeadingSegment.SegmentType == SegmentType.RemoteSegment ||
-                         this.LeadingSegment.SegmentType == SegmentType.RootSegment ||
-                         this.LeadingSegment.SegmentType == SegmentType.VolumelessRootSegment))
+                    if (LeadingSegment.SegmentType == SegmentType.RemoteSegment ||
+                        LeadingSegment.SegmentType == SegmentType.RootSegment ||
+                        LeadingSegment.SegmentType == SegmentType.VolumelessRootSegment)
                     {
                         return PathAnchor.Absolute;
                     }
-                    foreach (var segment in this.Segments)
+                    foreach (var segment in Segments)
                     {
                         if (segment.SegmentType == SegmentType.DeviceSegment)
                         {
@@ -36,6 +32,8 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
                 return simplifiedForm.Anchor;
             }
         }
+
+        public override PathType PathType => PathType.Windows;
 
         public override ISegment CreateSegment(SegmentType segmentType, string name)
         {
@@ -62,10 +60,10 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
             {
                 return seperator.ToString(CultureInfo.InvariantCulture);
             }
-            StringBuilder builder = new StringBuilder();
+            var builder = new StringBuilder();
             
-            bool skipNextSeperator = false;
-            for (int i = 0; i < segmentArray.Length; i++)
+            var skipNextSeperator = false;
+            for (var i = 0; i < segmentArray.Length; i++)
             {
                 var currentSegment = segmentArray[i];
                 if (i > 0 && !skipNextSeperator)

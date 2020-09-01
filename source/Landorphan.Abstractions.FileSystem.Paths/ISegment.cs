@@ -96,5 +96,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths
         bool HasExtension { get; }
 
         ISegment Clone();
+
+        string ToPathSegmentNotation();
     }
 }

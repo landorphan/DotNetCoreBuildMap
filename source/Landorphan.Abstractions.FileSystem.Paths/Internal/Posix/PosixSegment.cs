@@ -22,53 +22,93 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Posix
         public PosixSegment(SegmentType type, string name)
         {
             this.SegmentType = type;
-            this.Name = name;
+            switch (type)
+            {
+                case SegmentType.DeviceSegment:
+                case SegmentType.GenericSegment:
+                case SegmentType.RemoteSegment:
+                case SegmentType.RootSegment:
+                case SegmentType.VolumeRelativeSegment:
+                case SegmentType.ParentSegment:
+                case SegmentType.SelfSegment:
+                    this.Name = name;
+                    break;
+                case SegmentType.VolumelessRootSegment:
+                case SegmentType.EmptySegment:
+                case SegmentType.NullSegment:
+                    this.Name = string.Empty;
+                    break;
+#pragma warning disable S3532 // Empty "default" clauses should be removed
+                default:
+                    break;
+#pragma warning restore S3532 // Empty "default" clauses should be removed
+            }
         }
 
         public static PosixSegment ParseFromString(string input)
         {
-            if (input == ".")
+            var match = PathSegmentNotationSegmentRegex.Match(input);
+            if (match.Success)
             {
-                return SelfSegment;
-            }
-
-            if (input == "..")
-            {
-                return ParentSegment;
-            }
-
-            if (input == null)
-            {
-                return NullSegment;
-            }
-
-            if (input.Length == 0)
-            {
-                return EmptySegment;
+                SegmentType segmentType = PathSegmentNotationComponents.StringToSegmentType[match.Groups[SegmentTypeGroupName].Value];
+                string name = match.Groups[SegmentNameGroupName].Value;
+                return new PosixSegment(segmentType, NameFromPathSegmentNotationEncodedName(name));
             }
             else
             {
-                return new PosixSegment(SegmentType.GenericSegment, input);
+                if (input == ".")
+                {
+                    return SelfSegment;
+                }
+
+                if (input == "..")
+                {
+                    return ParentSegment;
+                }
+
+                if (input == null)
+                {
+                    return NullSegment;
+                }
+
+                if (input.Length == 0)
+                {
+                    return EmptySegment;
+                }
+                else
+                {
+                    return new PosixSegment(SegmentType.GenericSegment, input);
+                }
             }
         }
 
-
         public override bool IsLegalForSegmentOffset(int offset)
         {
-            if (this == ParentSegment || this == EmptySegment || this == SelfSegment || this == NullSegment)
+            switch (this.SegmentType)
             {
-                return true;
-            }
-
-            if (Name != null)
-            {
-                foreach (var alwaysIllegalCharacter in PosixRelevantPathChars.AlwaysIllegalCharacters)
-                {
-                    if (Name.ToCharArray().Contains(alwaysIllegalCharacter))
+                case SegmentType.EmptySegment:
+                case SegmentType.NullSegment:
+                    return string.IsNullOrWhiteSpace(Name);
+                case SegmentType.SelfSegment:
+                    return string.IsNullOrWhiteSpace(Name) || Name == ".";
+                case SegmentType.ParentSegment:
+                    return string.IsNullOrWhiteSpace(Name) || Name == "..";
+                case SegmentType.VolumeRelativeSegment:
+                case SegmentType.VolumelessRootSegment:
+                case SegmentType.DeviceSegment:
+                    return false;
+                default:
+                    if (Name != null)
                     {
-                        return false;
+                        foreach (var alwaysIllegalCharacter in PosixRelevantPathChars.AlwaysIllegalCharacters)
+                        {
+                            if (Name.ToCharArray().Contains(alwaysIllegalCharacter))
+                            {
+                                return false;
+                            }
+                        }
                     }
-                }
+                    break;
             }
 
             return true;

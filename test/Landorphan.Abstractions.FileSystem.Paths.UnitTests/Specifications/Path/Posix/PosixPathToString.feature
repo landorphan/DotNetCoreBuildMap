@@ -28,4 +28,4 @@ Examples:
 | C:/dir/file.txt/               | C:/dir/file.txt/               | Trailing slashs are kept unless normalized          |
 | /dir/dir/../dir/../../file.txt | /dir/dir/../dir/../../file.txt | Embedded Parent Segemnts                            |
 | /dir/dir/./dir/./dir/file.txt  | /dir/dir/./dir/./dir/file.txt  | Embedded Self Segments                              |
-| /                              | /                              | Root Path                                           | 
+| /                              | /                              | Root Path                                           |

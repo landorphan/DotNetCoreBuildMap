@@ -2,39 +2,196 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.Design;
-    using System.Diagnostics.CodeAnalysis;
-    using System.IO;
     using System.Linq;
-    using System.Runtime.CompilerServices;
-    using System.Transactions;
+    using System.Text;
+    using Landorphan.Abstractions.FileSystem.Paths.Internal.Converters;
     using Landorphan.Abstractions.FileSystem.Paths.Internal.Posix;
     using Landorphan.Abstractions.FileSystem.Paths.Internal.Windows;
+    using Newtonsoft.Json;
 
-    public abstract class ParsedPath : IPath
+    [JsonConverter(typeof(ParsedPathConverter))]
+    public abstract class ParsedPath : IPath //, IYamlConvertible
     {
-        public abstract ISegment CreateSegment(SegmentType segmentType, string name);
-        protected abstract string ConvertToString(IEnumerable<ISegment> segments);
-        public abstract PathType PathType { get; }
-        public abstract PathAnchor Anchor { get; }
-
-
-        private ParsedPath CreateFromSegments(IEnumerable<ISegment> segments)
-        {
-            var pathString = ConvertToString(CloneSegments(segments).ToArray());
-            return (ParsedPath) CreateFromSegments(PathType, pathString, segments.Cast<Segment>().ToArray());
-        }
+        internal SimplificationLevel simplification;
+        internal IPath simplifiedForm;
 
         internal IPath suppliedForm;
-        internal IPath simplifiedForm;
-        internal SimplificationLevel simplification;
+        public abstract PathAnchor Anchor { get; }
+
+        public string Extension => simplifiedForm.TrailingSegment.Extension;
+        public bool HasExtension => simplifiedForm.TrailingSegment.HasExtension;
+
+        public bool IsDiscouraged => (from s in Segments
+                                      where s.IsDiscouraged()
+                                      select s).Any() && Status == PathStatus.Legal;
+
+        public bool IsFullyQualified => simplifiedForm.LeadingSegment.SegmentType == SegmentType.RootSegment ||
+                                        simplifiedForm.LeadingSegment.SegmentType == SegmentType.VolumeRelativeSegment ||
+                                        simplifiedForm.LeadingSegment.SegmentType == SegmentType.RemoteSegment;
+
+        public ISegment LeadingSegment { get; private set; }
+
+        public string Name => simplifiedForm.TrailingSegment.Name;
+        public string NameWithoutExtension => simplifiedForm.TrailingSegment.NameWithoutExtension;
+        public abstract PathType PathType { get; }
+
+        public ISegment RootSegment => simplifiedForm.LeadingSegment.IsRootSegment ? simplifiedForm.LeadingSegment : Segment.GetEmptySegment(PathType);
+
+        public IReadOnlyList<ISegment> Segments { get; private set; }
+
+        public SerializationForm SerializationMethod { get; set; } = PathDefaults.DefaultSerializationMethod;
+
+        public SimplificationLevel SimplificationLevel => simplification;
+
+        public PathStatus Status
+        {
+            get
+            {
+                if (this == simplifiedForm)
+                {
+                    var loc = 0;
+                    if ((from s in Segments
+                         where !s.IsLegalForSegmentOffset(loc++)
+                         select s).Any())
+                    {
+                        return PathStatus.Illegal;
+                    }
+
+                    return PathStatus.Legal;
+                }
+
+                return simplifiedForm.Status;
+            }
+        }
+
+        public IPath SuppliedPath { get; private set; }
+        public string SuppliedPathString { get; private set; }
+        public ISegment TrailingSegment { get; private set; }
+
+        public IPath AppendSegmentAfter(int offset, ISegment segment)
+        {
+            return AddToSegments(offset, true, segment);
+        }
+
+        public IPath AppendSegmentAtEnd(ISegment segment)
+        {
+            return AddToSegments(Segments.Count, true, segment);
+            //if (segment == null)
+            //{
+            //    segment = Segment.GetEmptySegment(PathType);
+            //}
+            //var clones = CloneSegments(this.Segments);
+            //clones.Add(segment.Clone());
+            //return CreateFromSegments(clones);
+        }
+
+        public IPath ChangeExtension(string newExtension)
+        {
+            if (newExtension == null)
+            {
+                newExtension = string.Empty;
+            }
+            if (newExtension.Length == 1 && newExtension[0] == '.')
+            {
+                newExtension = string.Empty;
+            }
+            else if (newExtension.Length > 1 && newExtension[0] == '.')
+            {
+                newExtension = newExtension.Substring(1);
+            }
+
+            var newName = string.Empty;
+            if (string.IsNullOrWhiteSpace(newExtension))
+            {
+                newName = NameWithoutExtension;
+            }
+            else
+            {
+                newName = string.Join(".", NameWithoutExtension, newExtension);
+            }
+
+            return ReplaceSegment(Segments.Count - 1, CreateSegment(TrailingSegment.SegmentType, newName));
+        }
+
+        public IPath ConvertToRelativePath()
+        {
+            var path = (ParsedPath)Simplify();
+            while (path.Anchor == PathAnchor.Absolute)
+            {
+                if (path.Segments.Count > 1)
+                {
+                    path = CreateFromSegments(path.Segments.Skip(1));
+                }
+                else
+                {
+                    path = CreateFromSegments(new[] { (Segment)Segment.GetSelfSegment(path.PathType) });
+                }
+            }
+            return path;
+        }
+
+        public abstract ISegment CreateSegment(SegmentType segmentType, string name);
+
+        public IPath GetParent()
+        {
+            var parrentPath = AppendSegmentAtEnd(Segment.GetParentSegment(PathType));
+            return parrentPath.Simplify();
+        }
+
+        public IPath InsertSegmentAtBegining(ISegment segment)
+        {
+            return AddToSegments(0, false, segment);
+        }
+
+        public IPath InsertSegmentBefore(int offset, ISegment segment)
+        {
+            return AddToSegments(offset, false, segment);
+        }
+
+        public IPath ReplaceSegment(int offset, ISegment segment)
+        {
+            var clonedSegments = CloneSegments(Segments).ToArray();
+            clonedSegments[offset] = segment;
+            return CreateFromSegments(clonedSegments);
+        }
+
+        public IPath Simplify()
+        {
+            return simplifiedForm;
+        }
+
+        public string ToPathSegmentNotation()
+        {
+            var builder = new StringBuilder();
+            builder.Append(PathSegmentNotationComponents.OpenBracket);
+            builder.Append(PathSegmentNotationComponents.PathSegmentNotationHeader);
+            builder.Append(PathSegmentNotationComponents.Colon);
+            if (PathType == PathType.Windows)
+            {
+                builder.Append(PathSegmentNotationComponents.WindowsPathType);
+            }
+            else
+            {
+                builder.Append(PathSegmentNotationComponents.PosixPathType);
+            }
+            builder.Append(PathSegmentNotationComponents.CloseBracket);
+            foreach (var segment in Segments)
+            {
+                builder.Append(PathSegmentNotationComponents.ForwardSlash);
+                builder.Append(segment.ToPathSegmentNotation());
+            }
+            return builder.ToString();
+        }
+
+        public override string ToString()
+        {
+            return ConvertToString(Segments);
+        }
 
         internal static IPath CreateFromSegments(PathType pathType, string suppliedPath, IEnumerable<ISegment> segments)
         {
-            segments = TraverseSegmentChain(pathType, segments);
-
             ParsedPath retval = null;
-            if (Paths.PathType.Windows == pathType)
+            if (PathType.Windows == pathType)
             {
                 retval = new WindowsPath();
             }
@@ -42,15 +199,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
             {
                 retval = new PosixPath();
             }
-
-            retval.Segments = segments.ToArray();
-            retval.LeadingSegment = retval.Segments[0];
-            retval.TrailingSegment = segments.Last();
-            retval.suppliedForm = retval;
-            retval.SuppliedPathString = suppliedPath;
-            retval.SuppliedPath = retval;
-            retval.simplifiedForm = CreateSimplifiedForm(retval);
-            retval.simplification = GetSimplificationLevel(retval);
+            retval.InitializeFromSuppliedPathAndSegments(suppliedPath, segments);
             return retval;
         }
 
@@ -79,132 +228,12 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
             return retval;
         }
 
-        private static Segment[] TraverseSegmentChain(PathType pathType, IEnumerable<ISegment> segments)
-        {
-            List<Segment> retval = new List<Segment>();
-            Segment selfSegment = pathType == Paths.PathType.Windows ? (Segment)WindowsSegment.SelfSegment : (Segment)PosixSegment.SelfSegment;
-            if (segments == null || !segments.Any() || 
-                (segments.Count() == 1 && (segments.First().SegmentType == SegmentType.NullSegment || segments.First().SegmentType == SegmentType.EmptySegment)))
-            {
-                segments = new[] { (Segment) selfSegment.Clone() };
-            }
-
-            foreach (var segment in segments)
-            {
-                Segment newSegment = (Segment) segment.Clone();
-                retval.Add(newSegment);
-            }
-
-            return retval.ToArray();
-        }
-
-        public String SuppliedPathString { get; private set; }
-        public ISegment LeadingSegment { get; private set; }
-        public ISegment TrailingSegment { get; private set; }
-
-        public PathStatus Status
-        {
-            get 
-            { 
-                if (this == simplifiedForm)
-                {
-                    int loc = 0;
-                    if ((from s in Segments
-                         where !s.IsLegalForSegmentOffset(loc++)
-                         select s).Any())
-                    {
-                        return PathStatus.Illegal;
-                    }
-
-                    return PathStatus.Legal;
-                }
-
-                return simplifiedForm.Status;
-            }
-        }
-
-        public bool IsDiscouraged => (from s in Segments 
-                                     where s.IsDiscouraged()
-                                    select s).Any() && (Status == PathStatus.Legal);
-
-        public IReadOnlyList<ISegment> Segments { get; private set; }
-        public IPath SuppliedPath { get; private set; }
-
-        public IPath GetParent()
-        {
-            var parrentPath = this.AppendSegment(Segment.GetParentSegment(PathType));
-            return parrentPath.Simplify();
-        }
-
-        private static List<ISegment> CloneSegments(IEnumerable<ISegment> originalSegments)
-        {
-            List<ISegment> segments = new List<ISegment>((
-                    from s in originalSegments
-                    select (Segment)s.Clone()));
-            return segments;
-        }
-
-        public ISegment RootSegment => this.simplifiedForm.LeadingSegment.IsRootSegment ? this.simplifiedForm.LeadingSegment : Segment.GetEmptySegment(this.PathType);
-
-        public SimplificationLevel SimplificationLevel => simplification;
-
-        private static SimplificationLevel GetSimplificationLevel(IPath path)
-        {
-            SimplificationLevel retval = SimplificationLevel.Fully;
-
-            // This is a special case where the leading self reference can't be removed because 
-            // it would result in an empty path ... so in this case it's as normalized as possible 
-            if (path.Segments.Count == 1 && path.Segments[0].SegmentType == SegmentType.SelfSegment)
-            {
-                return SimplificationLevel.SelfReferenceOnly;
-            }
-
-            bool leadingParentsConsumed = false;
-            foreach (var segment in path.Segments)
-            {
-                switch (segment.SegmentType)
-                {
-                    case SegmentType.ParentSegment:
-                        if (leadingParentsConsumed)
-                        {
-                            return SimplificationLevel.NotNormalized;
-                        }
-
-                        retval = SimplificationLevel.LeadingParentsOnly;
-                        continue;
-                    case SegmentType.EmptySegment:
-                    case SegmentType.NullSegment:
-                    case SegmentType.SelfSegment:
-                        return SimplificationLevel.NotNormalized;
-                    default:
-                        leadingParentsConsumed = true;
-                        continue;
-                }
-            }
-
-            return retval;
-        }
-
-        public string Name => simplifiedForm.TrailingSegment.Name;
-        public string NameWithoutExtension => simplifiedForm.TrailingSegment.NameWithoutExtension;
-        public string Extension => simplifiedForm.TrailingSegment.Extension;
-        public bool HasExtension => simplifiedForm.TrailingSegment.HasExtension;
-
-        public bool IsFullyQualified => simplifiedForm.LeadingSegment.SegmentType == SegmentType.RootSegment ||
-                                        simplifiedForm.LeadingSegment.SegmentType == SegmentType.VolumeRelativeSegment ||
-                                        simplifiedForm.LeadingSegment.SegmentType == SegmentType.RemoteSegment;
-
-        public override string ToString()
-        {
-            return ConvertToString(this.Segments);
-        }
-
         internal static ISegment[] SimplifySegments(PathType pathType, ISegment[] segments)
         {
-            Stack<ISegment> stack = new Stack<ISegment>(segments);
-            Stack<ISegment> result = new Stack<ISegment>();
+            var stack = new Stack<ISegment>(segments);
+            var result = new Stack<ISegment>();
 
-           int popDepth = 0;
+            var popDepth = 0;
             Func<bool> ShouldDiscard = () =>
             {
                 if (popDepth > 0)
@@ -225,7 +254,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
                     // Any Device Segment anywhere in the path resolves immediately to
                     // that device and causes all other segments to be irrelevant.
                     case SegmentType.DeviceSegment:
-                        return new[] {current};
+                        return new[] { current };
 
                     // Handle all Absolute Segment types
                     // "True" Absolute segments must be the first segment.
@@ -242,7 +271,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
                             popDepth = 0;
                             result.Push(current);
                         }
-                        else if(!ShouldDiscard())
+                        else if (!ShouldDiscard())
                         {
                             // If there is no pop depth, keep the segment 
                             // It will be considered a "generic" segment for 
@@ -289,7 +318,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
                         //}
                         break;
                     // case SegmentType.GenericSegment:
-                    default: 
+                    default:
                         if (!ShouldDiscard())
                         {
                             result.Push(current);
@@ -298,7 +327,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
                 }
             }
 
-            for (int i = 0; i < popDepth; i++)
+            for (var i = 0; i < popDepth; i++)
             {
                 if (pathType == PathType.Posix)
                 {
@@ -330,72 +359,124 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
             return result.ToArray();
         }
 
-        public IPath ChangeExtension(string newExtension)
+        internal IPath AddToSegments(int offset, bool after, ISegment segment)
         {
-            if (newExtension == null)
+            if (after)
             {
-                newExtension = string.Empty;
-            }
-            if (newExtension.Length == 1 && newExtension[0] == '.')
-            {
-                newExtension = string.Empty;
-            }
-            else if (newExtension.Length > 1 && newExtension[0] == '.')
-            {
-                newExtension = newExtension.Substring(1);
+                offset++;
             }
 
-            string newName = string.Empty;
-            if (string.IsNullOrWhiteSpace(newExtension))
-            {
-                newName = NameWithoutExtension;
-            }
-            else
-            {
-                newName = string.Join(".", NameWithoutExtension, newExtension);
-            }
-
-            return ReplaceSegment(Segments.Count - 1, CreateSegment(TrailingSegment.SegmentType, newName));
-        }
-
-        public IPath ConvertToRelativePath()
-        {
-            ParsedPath path = (ParsedPath)this.Simplify();
-            while (path.Anchor == PathAnchor.Absolute)
-            {
-                if (path.Segments.Count > 1)
-                {
-                    path = CreateFromSegments(path.Segments.Skip(1));
-                }
-                else
-                {
-                    path = CreateFromSegments(new[] {(Segment)Segment.GetSelfSegment(path.PathType)});
-                }
-            }
-            return path;
-        }
-
-        public IPath Simplify()
-        {
-            return this.simplifiedForm;
-        }
-
-        public IPath AppendSegment(ISegment segment)
-        {
+            var newSegments = new List<ISegment>();
             if (segment == null)
             {
                 segment = Segment.GetEmptySegment(PathType);
             }
-            var clones = CloneSegments(this.Segments);
-            clones.Add(segment.Clone());
-            return CreateFromSegments(clones);
+            var clones = CloneSegments(Segments);
+
+            newSegments.AddRange(clones.Take(offset));
+            newSegments.Add(segment);
+            newSegments.AddRange(clones.Skip(offset));
+
+            return CreateFromSegments(newSegments);
         }
 
-        public IPath ReplaceSegment(int offset, ISegment segment)
+        protected abstract string ConvertToString(IEnumerable<ISegment> segments);
+
+        private static List<ISegment> CloneSegments(IEnumerable<ISegment> originalSegments)
         {
-            var clonedSegments = CloneSegments(this.Segments).ToArray();
-            clonedSegments[offset] = segment;
-            return CreateFromSegments(clonedSegments);
+            var segments = new List<ISegment>(from s in originalSegments
+                                              select (Segment)s.Clone());
+            return segments;
         }
+
+        private static SimplificationLevel GetSimplificationLevel(IPath path)
+        {
+            var retval = SimplificationLevel.Fully;
+
+            // This is a special case where the leading self reference can't be removed because 
+            // it would result in an empty path ... so in this case it's as normalized as possible 
+            if (path.Segments.Count == 1 && path.Segments[0].SegmentType == SegmentType.SelfSegment)
+            {
+                return SimplificationLevel.SelfReferenceOnly;
+            }
+
+            var leadingParentsConsumed = false;
+            foreach (var segment in path.Segments)
+            {
+                switch (segment.SegmentType)
+                {
+                    case SegmentType.ParentSegment:
+                        if (leadingParentsConsumed)
+                        {
+                            return SimplificationLevel.NotNormalized;
+                        }
+
+                        retval = SimplificationLevel.LeadingParentsOnly;
+                        continue;
+                    case SegmentType.EmptySegment:
+                    case SegmentType.NullSegment:
+                    case SegmentType.SelfSegment:
+                        return SimplificationLevel.NotNormalized;
+                    default:
+                        leadingParentsConsumed = true;
+                        continue;
+                }
+            }
+
+            return retval;
+        }
+
+        private static Segment[] TraverseSegmentChain(PathType pathType, IEnumerable<ISegment> segments)
+        {
+            var retval = new List<Segment>();
+            var selfSegment = pathType == PathType.Windows ? WindowsSegment.SelfSegment : (Segment)PosixSegment.SelfSegment;
+            if (segments == null || !segments.Any() ||
+                segments.Count() == 1 && (segments.First().SegmentType == SegmentType.NullSegment || segments.First().SegmentType == SegmentType.EmptySegment))
+            {
+                segments = new[] { (Segment)selfSegment.Clone() };
+            }
+
+            foreach (var segment in segments)
+            {
+                var newSegment = (Segment)segment.Clone();
+                retval.Add(newSegment);
+            }
+
+            return retval.ToArray();
+        }
+
+        private ParsedPath CreateFromSegments(IEnumerable<ISegment> segments)
+        {
+            var pathString = ConvertToString(CloneSegments(segments).ToArray());
+            return (ParsedPath)CreateFromSegments(PathType, pathString, segments.Cast<Segment>().ToArray());
+        }
+
+        private void InitializeFromSuppliedPathAndSegments(string suppliedPath, IEnumerable<ISegment> segments)
+        {
+            segments = TraverseSegmentChain(PathType, segments);
+            Segments = segments.ToArray();
+            LeadingSegment = Segments[0];
+            TrailingSegment = segments.Last();
+            suppliedForm = this;
+            SuppliedPathString = suppliedPath;
+            SuppliedPath = this;
+            simplifiedForm = CreateSimplifiedForm(this);
+            simplification = GetSimplificationLevel(this);
+        }
+
+        //public void Read(IParser parser, Type expectedType, ObjectDeserializer nestedObjectDeserializer)
+        //{
+        //    var value = parser.Consume<Scalar>().Value;
+        //    IPathParser pathParser = new PathParser();
+        //    var tempPath = pathParser.Parse(value);
+        //    this.PathType = tempPath.PathType;
+        //    InitializeFromSuppliedPathAndSegments(value, tempPath.Segments);
+        //}
+
+        //public void Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
+        //{
+        //    emitter.Emit(new Scalar(null, null, this.ToString(),
+        //        ScalarStyle.Any, true, false));
+        //}
     }
 }

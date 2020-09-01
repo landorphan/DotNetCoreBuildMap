@@ -13,41 +13,18 @@ using Landorphan.BuildMap.Model;
 
 namespace Landorphan.BuildMap.Construction
 {
+    using System.Reflection;
     using System.Xml.Linq;
     using System.Xml.XPath;
     using Landorphan.BuildMap.Abstractions.FileSystem;
     using Landorphan.BuildMap.Abstractions.VisualStudioSolutionFile;
     using Landorphan.Common;
     using Microsoft.Build.Construction;
+    using Newtonsoft.Json.Linq;
     using YamlDotNet.Core.Tokens;
 
     public class MapManagement
     {
-        public IEnumerable<FilePaths> LocateFiles(string workingDirectory, IEnumerable<string> globPatterns)
-        {
-            var fs = AbstractionManager.GetFileSystem();
-            if (string.IsNullOrWhiteSpace(workingDirectory))
-            {
-                workingDirectory = fs.GetWorkingDirectory();
-            }
-            List<FilePaths> retval = new List<FilePaths>();
-            var globs =
-                (from g in globPatterns
-               select Glob.Parse(g));
-            var files = fs.GetFiles(workingDirectory);
-            foreach (var file in files)
-            {
-                foreach (var glob in globs)
-                {
-                    if (glob.IsMatch(file.Absolute))
-                    {
-                        retval.Add(file);
-                        break;
-                    }
-                }
-            }
-            return retval;
-        }
 
         // public List<SuppliedFile> GetSuppliedFiles(IEnumerable<string> locatedFiles)
         // {
@@ -61,7 +38,7 @@ namespace Landorphan.BuildMap.Construction
         //     return retval;
         // }
 
-        private readonly Guid SolutionFolderGuid = new Guid("2150E333-8FDC-42A3-9474-1A3956D46DE8");
+//        private readonly Guid SolutionFolderGuid = new Guid("2150E333-8FDC-42A3-9474-1A3956D46DE8");
 //        private readonly Guid SharedProjectGuid = new Guid("D954291E-2A0B-460D-934E-DC6B0785DB48");
         
         public void IncorporateSolutionFileProjects(MapFiles mapFiles)
@@ -80,7 +57,7 @@ namespace Landorphan.BuildMap.Construction
                 {
                     var slnGuid = projectReference.Key;
                     var projectReferencePath = fs.NormalizePath(projectReference.Value.AbsolutePath);
-                    if (mapFiles.TryGetProjectFileBySafePath(projectReferencePath, out var projectFile))
+                    if (mapFiles.TryGetProjectFileBySafePath(projectReference.Value.RelativePath, projectReferencePath, out var projectFile))
                     {
                         solutionFile.SlnGuidToHashGuidLookup.Add(slnGuid, projectFile.Id);
                         projectFile.SolutionFiles.Add(solutionFile);
@@ -97,10 +74,12 @@ namespace Landorphan.BuildMap.Construction
                             var dependentOnHashGuid = solutionFile.SlnGuidToHashGuidLookup[dependentOnSlnGuid];
                             if (mapFiles.TryGetProjectFileByHashId(dependentOnHashGuid, out var dependentOnProject))
                             {
-                                if (!currentProjectFile.DependentOn.TryGetValue(dependentOnHashGuid, out _))
+                                if (!currentProjectFile.SolutionDependentOn.TryGetValue(dependentOnHashGuid, out var solutionProjectDependentOn))
                                 {
-                                    currentProjectFile.DependentOn.Add(dependentOnHashGuid, dependentOnProject);
+                                    solutionProjectDependentOn = new Dictionary<Guid, SuppliedProjectFile>();
+                                    currentProjectFile.SolutionDependentOn.Add(solutionFile.Id, solutionProjectDependentOn);
                                 }
+                                solutionProjectDependentOn.Add(dependentOnHashGuid, dependentOnProject);
                             }
                         }
                     }
@@ -117,14 +96,15 @@ namespace Landorphan.BuildMap.Construction
                 as IEnumerable<object>)?.Cast<XAttribute>();
             foreach (var include in projectReferences)
             {
-                var includePath = fs.GetAbsolutePath(fs.CombinePaths(suppliedProjectFile.Directory, include.Value));
+                var baseRelativePath = fs.CombinePaths(suppliedProjectFile.Directory, include.Value);
+                var includePath = fs.GetAbsolutePath(baseRelativePath);
                 SuppliedProjectFile includedSuppliedProjectFile;
                 // Guid includedProjectHashGuid;
                 // First attempt to lookup the project based on the "safe path".
-                if (mapFiles.TryGetProjectFileBySafePath(includePath, out includedSuppliedProjectFile) && 
-                    !suppliedProjectFile.DependentOn.TryGetValue(includedSuppliedProjectFile.Id, out _))
+                if (mapFiles.TryGetProjectFileBySafePath(baseRelativePath, includePath, out includedSuppliedProjectFile) && 
+                    !suppliedProjectFile.ProjectDependentOn.TryGetValue(includedSuppliedProjectFile.Id, out _))
                 {
-                    suppliedProjectFile.DependentOn.Add(includedSuppliedProjectFile.Id, includedSuppliedProjectFile);
+                    suppliedProjectFile.ProjectDependentOn.Add(includedSuppliedProjectFile.Id, includedSuppliedProjectFile);
                 }
                 // I think after refactor this is no longer necissary but keeping the code until we test ... just in case.
                 // else
@@ -184,15 +164,28 @@ namespace Landorphan.BuildMap.Construction
                 project.Language = DetermineProjectLanguage(projectFile);
                 project.Name = fs.GetNameWithoutExtension(projectFile.Paths.Relative);
                 var solutionNames =
-                (     from s in projectFile.SolutionFiles
-                    select fs.GetName(s.Paths.Relative));
+                (from s in projectFile.SolutionFiles
+                 select fs.GetName(s.Paths.Relative));
                 project.Solutions.AddRange(solutionNames);
                 project.RelativePath = projectFile.Paths.Relative;
                 project.AbsolutePath = projectFile.Paths.Absolute;
                 project.RealPath = projectFile.Paths.Real;
                 project.Status = projectFile.Status;
-                project.DependentOn.AddRange(projectFile.DependentOn.Keys);
+                project.DependentOn.AddRange(projectFile.ProjectDependentOn.Keys);
                 map.Build.Projects.Add(project);
+            }
+
+            return map;
+        }
+
+        public Map BaseOrderMap(Map map)
+        {
+            foreach (var project in map.Build.Projects)
+            {
+                if (project.Status != FileStatus.Valid)
+                {
+                    project.Group = -1;
+                }
             }
 
             return map;
@@ -200,19 +193,30 @@ namespace Landorphan.BuildMap.Construction
 
         public Map Create(string workingDirectory, IEnumerable<string> globPatterns)
         {
+            var fileSearcher = new FileSearcher();
             workingDirectory.ArgumentNotNullNorEmptyNorWhiteSpace(nameof(workingDirectory));
-            
+
             var fs = AbstractionManager.GetFileSystem();
             workingDirectory = fs.NormalizePath(workingDirectory);
-            IEnumerable<FilePaths> locatedFiles = LocateFiles(workingDirectory, globPatterns);
-            MapFiles mapFiles = new MapFiles(workingDirectory); 
+            IEnumerable<FilePaths> locatedFiles = fileSearcher.LocateFiles(workingDirectory, globPatterns);
+            MapFiles mapFiles = new MapFiles(workingDirectory);
             mapFiles.PreprocessList(locatedFiles);
 
             IncorporateSolutionFileProjects(mapFiles);
-            
+
             MapProjectLevelDependencies(mapFiles);
-            
-            return ConvertMapFilesToMap(workingDirectory, mapFiles);
+
+            foreach (var suppliedProjectFile in mapFiles.GetAllProjectFiles())
+            {
+                var circularReferenceChecker = new ProjectCircularReferenceChecker(suppliedProjectFile);
+                if (circularReferenceChecker.ValidateCircularReferences())
+                {
+                    suppliedProjectFile.Status = FileStatus.Circular;
+                }
+            }
+            var map = ConvertMapFilesToMap(workingDirectory, mapFiles);
+            BaseOrderMap(map);
+            return map;
         }
     }
 }

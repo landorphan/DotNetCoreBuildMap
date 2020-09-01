@@ -1,32 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Posix
+﻿namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Posix
 {
+    using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
+    using System.Text;
 
-    class PosixPath : ParsedPath
+    internal class PosixPath : ParsedPath
     {
-        public override PathType PathType => PathType.Posix;
-        public override PathAnchor Anchor 
-        { 
+        public override PathAnchor Anchor
+        {
             get
             {
-                if (this == this.simplifiedForm)
+                if (this == simplifiedForm)
                 {
-                    if ((this.LeadingSegment.SegmentType == SegmentType.RemoteSegment ||
-                         this.LeadingSegment.SegmentType == SegmentType.RootSegment))
+                    if (LeadingSegment.SegmentType == SegmentType.RemoteSegment ||
+                        LeadingSegment.SegmentType == SegmentType.RootSegment)
                     {
-                        return Paths.PathAnchor.Absolute;
+                        return PathAnchor.Absolute;
                     }
-                    return Paths.PathAnchor.Relative;
+                    return PathAnchor.Relative;
                 }
 
                 return simplifiedForm.Anchor;
             }
         }
+
+        public override PathType PathType => PathType.Posix;
 
         public override ISegment CreateSegment(SegmentType segmentType, string name)
         {
@@ -53,15 +52,15 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Posix
         /// <returns></returns>
         protected override string ConvertToString(IEnumerable<ISegment> segments)
         {
-            string separator = PosixRelevantPathChars.ForwardSlash.ToString(CultureInfo.InvariantCulture);
+            var separator = PosixRelevantPathChars.ForwardSlash.ToString(CultureInfo.InvariantCulture);
             var segmentArray = segments.ToArray();
             if (segmentArray.Length == 1 && segmentArray[0].SegmentType == SegmentType.RootSegment)
             {
                 return separator;
             }
-            StringBuilder builder = new StringBuilder();
+            var builder = new StringBuilder();
 
-            for (int i = 0; i < segmentArray.Length; i++)
+            for (var i = 0; i < segmentArray.Length; i++)
             {
                 var segment = segmentArray[i];
                 if (i > 0)
@@ -93,6 +92,5 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Posix
 
             return builder.ToString();
         }
-
     }
 }

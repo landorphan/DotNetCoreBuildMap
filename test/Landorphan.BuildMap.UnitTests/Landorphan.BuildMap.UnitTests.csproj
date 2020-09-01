@@ -1,11 +1,16 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
 
     <IsPackable>false</IsPackable>
     <CodeAnalysisRuleSet>..\..\CodeAnalysis\Default.Test.16.5.WithSonarLint.ruleset</CodeAnalysisRuleSet>
+    <DefaultItemExcludes>$(DefaultItemExcludes);TestAssets\SolutionFiles\**</DefaultItemExcludes>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="TestAssets\SolutionFiles\SimpleSolution\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\..\CodeAnalysis\CustomDictionary.xml" Link="CustomDictionary.xml" />
@@ -13,6 +18,7 @@
 
   <ItemGroup>
     <PackageReference Include="FluentAssertions" Version="5.10.3" />
+    <PackageReference Include="Landorphan.Common" Version="0.9.814" />
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -24,6 +30,9 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="SpecFlow" Version="3.4.3" />
+    <PackageReference Include="SpecFlow.NUnit" Version="3.4.3" />
+    <PackageReference Include="SpecFlow.Tools.MsBuild.Generation" Version="3.4.3" />
   </ItemGroup>
 
   <ItemGroup>
@@ -34,12 +43,62 @@
     <None Remove="TestAssets\Maps\ExeLibTest.yml" />
     <EmbeddedResource Include="TestAssets\Maps\ExeLibTest.yml" />
     <None Remove="TestAssets\Maps\ExeLibTest.map" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Specifications\MapFileCreation\MapFileEmptyFiles - Copy.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Specifications\MapFileCreation\MapFileSimpleCreation - Copy.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Specifications\MapFileCreation\Model.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Specifications\Model.feature.cs" />
     <EmbeddedResource Include="TestAssets\Maps\ExeLibTest.map" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\source\dotnetmap\dotnetmap.csproj" />
     <ProjectReference Include="..\..\source\Landorphan.BuildMap\Landorphan.BuildMap.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="TestAssets\SolutionFiles\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Specifications\MapFileCreation\MapFileMissingFiles.feature.cs">
+      <DependentUpon>MapFileMissingFiles.feature</DependentUpon>
+    </Compile>
+    <Compile Update="Specifications\MapFileCreation\ProjectCircularReferences.feature.cs">
+      <DependentUpon>ProjectCircularReferences.feature</DependentUpon>
+    </Compile>
+    <Compile Update="Specifications\MapFileCreation\MapFileSimpleCreation.feature.cs">
+      <DependentUpon>MapFileSimpleCreation.feature</DependentUpon>
+    </Compile>
+    <Compile Update="Specifications\Model.feature.cs">
+      <DependentUpon>%(Filename)</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <SpecFlowFeatureFiles Update="Specifications\MapFileCreation\MapFileMalformedFiles.feature">
+      <Visible>$(UsingMicrosoftNETSdk)</Visible>
+      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
+    </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Specifications\MapFileCreation\MapFileEmptyFiles.feature">
+      <Visible>$(UsingMicrosoftNETSdk)</Visible>
+      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
+    </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Specifications\MapFileCreation\MapFileMissingFiles.feature">
+      <Visible>$(UsingMicrosoftNETSdk)</Visible>
+      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
+    </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Specifications\MapFileCreation\ProjectCircularReferences.feature">
+      <Visible>$(UsingMicrosoftNETSdk)</Visible>
+      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
+    </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Specifications\MapFileCreation\MapFileSimpleCreation.feature">
+      <Visible>$(UsingMicrosoftNETSdk)</Visible>
+      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
+    </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Specifications\Model.feature">
+      <Visible>$(UsingMicrosoftNETSdk)</Visible>
+      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
+    </SpecFlowFeatureFiles>
   </ItemGroup>
 
 </Project>

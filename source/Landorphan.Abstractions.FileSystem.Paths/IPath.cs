@@ -10,6 +10,12 @@ namespace Landorphan.Abstractions.FileSystem.Paths
         Illegal
     }
 
+    public enum SerializationForm
+    {
+        Simple,
+        PathSegmentNotation
+    }
+
     public enum PathType
     {
         Windows,
@@ -32,43 +38,51 @@ namespace Landorphan.Abstractions.FileSystem.Paths
 
     public interface IPath
     {
-        string SuppliedPathString { get; }
+        PathAnchor Anchor { get; }
+        string Extension { get; }
+        bool HasExtension { get; }
+
+        bool IsDiscouraged { get; }
+        bool IsFullyQualified { get; }
 
         ISegment LeadingSegment { get; }
 
-        ISegment TrailingSegment { get; }
-
-        PathStatus Status { get; }
-
-        bool IsDiscouraged { get; }
+        string Name { get; }
+        string NameWithoutExtension { get; }
 
         PathType PathType { get; }
 
-        PathAnchor Anchor { get; }
+        ISegment RootSegment { get; }
 
         IReadOnlyList<ISegment> Segments { get; }
 
-        IPath SuppliedPath { get; }
-
-        IPath GetParent();
-
-        ISegment RootSegment { get; }
+        SerializationForm SerializationMethod { get; set; }
 
         SimplificationLevel SimplificationLevel { get; }
 
-        string Name { get; }
-        string NameWithoutExtension { get; }
-        string Extension { get; }
-        bool HasExtension { get; }
-        bool IsFullyQualified { get; }
+        PathStatus Status { get; }
+
+        IPath SuppliedPath { get; }
+
+        string SuppliedPathString { get; }
+
+        ISegment TrailingSegment { get; }
+        IPath AppendSegmentAfter(int offset, ISegment segment);
+        IPath AppendSegmentAtEnd(ISegment segment);
 
         IPath ChangeExtension(string newExtension);
         IPath ConvertToRelativePath();
-        IPath Simplify();
-
-        IPath ReplaceSegment(int offset, ISegment segment);
 
         ISegment CreateSegment(SegmentType segmentType, string name);
-        IPath AppendSegment(ISegment segment);
+
+        IPath GetParent();
+
+        IPath InsertSegmentAtBegining(ISegment segment);
+        IPath InsertSegmentBefore(int offset, ISegment segment);
+
+        IPath ReplaceSegment(int offset, ISegment segment);
+        IPath Simplify();
+
+        string ToPathSegmentNotation();
     }
 }
