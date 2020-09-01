@@ -32,11 +32,11 @@ Scenario: Single Solution with missing project files
 
 Scenario: Multiple solution with missing project files.
 	Given I locate the following project files:
-		| Name     | Language    | Status  |
-		| Project1 | CSharp      | Valid   |
-		| Project2 | FSharp      | Valid   |
-		| Project3 | VisualBasic | Valid   |
-		| Project4 | CSharp      | Missing |
+		| Name     | Language    | Status |
+		| Project1 | CSharp      | Valid  |
+		| Project2 | FSharp      | Valid  |
+		| Project3 | VisualBasic | Valid  |
+		| Project4 | CSharp      | Empty  |
       And I locate the following solution files: 
 		| Name      |
 		| Solution1 |
@@ -58,8 +58,8 @@ Scenario: Multiple solution with missing project files.
       And the projects and solutions are saved on disk
 	 When I create the map file with the following search patterns: **/*.sln;**/*.csproj;**/*.vbproj;**/*.fsproj
 	 Then the map file should contain the following projects:
-		| Group | Item | Types   | Language    | Name     | Status  | Solutions           | Id | Relative Path            | Dependent On |
-		| 0     | 0    | Library | CSharp      | Project1 | Valid   | Solution1,Solution2 | 1  | Project1`Project1.csproj |              |
-		| 0     | 0    | Library | FSharp      | Project2 | Valid   | Solution1           | 2  | Project2`Project2.fsproj | 1            |
-		| 0     | 0    | Library | VisualBasic | Project3 | Valid   | Solution1           | 3  | Project3`Project3.vbproj | 1            |
-		| -1    | 0    | Library | CSharp      | Project4 | Missing | Solution2           | 4  | Project4`Project4.csproj |              |
+		| Group | Item | Types   | Language    | Name     | Status | Solutions           | Id | Relative Path            | Dependent On |
+		| 0     | 0    | Library | CSharp      | Project1 | Valid  | Solution1,Solution2 | 1  | Project1`Project1.csproj |              |
+		| 0     | 0    | Library | FSharp      | Project2 | Valid  | Solution1           | 2  | Project2`Project2.fsproj | 1            |
+		| 0     | 0    | Library | VisualBasic | Project3 | Valid  | Solution1           | 3  | Project3`Project3.vbproj | 1            |
+		| -1    | 0    | Library | CSharp      | Project4 | Empty  | Solution2           | 4  | Project4`Project4.csproj |              |
