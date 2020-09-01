@@ -4,6 +4,8 @@ Feature: Map File Missing Files
 	As a developer
 	I want to to be able to create a mapping of all projects, their dependencies and their build order.
 
+	# default status is Valid
+
 Scenario: Build a Simple Project
 	Given I locate the following project files:
 		| Name     | Language | Status  |

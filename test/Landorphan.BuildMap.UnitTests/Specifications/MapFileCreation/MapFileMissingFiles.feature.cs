@@ -85,7 +85,7 @@ namespace Landorphan.BuildMap.UnitTests.Specifications.MapFileCreation
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Build a Simple Project", null, tagsOfScenario, argumentsOfScenario);
-#line 7
+#line 9
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -117,14 +117,14 @@ this.ScenarioInitialize(scenarioInfo);
                             "Project2",
                             "CSharp",
                             "Missing"});
-#line 8
+#line 10
  testRunner.Given("I locate the following project files:", ((string)(null)), table19, "Given ");
 #line hidden
                 TechTalk.SpecFlow.Table table20 = new TechTalk.SpecFlow.Table(new string[] {
                             "Name"});
                 table20.AddRow(new string[] {
                             "Solution1"});
-#line 12
+#line 14
       testRunner.And("I locate the following solution files:", ((string)(null)), table20, "And ");
 #line hidden
                 TechTalk.SpecFlow.Table table21 = new TechTalk.SpecFlow.Table(new string[] {
@@ -136,7 +136,7 @@ this.ScenarioInitialize(scenarioInfo);
                 table21.AddRow(new string[] {
                             "Solution1",
                             "Project2"});
-#line 15
+#line 17
    testRunner.And("the following solutions contain the following located projects:", ((string)(null)), table21, "And ");
 #line hidden
                 TechTalk.SpecFlow.Table table22 = new TechTalk.SpecFlow.Table(new string[] {
@@ -145,7 +145,7 @@ this.ScenarioInitialize(scenarioInfo);
                 table22.AddRow(new string[] {
                             "Project2",
                             "Project1"});
-#line 19
+#line 21
    testRunner.And("the following projects contain the following references:", ((string)(null)), table22, "And ");
 #line hidden
                 TechTalk.SpecFlow.Table table23 = new TechTalk.SpecFlow.Table(new string[] {
@@ -156,13 +156,13 @@ this.ScenarioInitialize(scenarioInfo);
                             "Solution1",
                             "Project2",
                             "Project1"});
-#line 23
+#line 25
    testRunner.And("the following solutions define the following additional dependencies:", ((string)(null)), table23, "And ");
 #line hidden
-#line 26
+#line 28
       testRunner.And("the projects and solutions are saved on disk", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 27
+#line 29
   testRunner.When("I create the map file with the following search patterns: **/*.sln", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
                 TechTalk.SpecFlow.Table table24 = new TechTalk.SpecFlow.Table(new string[] {
@@ -198,7 +198,7 @@ this.ScenarioInitialize(scenarioInfo);
                             "2",
                             "Project2`Project2.csproj",
                             ""});
-#line 28
+#line 30
   testRunner.Then("the map file should contain the following projects:", ((string)(null)), table24, "Then ");
 #line hidden
             }

@@ -2,7 +2,6 @@ namespace Landorphan.Abstractions.FileSystem.Paths
 {
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
     using System.Linq;
     using System.Runtime.InteropServices;
     using System.Text.RegularExpressions;
@@ -13,10 +12,11 @@ namespace Landorphan.Abstractions.FileSystem.Paths
 
     public class PathParser : IPathParser
     {
-        public static readonly string PathSegmentNotationSegmentRegexPattern =
-            @$"/?\{{([{string.Join(string.Empty, PathSegmentNotationComponents.SegmentTypeStrings)}])\}} ?([^/]*)";
+        public const string PathSegmentNotationQuickCheckToken = "PSN:";
         public const string PathTypeGroupName = "PathType";
         public const string SegmentGroupName = "Segment";
+        public static readonly string PathSegmentNotationSegmentRegexPattern =
+            @$"/?\{{([{string.Join(string.Empty, PathSegmentNotationComponents.SegmentTypeStrings)}])\}} ?([^/]*)";
         public static readonly string PathSegmentNotationPathRegexPattern =
             $@"\w*\[{PathSegmentNotationQuickCheckToken}(?<{PathTypeGroupName}>{PathSegmentNotationComponents.WindowsPathType}|{PathSegmentNotationComponents.PosixPathType})\]" +
             $@"(?<{SegmentGroupName}>{PathSegmentNotationSegmentRegexPattern})*";
@@ -25,7 +25,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths
 
         public IPath Parse(string pathString)
         {
-            bool windows = PathAbstractionManager.GetRuntimeInformation().IsOSPlatform(OSPlatform.Windows);
+            var windows = PathAbstractionManager.GetRuntimeInformation().IsOSPlatform(OSPlatform.Windows);
             if (windows)
             {
                 return Parse(pathString, PathType.Windows);
@@ -34,9 +34,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths
             return Parse(pathString, PathType.Posix);
         }
 
-        public const string PathSegmentNotationQuickCheckToken = "PSN:";
-
-        public IPath Parse(String pathString, PathType pathType)
+        public IPath Parse(string pathString, PathType pathType)
         {
             pathString ??= string.Empty;
             // NOTE: This is designed to be a very fast but possibly inaccurate test to see if this path is in PSN form.
@@ -61,7 +59,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths
                             throw new ArgumentException("Unrecognized Path Type");
                     }
                     var segmentMatchGroup = match.Groups[SegmentGroupName];
-                    List<Segment> parsedSegments = new List<Segment>();
+                    var parsedSegments = new List<Segment>();
                     foreach (Capture capture in segmentMatchGroup.Captures)
                     {
                         Segment parsedSegment;
@@ -81,7 +79,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths
             }
             var tokenizer = GetTokenizer(pathString, pathType);
             var tokens = tokenizer.GetTokens();
-            var segmenter = this.GetSegmenter(pathType);
+            var segmenter = GetSegmenter(pathType);
             var rawSegments = segmenter.GetSegments(tokens).ToArray();
             return ParsedPath.CreateFromSegments(pathType, pathString, rawSegments);
         }
@@ -93,10 +91,8 @@ namespace Landorphan.Abstractions.FileSystem.Paths
             {
                 return new WindowsSegmenter();
             }
-            else
-            {
-                return new PosixSegmenter();
-            }
+
+            return new PosixSegmenter();
         }
 
         private PathTokenizer GetTokenizer(string pathString, PathType pathType)
@@ -105,10 +101,8 @@ namespace Landorphan.Abstractions.FileSystem.Paths
             {
                 return new WindowsPathTokenizer(pathString);
             }
-            else
-            {
-                return new PosixPathTokenizer(pathString);
-            }
+
+            return new PosixPathTokenizer(pathString);
         }
     }
 }

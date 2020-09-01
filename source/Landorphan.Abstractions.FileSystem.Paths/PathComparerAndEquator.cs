@@ -1,26 +1,57 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Landorphan.Abstractions.FileSystem.Paths
+﻿namespace Landorphan.Abstractions.FileSystem.Paths
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.ComponentModel;
     using System.Globalization;
 
-    public interface IPathComparerAndEquator : IComparer<IPath>, IEqualityComparer<IPath>
-    {
-    }
+    public interface IPathComparerAndEquator : IComparer<IPath>, IEqualityComparer<IPath>, IComparer, IEqualityComparer
+    {}
 
-    public class PathComparerAndEquator : IPathComparerAndEquator
+    public sealed class PathComparerAndEquator : IPathComparerAndEquator
     {
-        private StringComparison comparisonMethod;
-        public PathComparerAndEquator(StringComparison comparisonMethod)
+        private readonly StringComparison stringComparison;
+
+        internal PathComparerAndEquator(StringComparison comparison)
         {
-            this.comparisonMethod = comparisonMethod;
+            if (!Enum.IsDefined(typeof(StringComparison), comparison))
+            {
+                throw new InvalidEnumArgumentException(nameof(comparison), (int)comparison, typeof(StringComparison));
+            }
+
+            stringComparison = comparison;
+        }
+
+        public static IPathComparerAndEquator CaseInsensitive { get; } = new PathComparerAndEquator(StringComparison.OrdinalIgnoreCase);
+
+        public static IPathComparerAndEquator CaseSensitive { get; } = new PathComparerAndEquator(StringComparison.Ordinal);
+
+        public int Compare(object x, object y)
+        {
+            return Compare(x as IPath, y as IPath);
         }
 
         public int Compare(IPath x, IPath y)
         {
-            return string.Compare(x.ToPathSegmentNotation(), y.ToPathSegmentNotation(), comparisonMethod);
+            if (ReferenceEquals(null, x))
+            {
+                // null (x) is less than not null (y)
+                return ReferenceEquals(null, y) ? 0 : -1;
+            }
+
+            if (ReferenceEquals(null, y))
+            {
+                // not null (x) is greater than null (y)
+                return 1;
+            }
+
+            return string.Compare(x.ToPathSegmentNotation(), y.ToPathSegmentNotation(), stringComparison);
+        }
+
+        public new bool Equals(object x, object y)
+        {
+            return Equals(x as IPath, y as IPath);
         }
 
         public bool Equals(IPath x, IPath y)
@@ -28,9 +59,28 @@ namespace Landorphan.Abstractions.FileSystem.Paths
             return Compare(x, y) == 0;
         }
 
+        public int GetHashCode(object obj)
+        {
+            if (!(obj is IPath asIPath))
+            {
+                return 0;
+            }
+
+            return GetHashCode(asIPath);
+        }
+
         public int GetHashCode(IPath obj)
         {
-            switch (comparisonMethod)
+            // ReSharper disable HeuristicUnreachableCode
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalse
+            if (ReferenceEquals(null, obj))
+            {
+                return 0;
+            }
+
+            // ReSharper restore HeuristicUnreachableCode
+
+            switch (stringComparison)
             {
                 case StringComparison.OrdinalIgnoreCase:
                 case StringComparison.InvariantCultureIgnoreCase:
@@ -44,8 +94,5 @@ namespace Landorphan.Abstractions.FileSystem.Paths
                     return obj.ToPathSegmentNotation().GetHashCode();
             }
         }
-
-        public static IPathComparerAndEquator CaseSensitive { get; } = new PathComparerAndEquator(StringComparison.Ordinal);
-        public static IPathComparerAndEquator CaseInsensitive { get; } = new PathComparerAndEquator(StringComparison.OrdinalIgnoreCase);
     }
 }
