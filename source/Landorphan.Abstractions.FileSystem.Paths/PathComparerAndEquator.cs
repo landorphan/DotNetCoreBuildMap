@@ -3,8 +3,8 @@
     using System;
     using System.Collections;
     using System.Collections.Generic;
-    using System.ComponentModel;
     using System.Globalization;
+    using Landorphan.Common;
 
     public interface IPathComparerAndEquator : IComparer<IPath>, IEqualityComparer<IPath>, IComparer, IEqualityComparer
     {}
@@ -15,10 +15,7 @@
 
         internal PathComparerAndEquator(StringComparison comparison)
         {
-            if (!Enum.IsDefined(typeof(StringComparison), comparison))
-            {
-                throw new InvalidEnumArgumentException(nameof(comparison), (int)comparison, typeof(StringComparison));
-            }
+            comparison.ArgumentMustBeValidEnumValue(nameof(comparison));
 
             stringComparison = comparison;
         }
