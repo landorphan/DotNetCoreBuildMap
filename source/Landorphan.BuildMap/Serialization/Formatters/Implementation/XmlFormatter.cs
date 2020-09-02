@@ -1,29 +1,29 @@
-using System.IO;
-using System.Text;
-using System.Xml;
-using Landorphan.BuildMap.Model;
-using Landorphan.BuildMap.Model.Support;
-using Landorphan.BuildMap.Serialization.Formatters.Interfaces;
-
 namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
 {
     using System;
+    using System.IO;
+    using System.Text;
+    using System.Xml;
+    using System.Xml.Serialization;
+    using Landorphan.BuildMap.Model;
+    using Landorphan.BuildMap.Model.Support;
+    using Landorphan.BuildMap.Serialization.Formatters.Interfaces;
     using Landorphan.Common;
 
     public class XmlFormatter : IFormatter
     {
-        private readonly System.Xml.Serialization.XmlSerializer serializer = new System.Xml.Serialization.XmlSerializer(
-            typeof(Map), new[] { typeof(Project), typeof(VersionString), typeof(Build) }); 
-        
-        public string Write(Map map)
+        private readonly XmlSerializer serializer = new XmlSerializer(
+            typeof(Map),
+            new[] {typeof(Project), typeof(VersionString), typeof(Build)});
+
+        public Map Read(string text)
         {
-            string result;
-            using (MemoryStream stream = new MemoryStream())
-            using (XmlTextWriter writer = new XmlTextWriter(stream, Encoding.UTF8))
+            Map result;
+            var bytes = Encoding.UTF8.GetBytes(text);
+            using (var stream = new MemoryStream(bytes))
+            using (var reader = new XmlTextReader(stream))
             {
-                writer.Formatting = Formatting.Indented;
-                serializer.Serialize(writer, map);
-                result = Encoding.UTF8.GetString(stream.ToArray());
+                result = (Map)serializer.Deserialize(reader);
             }
 
             return result;
@@ -35,14 +35,15 @@ namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
             return text.StartsWith("<", StringComparison.OrdinalIgnoreCase);
         }
 
-        public Map Read(string text)
+        public string Write(Map map)
         {
-            Map result;
-            byte[] bytes = Encoding.UTF8.GetBytes(text);
-            using (MemoryStream stream = new MemoryStream(bytes))
-            using (XmlTextReader reader = new XmlTextReader(stream))
+            string result;
+            using (var stream = new MemoryStream())
+            using (var writer = new XmlTextWriter(stream, Encoding.UTF8))
             {
-                result = (Map) serializer.Deserialize(reader);
+                writer.Formatting = Formatting.Indented;
+                serializer.Serialize(writer, map);
+                result = Encoding.UTF8.GetString(stream.ToArray());
             }
 
             return result;

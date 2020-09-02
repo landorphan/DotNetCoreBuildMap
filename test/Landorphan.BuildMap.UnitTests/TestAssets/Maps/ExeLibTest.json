@@ -53,8 +53,10 @@
         ],
         "Id": "f7dc32dc-072d-4736-a195-70b59c29991b",
         "RelativePath": "test/Landorphan.BuildMap.UnitTests/Landorphan.BuildMap.UnitTests.csproj",
-        "AbsolutePath": "/repo/macos/per/DotNetCoreBuildTools/test/Landorphan.BuildMap.UnitTests/Landorphan.BuildMap.UnitTests.csproj",
-        "RealPath": "/repo/macos/per/DotNetCoreBuildTools/test/Landorphan.BuildMap.UnitTests/Landorphan.BuildMap.UnitTests.csproj",
+        "AbsolutePath":
+          "/repo/macos/per/DotNetCoreBuildTools/test/Landorphan.BuildMap.UnitTests/Landorphan.BuildMap.UnitTests.csproj",
+        "RealPath":
+          "/repo/macos/per/DotNetCoreBuildTools/test/Landorphan.BuildMap.UnitTests/Landorphan.BuildMap.UnitTests.csproj",
         "DependentOn": [
           "837d14e7-8d17-4f04-a837-fc0e597aa9f4",
           "0038b977-b561-454b-ab0b-9ceeb0a9b695"

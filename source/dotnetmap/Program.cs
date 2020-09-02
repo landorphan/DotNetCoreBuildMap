@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.CommandLine;
-using System.IO;
-using dotnetmap.Commands;
-using Landorphan.BuildMap.Abstractions;
-
-namespace dotnetmap
+﻿namespace dotnetmap
 {
+    using System.CommandLine;
+    using dotnetmap.Commands;
+
     internal static class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             // IFileSystem fs = new FileSystemAbstraction();
             // var files = fs.GetFiles(fs.GetWorkingDirectory());

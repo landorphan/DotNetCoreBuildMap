@@ -1,4 +1,5 @@
 // ReSharper disable AssignmentInConditionalExpression
+
 namespace Landorphan.BuildMap.Abstractions.VisualStudioSolutionFile
 {
     using System;
@@ -6,7 +7,7 @@ namespace Landorphan.BuildMap.Abstractions.VisualStudioSolutionFile
 
     public interface ISolutionFile
     {
-        bool TryGetProjectBySlnGuid(Guid slnGuid, out IProjectInSolution projectInSolution);
         IEnumerable<IProjectInSolution> GetAllProjects();
+        bool TryGetProjectBySlnGuid(Guid slnGuid, out IProjectInSolution projectInSolution);
     }
 }

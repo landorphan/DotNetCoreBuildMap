@@ -1151,7 +1151,7 @@
       <Entry.SortBy>
         <Access Order="Public Internal ProtectedInternal Protected Private" />
         <Static />
-        <Name/>
+        <Name />
       </Entry.SortBy>
     </Entry>
     <!--</Region>-->

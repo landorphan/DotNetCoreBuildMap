@@ -32,7 +32,7 @@ namespace Landorphan.BuildMap.UnitTests
         public void ICanReadAJsonFile()
         {
             using (var stream = typeof(ConverterTests).Assembly.GetManifestResourceStream(
-                "Landorphan.BuildMap.UnitTests.TestAssets.Maps.ExeLibTest.json")) 
+                "Landorphan.BuildMap.UnitTests.TestAssets.Maps.ExeLibTest.json"))
             using (var reader = new StreamReader(stream))
             {
                 var json = reader.ReadToEnd();
@@ -45,7 +45,7 @@ namespace Landorphan.BuildMap.UnitTests
         public void ICanReadAMapFile()
         {
             using (var stream = typeof(ConverterTests).Assembly.GetManifestResourceStream(
-                "Landorphan.BuildMap.UnitTests.TestAssets.Maps.ExeLibTest.map")) 
+                "Landorphan.BuildMap.UnitTests.TestAssets.Maps.ExeLibTest.map"))
             using (var reader = new StreamReader(stream))
             {
                 var json = reader.ReadToEnd();

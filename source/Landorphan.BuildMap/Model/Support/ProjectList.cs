@@ -1,16 +1,15 @@
-using System;
-using System.Collections.Generic;
-
 namespace Landorphan.BuildMap.Model.Support
 {
+    using System;
+    using System.Collections.Generic;
+
     [Serializable]
     public class ProjectList : List<Project>
     {
         public ProjectList()
         {
-            
         }
-        
+
         public ProjectList(ICollection<Project> projects) : base(projects)
         {
         }

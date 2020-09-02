@@ -657,7 +657,8 @@
           <Or>
             <And>
               <Kind Is="Method" />
-              <HasAttribute Name="Microsoft.VisualStudio.TestTools.UnitTesting.ClassInitializeAttribute" Inherited="True" />
+              <HasAttribute Name="Microsoft.VisualStudio.TestTools.UnitTesting.ClassInitializeAttribute"
+                            Inherited="True" />
             </And>
             <And>
               <Kind Is="Method" />
@@ -677,7 +678,8 @@
           <Or>
             <And>
               <Kind Is="Method" />
-              <HasAttribute Name="Microsoft.VisualStudio.TestTools.UnitTesting.TestInitializeAttribute" Inherited="True" />
+              <HasAttribute Name="Microsoft.VisualStudio.TestTools.UnitTesting.TestInitializeAttribute"
+                            Inherited="True" />
             </And>
             <And>
               <Kind Is="Method" />
@@ -765,7 +767,8 @@
           <Or>
             <And>
               <Kind Is="Method" />
-              <HasAttribute Name="Microsoft.VisualStudio.TestTools.UnitTesting.AssemblyCleanupAttribute" Inherited="True" />
+              <HasAttribute Name="Microsoft.VisualStudio.TestTools.UnitTesting.AssemblyCleanupAttribute"
+                            Inherited="True" />
             </And>
             <And>
               <!-- could improve this to check for no namespace -->
@@ -1151,7 +1154,7 @@
         <Entry.SortBy>
           <Access Order="Public Internal ProtectedInternal Protected Private" />
           <Static />
-          <Name/>
+          <Name />
         </Entry.SortBy>
       </Entry>
     </Region>

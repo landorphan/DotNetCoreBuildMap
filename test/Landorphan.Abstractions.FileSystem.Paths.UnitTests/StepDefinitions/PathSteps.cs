@@ -230,6 +230,12 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
             }
         }
 
+        [Then(@"the path's anchor property should be (Relative|Absolute)")]
+        public void ThenThePathsAnchorPropertyShouldBe(PathAnchor anchor)
+        {
+            parsedPath.Anchor.Should().Be(anchor);
+        }
+
         [Given(@"the (parse|resulting) path's FullyQualified property should be: (true|false)")]
         [Then(@"the (parse|resulting) path's FullyQualified property should be: (true|false)")]
         public void ThenThePathSFullyQualifiedPropertyShouldBeFalse(string parseOrResulting, bool expected)
@@ -276,12 +282,6 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
         public void ThenThePathTypeShouldBeWindows(PathType pathType)
         {
             parsedPath.PathType.Should().Be(pathType);
-        }
-
-        [Then(@"the path's anchor property should be (Relative|Absolute)")]
-        public void ThenThePathsAnchorPropertyShouldBe(PathAnchor anchor)
-        {
-            parsedPath.Anchor.Should().Be(anchor);
         }
 
         [Then(@"the resulting path should have the following Simplification Level: (NotNormalized|SelfReferenceOnly|LeadingParentsOnly|Fully)")]

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Landorphan.Abstractions.FileSystem.Paths
+﻿namespace Landorphan.Abstractions.FileSystem.Paths
 {
     public static class PathDefaults
     {

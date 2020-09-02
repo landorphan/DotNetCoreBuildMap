@@ -1,6 +1,8 @@
 ﻿namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
 {
-    [JetBrains.Annotations.NoReorder]
+    using JetBrains.Annotations;
+
+    [NoReorder]
     public static class WindowsRelevantPathCharacters
     {
 // @formatter:off

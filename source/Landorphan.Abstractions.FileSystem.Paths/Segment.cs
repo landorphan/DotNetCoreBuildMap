@@ -14,7 +14,6 @@
 
         public static readonly string PathSegmentNotationSegmentRegexPattern =
             @$"/?\{{(?<{SegmentTypeGroupName}>[{string.Join(string.Empty, PathSegmentNotationComponents.SegmentTypeStrings)}])\}} ?(?<{SegmentNameGroupName}>[^/]*)";
-
         public static readonly Regex PathSegmentNotationSegmentRegex = new Regex(
             PathSegmentNotationSegmentRegexPattern,
             RegexOptions.Compiled);

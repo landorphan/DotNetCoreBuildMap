@@ -15,18 +15,20 @@ namespace Landorphan.BuildMap.Abstractions.VisualStudioSolutionFile
             this.projectInSolution = projectInSolution;
         }
 
-        public IEnumerable<Guid> GetProjectsThisProjectDependsOn()
-        {
-            List<Guid> retval = new GuidList(
-                (from g in projectInSolution.Dependencies
-                    select new Guid(g)).ToList());
-            return retval;
-        }
-
-        public Guid SlnGuid => new Guid(projectInSolution.ProjectGuid);
         public string AbsolutePath => projectInSolution.AbsolutePath;
         public string ProjectName => projectInSolution.ProjectName;
         public SolutionProjectType ProjectType => projectInSolution.ProjectType;
         public string RelativePath => projectInSolution.RelativePath;
+
+        public Guid SlnGuid => new Guid(projectInSolution.ProjectGuid);
+
+        public IEnumerable<Guid> GetProjectsThisProjectDependsOn()
+        {
+            List<Guid> retval = new GuidList(
+                (
+                    from g in projectInSolution.Dependencies
+                    select new Guid(g)).ToList());
+            return retval;
+        }
     }
 }

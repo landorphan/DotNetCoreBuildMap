@@ -1,9 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace Landorphan.BuildMap.Model.Support
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+
     [Serializable]
     public class GuidList : List<Guid>
     {
@@ -15,25 +15,26 @@ namespace Landorphan.BuildMap.Model.Support
         {
         }
 
-        public static implicit operator GuidList(Guid[] guids)
-        {
-            return new GuidList(guids);
-        }
-
         public override string ToString()
         {
-            StringBuilder output = new StringBuilder();
-            int item = 0;
+            var output = new StringBuilder();
+            var item = 0;
             foreach (var guid in this)
             {
                 if (item++ > 0)
                 {
                     output.Append(';');
                 }
+
                 output.Append(guid);
             }
 
             return output.ToString();
+        }
+
+        public static implicit operator GuidList(Guid[] guids)
+        {
+            return new GuidList(guids);
         }
     }
 }

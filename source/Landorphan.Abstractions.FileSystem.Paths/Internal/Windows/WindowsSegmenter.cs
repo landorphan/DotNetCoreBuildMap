@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
+﻿namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
 {
+    using System;
+    using System.Collections.Generic;
     using System.Linq;
 
     public class WindowsSegmenter : ISegmenter
@@ -20,7 +18,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
                 return segments.ToArray();
             }
 
-            for (int i = 0; i < tokens.Length; i++)
+            for (var i = 0; i < tokens.Length; i++)
             {
                 if (i == 0)
                 {
@@ -29,6 +27,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
                         segments.Add(new WindowsSegment(SegmentType.RemoteSegment, tokens[i].Substring(UncIndicator.Length)));
                         continue;
                     }
+
                     if (tokens[i].Contains(":"))
                     {
                         var parts = tokens[i].Split(':');

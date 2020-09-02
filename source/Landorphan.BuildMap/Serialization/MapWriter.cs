@@ -1,13 +1,12 @@
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using Landorphan.BuildMap.Model;
-using Landorphan.BuildMap.Serialization.Formatters.Implementation;
-using Landorphan.BuildMap.Serialization.Formatters.Interfaces;
-
 namespace Landorphan.BuildMap.Serialization
 {
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Text;
+    using Landorphan.BuildMap.Model;
+    using Landorphan.BuildMap.Serialization.Formatters.Implementation;
+    using Landorphan.BuildMap.Serialization.Formatters.Interfaces;
+
     public class MapWriter : IMapWriter
     {
         public void Write(Stream stream, Map map)
@@ -20,7 +19,10 @@ namespace Landorphan.BuildMap.Serialization
             Write(stream, map, writeFormat, null);
         }
 
-        public void Write(Stream stream, Map map, WriteFormat writeFormat,
+        public void Write(
+            Stream stream,
+            Map map,
+            WriteFormat writeFormat,
             IEnumerable<string> items)
         {
             IFormatWriter writer = null;
@@ -38,7 +40,7 @@ namespace Landorphan.BuildMap.Serialization
                 case WriteFormat.Json:
                     writer = new JsonFormatter();
                     break;
-                case WriteFormat.Xml: 
+                case WriteFormat.Xml:
                     writer = new XmlFormatter();
                     break;
                 default:
@@ -46,11 +48,11 @@ namespace Landorphan.BuildMap.Serialization
                     break;
             }
 
-            string content = writer.Write(map);
+            var content = writer.Write(map);
             // Create a writer which will not close the stream.
             // The stream is owned by the caller.
             var encoding = new UTF8Encoding(false);
-            using (StreamWriter streamWriter = new StreamWriter(stream, encoding, -1, true))
+            using (var streamWriter = new StreamWriter(stream, encoding, -1, true))
             {
                 streamWriter.WriteLine(content);
             }

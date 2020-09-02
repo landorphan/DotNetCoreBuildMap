@@ -33,6 +33,7 @@
                         continue;
                     }
                 }
+
                 if (i == 0)
                 {
                     if (tokens[i].StartsWith(UncIndicator, StringComparison.Ordinal))
@@ -46,8 +47,8 @@
                         segments.Add(new PosixSegment(SegmentType.RootSegment, string.Empty));
                         continue;
                     }
-
                 }
+
                 segments.Add(PosixSegment.ParseFromString(tokens[i]));
             }
 
