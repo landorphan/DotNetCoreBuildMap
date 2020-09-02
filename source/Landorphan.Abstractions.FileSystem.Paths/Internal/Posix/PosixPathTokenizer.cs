@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Posix
+﻿namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Posix
 {
+    using System;
+
     public class PosixPathTokenizer : PathTokenizer
     {
-        public const string DoubleForwardSlask = "//";
+        public const string DoubleForwardSlash = "//";
+
         public PosixPathTokenizer(string path) : base(PreParsePath(path))
         {
         }
@@ -18,14 +17,13 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Posix
                 return null;
             }
 
-            if (path.StartsWith(DoubleForwardSlask, StringComparison.Ordinal))
+            if (path.StartsWith(DoubleForwardSlash, StringComparison.Ordinal))
             {
                 // Converts the (\\server\...) pattern into (UNC:server\...)
-                path = "UNC:" + path.Substring(DoubleForwardSlask.Length);
+                path = "UNC:" + path.Substring(DoubleForwardSlash.Length);
             }
 
             return path;
         }
-
     }
 }

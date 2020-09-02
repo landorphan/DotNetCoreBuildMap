@@ -1,16 +1,16 @@
 ﻿Feature: Path last segment name features
 	In order to reliably interact with the file systems of multiple platforms
 	As a developer
-	I want path segment names to be handled corectly
+	I want path segment names to be handled correctly
 
 Scenario Outline: Get Segment Name Information (Last Segment)
 	Given I have the following path: <Path>
 	  And I'm running on the following Operating System: Linux
 	 When I parse the path 
-	 Then the parsed path's <Retreival> should be: <Value>
+	 Then the parsed path's <Retrieval> should be: <Value>
 	  And the path's has extension property is: <Has Extension>
 Examples:
-| Path           | Retreival            | Value      | Has Extension |
+| Path           | Retrieval            | Value      | Has Extension |
 | foo.txt        | Name                 | foo.txt    | true          |
 | foo.txt        | NameWithoutExtension | foo        | true          |
 | foo.txt        | Extension            | .txt       | true          |

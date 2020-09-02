@@ -1,21 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Landorphan.BuildMap.Construction
+﻿namespace Landorphan.BuildMap.Construction
 {
+    using System;
+    using System.Collections.Generic;
     using System.Linq;
     using Landorphan.BuildMap.Construction.SolutionModel;
-    using Landorphan.BuildMap.Model;
 
     public class ProjectCircularReferenceChecker
     {
+        private List<SuppliedProjectFile> circularReferences = new List<SuppliedProjectFile>();
         private SuppliedProjectFile project;
         private List<Guid> visitedProjectFiles = new List<Guid>();
-        private List<SuppliedProjectFile> circularReferences = new List<SuppliedProjectFile>();
+
         public ProjectCircularReferenceChecker(SuppliedProjectFile project)
         {
             this.project = project;
+        }
+
+        public bool ValidateCircularReferences()
+        {
+            visitedProjectFiles.Clear();
+            circularReferences.Clear();
+            project.ProjectCircularReferences.Clear();
+            foreach (var dependentOnProject in project.ProjectDependentOn)
+            {
+                ValidateCircularReferencesInternalLoop(dependentOnProject.Value);
+            }
+
+            if (circularReferences.Any())
+            {
+                project.ProjectCircularReferences.AddRange(circularReferences);
+                return true;
+            }
+
+            return false;
         }
 
         public void ValidateCircularReferencesInternalLoop(SuppliedProjectFile projectFileToEvaluate)
@@ -28,7 +45,6 @@ namespace Landorphan.BuildMap.Construction
                     if (dependentOnProject.Key == project.Id)
                     {
                         circularReferences.Add(dependentOnProject.Value);
-                        continue;
                     }
                     else
                     {
@@ -36,24 +52,6 @@ namespace Landorphan.BuildMap.Construction
                     }
                 }
             }
-        }
-
-        public bool ValidateCircularReferences()
-        {
-            visitedProjectFiles.Clear();
-            circularReferences.Clear();
-            project.ProjectCircularReferences.Clear();
-            foreach (var dependentOnProject in project.ProjectDependentOn)
-            {
-                ValidateCircularReferencesInternalLoop(dependentOnProject.Value);
-            }
-            if (circularReferences.Any())
-            {
-                project.ProjectCircularReferences.AddRange(circularReferences);
-                return true;
-            }
-
-            return false;
         }
     }
 }

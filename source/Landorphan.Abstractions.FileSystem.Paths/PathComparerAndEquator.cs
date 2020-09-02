@@ -7,7 +7,8 @@
     using Landorphan.Common;
 
     public interface IPathComparerAndEquator : IComparer<IPath>, IEqualityComparer<IPath>, IComparer, IEqualityComparer
-    {}
+    {
+    }
 
     public sealed class PathComparerAndEquator : IPathComparerAndEquator
     {

@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Posix
+﻿namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Posix
 {
+    using System;
+    using System.Collections.Generic;
     using System.Linq;
 
     public class PosixSegmenter : ISegmenter
@@ -19,7 +17,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Posix
                 return segments;
             }
 
-            for (int i = 0; i < tokens.Length; i++)
+            for (var i = 0; i < tokens.Length; i++)
             {
                 if (tokens.Length == 1)
                 {
@@ -35,6 +33,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Posix
                         continue;
                     }
                 }
+
                 if (i == 0)
                 {
                     if (tokens[i].StartsWith(UncIndicator, StringComparison.Ordinal))
@@ -48,8 +47,8 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Posix
                         segments.Add(new PosixSegment(SegmentType.RootSegment, string.Empty));
                         continue;
                     }
-
                 }
+
                 segments.Add(PosixSegment.ParseFromString(tokens[i]));
             }
 
@@ -63,6 +62,5 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Posix
 
             return segments;
         }
-
     }
 }

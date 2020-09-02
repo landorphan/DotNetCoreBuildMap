@@ -1,19 +1,18 @@
-using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.IO;
-using System.Text;
-using Landorphan.BuildMap.Model;
-using Landorphan.BuildMap.Serialization.Formatters.Implementation;
-using Landorphan.BuildMap.Serialization.Formatters.Interfaces;
-using Newtonsoft.Json;
-
 namespace Landorphan.BuildMap.Serialization
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Text;
+    using Landorphan.BuildMap.Model;
+    using Landorphan.BuildMap.Serialization.Formatters.Implementation;
+    using Landorphan.BuildMap.Serialization.Formatters.Interfaces;
+
     public class MapReader : IMapReader
     {
         private readonly Queue<IFormatReader> orderedReaders = new Queue<IFormatReader>();
         private readonly Dictionary<ReadFormat, IFormatReader> organizedReaders = new Dictionary<ReadFormat, IFormatReader>();
+
         public MapReader()
         {
             IFormatReader reader = new MapFormatter();
@@ -34,25 +33,29 @@ namespace Landorphan.BuildMap.Serialization
         {
             return Read(stream, ReadFormat.Map);
         }
-        
+
         public Map Read(Stream stream, ReadFormat formatHint)
         {
             Map map = null;
             string contents;
             // Create a reader which will not close a stream ... 
             // The stream is owned by the caller and not this code.
-            using (var reader = new StreamReader(stream, Encoding.UTF8, 
-                false, -1, true))
+            using (var reader = new StreamReader(
+                stream,
+                Encoding.UTF8,
+                false,
+                -1,
+                true))
             {
                 contents = reader.ReadToEnd();
             }
-            
+
             Console.Error.WriteLine($"Read contents Hint = {formatHint}.. ");
             // First try the suggested format.
             if (!TryRead(contents, organizedReaders[formatHint], out map))
             {
                 // Next go through the list and try each reader.
-                Console.Error.WriteLine($"Unable to read iterating over readers..");
+                Console.Error.WriteLine("Unable to read iterating over readers..");
                 foreach (var reader in orderedReaders)
                 {
                     if (TryRead(contents, reader, out map))
@@ -83,6 +86,7 @@ namespace Landorphan.BuildMap.Serialization
             {
                 Console.Error.WriteLine(e.ToString());
             }
+
             return false;
         }
     }

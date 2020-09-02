@@ -78,7 +78,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.UnitTests.Specifications.Path
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Comare two paths")]
+        [NUnit.Framework.DescriptionAttribute("Compare two paths")]
         [NUnit.Framework.TestCaseAttribute("Linux", "(null)", "/A", "less than", "Sensitive", null)]
         [NUnit.Framework.TestCaseAttribute("Linux", "/a", "(null)", "greater than", "Sensitive", null)]
         [NUnit.Framework.TestCaseAttribute("Linux", "(null)", "(null)", "equal to", "Sensitive", null)]
@@ -103,7 +103,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.UnitTests.Specifications.Path
         [NUnit.Framework.TestCaseAttribute("Windows", "/a", "/a", "equal to", "Insensitive", null)]
         [NUnit.Framework.TestCaseAttribute("Windows", "/A", "/a", "equal to", "Insensitive", null)]
         [NUnit.Framework.TestCaseAttribute("Windows", "/a", "/A", "equal to", "Insensitive", null)]
-        public virtual void ComareTwoPaths(string oS, string path1, string path2, string compareType, string comparer, string[] exampleTags)
+        public virtual void CompareTwoPaths(string oS, string path1, string path2, string compareType, string comparer, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
@@ -112,7 +112,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.UnitTests.Specifications.Path
             argumentsOfScenario.Add("Path 2", path2);
             argumentsOfScenario.Add("Compare Type", compareType);
             argumentsOfScenario.Add("Comparer", comparer);
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Comare two paths", null, tagsOfScenario, argumentsOfScenario);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Compare two paths", null, tagsOfScenario, argumentsOfScenario);
 #line 9
 this.ScenarioInitialize(scenarioInfo);
 #line hidden

@@ -21,12 +21,17 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
     [Binding]
     public sealed class PathSteps
     {
+        public IPath joinResultPath;
         public IPath normalizedPath;
         public IPath originalForm;
+        public IPath otherNormalizedPath;
+        public IPath otherParsedPath;
+        public string otherSuppliedPath;
         public IPath parsedPath;
         public IPath pathChangeResult;
         public string preParsedPath;
         public string suppliedPath;
+
         private static OSPlatform osPlatform;
         private readonly PathParser pathParser = new PathParser();
         private bool areEqual;
@@ -38,61 +43,43 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
         private int path2HashCode;
         private string psnForm;
         private ISegment[] segments;
-        private string seralizedForm;
+        private string serializedForm;
         private string serializeTo;
         private Exception thrownException;
         private string[] tokens;
         private string toStringReturned;
+        private PathType OtherPathType { get; set; }
         private PathType PathType { get; set; }
 
         [BeforeScenario]
         public void ResetAbstractionManagerForTest()
         {
-            PathAbstractionManager.GetRuntimeInformation = () =>
-            {
-                return new MockRuntimeInformation();
-            };
+            PathAbstractionManager.GetRuntimeInformation = () => new MockRuntimeInformation();
         }
 
-        [Then(@"the two paths should be the same")]
-        public void ComparePaths()
+        [Given(@"I have the following other path: (.*)")]
+        public void GivenIHaveTheFollowingOtherPath(string path)
         {
-            pathChangeResult.PathType.Should().Be(parsedPath.PathType);
-            pathChangeResult.Anchor.Should().Be(parsedPath.Anchor);
-            pathChangeResult.IsDiscouraged.Should().Be(parsedPath.IsDiscouraged);
-            pathChangeResult.IsFullyQualified.Should().Be(parsedPath.IsFullyQualified);
-            pathChangeResult.Segments.Count.Should().Be(parsedPath.Segments.Count);
-            for (var i = 0; i < pathChangeResult.Segments.Count; i++)
+            if (path == "(null)")
             {
-                CompareSegment(pathChangeResult.Segments[i], parsedPath.Segments[i].ToPathSegmentNotation());
-            }
-        }
-
-        public void CompareSegment(ISegment actualSegment, string value)
-        {
-            //            value = PreparePathForTest(value);
-            var expected = ParseSegment(value);
-            if (PathType == PathType.Posix)
-            {
-                actualSegment.ToString().Should().Be(expected.ToString());
+                otherSuppliedPath = null;
             }
             else
             {
-                actualSegment.ToString().Should().BeEquivalentTo(expected.ToString());
+                otherSuppliedPath = path.Contains("PSN:", StringComparison.Ordinal) ? path.Replace('`', '\\') : PreparePathForTest(path);
             }
-            actualSegment.SegmentType.Should().Be(expected.SegmentType);
         }
 
         [Given(@"I have the following path: (.*)")]
         public void GivenIHaveTheFollowingPath(string path)
         {
-            if (path.Contains("PSN:", StringComparison.Ordinal))
+            if (path == "(null)")
             {
-                suppliedPath = path.Replace('`', '\\');
+                suppliedPath = null;
             }
             else
             {
-                suppliedPath = PreparePathForTest(path);
+                suppliedPath = path.Contains("PSN:", StringComparison.Ordinal) ? path.Replace('`', '\\') : PreparePathForTest(path);
             }
         }
 
@@ -123,34 +110,33 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
 
             if (pathNumber == 1)
             {
-                path1 = path == "(null)" ? null : parser.Parse(path,PathType);
+                path1 = path == "(null)" ? null : parser.Parse(path, PathType);
             }
             else
             {
-                path2 = path == "(null)" ? null: parser.Parse(path,PathType);
+                path2 = path == "(null)" ? null : parser.Parse(path, PathType);
             }
         }
 
-        public string PreparePathForTest(string path)
+        [Then(@"The join result should be a new instance")]
+        public void TheJoinResultShouldBeANewInstance()
         {
-            for (var i = 0; i <= WindowsRelevantPathCharacters.Space; i++)
-            {
-                path = path.Replace($"%{i:X2}", ((char)i).ToString(), StringComparison.Ordinal);
-            }
-            if (path == "(null)")
-            {
-                path = null;
-            }
-            else if (path == "(empty)")
-            {
-                path = string.Empty;
-            }
-            else
-            {
-                path = path.Replace('`', '\\');
-            }
+            joinResultPath.Should().NotBeSameAs(parsedPath);
+            joinResultPath.Should().NotBeSameAs(otherParsedPath);
+        }
 
-            return path;
+        [Then(@"The join result should have the expected status: (.*)")]
+        public void TheJoinResultShouldHaveTheExpectedStatus (string expectedStatus)
+        {
+            var actualStatus = joinResultPath.Status.ToString();
+            actualStatus.Should().BeEquivalentTo(expectedStatus);
+        }
+
+        [Then(@"The join result should have the expected value: (.*)")]
+        public void TheJoinResultShouldHaveTheExpectedValue(string expectedPsn)
+        {
+            var actualPsn = joinResultPath.ToPathSegmentNotation();
+            actualPsn.Should().BeEquivalentTo(expectedPsn);
         }
 
         [Then(@"an exception of type ""(.*)"" should be thrown")]
@@ -207,25 +193,8 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
             }
         }
 
-        [Then(@"segment '(.*)' should be: (.*)")]
-        public void ThenSegmentShouldBeNull(int segment, string value)
-        {
-
-            ISegment actual;
-            if (segment >= segments.Length)
-            {
-                actual = WindowsSegment.NullSegment;
-            }
-            else
-            {
-                actual = segments[segment];
-            }
-            CompareSegment(actual, value);
-
-        }
-
         [Then(@"token '(.*)' should be: (.*)")]
-        public void ThenSetmentShouldBe(int loc, string expected)
+        public void ThenSegmentShouldBe(int loc, string expected)
         {
             string actual = null;
             if (loc < tokens.Length)
@@ -245,6 +214,22 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
             actual.Should().Be(expected);
         }
 
+        [Then(@"segment '(.*)' should be: (.*)")]
+        public void ThenSegmentShouldBeNull(int segment, string value)
+        {
+            ISegment actual;
+            if (segment >= segments.Length)
+            {
+                actual = WindowsSegment.NullSegment;
+            }
+            else
+            {
+                actual = segments[segment];
+            }
+
+            CompareSegment(actual, value);
+        }
+
         [Then(@"the exception message should contain: (.*)")]
         public void ThenTheExceptionMessageShouldContainMessagePart(string messagePart)
         {
@@ -252,7 +237,7 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
         }
 
         [Then(@"The following PSN string should be produced: (.*)")]
-        public void ThenTheFollowingPSNStringShouldBeProduced(string expectedPsn)
+        public void ThenTheFollowingPsnStringShouldBeProduced(string expectedPsn)
         {
             psnForm.Should().Be(expectedPsn.Replace('`', '\\'));
         }
@@ -263,11 +248,11 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
             if (serializeTo == "Json")
             {
                 // Json has to escape '\' characters so we make that adjustment here.
-                seralizedForm.Should().Be(serializedForm.Replace("`", @"\\", StringComparison.OrdinalIgnoreCase));
+                this.serializedForm.Should().Be(serializedForm.Replace("`", @"\\", StringComparison.OrdinalIgnoreCase));
             }
             else
             {
-                seralizedForm.Should().Be(serializedForm);
+                this.serializedForm.Should().Be(serializedForm);
             }
         }
 
@@ -283,7 +268,12 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
             {
                 pathChangeResult.Status.Should().Be(status);
             }
+        }
 
+        [Then(@"the path's anchor property should be (Relative|Absolute)")]
+        public void ThenThePathsAnchorPropertyShouldBe(PathAnchor anchor)
+        {
+            parsedPath.Anchor.Should().Be(anchor);
         }
 
         [Given(@"the (parse|resulting) path's FullyQualified property should be: (true|false)")]
@@ -334,12 +324,6 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
             parsedPath.PathType.Should().Be(pathType);
         }
 
-        [Then(@"the psth's anchor property should be (Relative|Absolute)")]
-        public void ThenThePsthSIsNoramlizedPropertyShouldBeTrue(PathAnchor anchor)
-        {
-            parsedPath.Anchor.Should().Be(anchor);
-        }
-
         [Then(@"the resulting path should have the following Simplification Level: (NotNormalized|SelfReferenceOnly|LeadingParentsOnly|Fully)")]
         public void ThenTheResultingPathShouldHaveTheFollowingNormalizationLevel(SimplificationLevel simplificationLevel)
         {
@@ -379,6 +363,20 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
             segments.Length.Should().Be(expected);
         }
 
+        [Then(@"the two paths should be the same")]
+        public void ThenTheTwoPathsShouldBeTheSame()
+        {
+            pathChangeResult.PathType.Should().Be(parsedPath.PathType);
+            pathChangeResult.Anchor.Should().Be(parsedPath.Anchor);
+            pathChangeResult.IsDiscouraged.Should().Be(parsedPath.IsDiscouraged);
+            pathChangeResult.IsFullyQualified.Should().Be(parsedPath.IsFullyQualified);
+            pathChangeResult.Segments.Count.Should().Be(parsedPath.Segments.Count);
+            for (var i = 0; i < pathChangeResult.Segments.Count; i++)
+            {
+                CompareSegment(pathChangeResult.Segments[i], parsedPath.Segments[i].ToPathSegmentNotation());
+            }
+        }
+
         [When(@"I ask for the parent path")]
         public void WhenIAskForTheParentPath()
         {
@@ -389,6 +387,12 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
         public void WhenIAskForThePathToBeRepresentedAsAString()
         {
             toStringReturned = parsedPath.ToString();
+        }
+
+        [When(@"I call path join other")]
+        public void WhenICallPathJoinOther()
+        {
+            joinResultPath = parsedPath.Join(otherParsedPath);
         }
 
         [When(@"I change the path's extension to: (.*)")]
@@ -415,6 +419,7 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
                     comparer = PathUtilities.DefaultComparerAndEquator;
                     break;
             }
+
             compareResult = comparer.Compare(path1, path2);
             path1HashCode = comparer.GetHashCode(path1);
             path2HashCode = comparer.GetHashCode(path2);
@@ -428,7 +433,7 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
         }
 
         [When(@"I evaluate the original form")]
-        public void WhenIEvaluteTheNonnormalizedForm()
+        public void WhenIEvaluateTheNonNormalizedForm()
         {
             originalForm = parsedPath.SuppliedPath;
             segments = originalForm.Segments.ToArray();
@@ -446,7 +451,6 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
             {
                 parsedPath = parsedPath.AppendSegmentAfter(offset, segment);
             }
-
         }
 
         [When(@"I simplify the path")]
@@ -455,6 +459,16 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
             normalizedPath = parsedPath.Simplify();
             pathChangeResult = normalizedPath;
             preParsedPath = normalizedPath.ToString();
+        }
+
+        [Given(@"I parse the other path")]
+        [When(@"I parse the other path")]
+        public void WhenIParseTheOtherPath()
+        {
+            otherParsedPath = pathParser.Parse(otherSuppliedPath);
+            OtherPathType = otherParsedPath.PathType;
+            // NOTE: Unless this is overriden by a test step ... the normalized path = the parsedPath on first parsing 
+            otherNormalizedPath = otherParsedPath;
         }
 
         [Given(@"I parse the path")]
@@ -469,10 +483,10 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
 
         [Given(@"I parse the path as a (Windows|Posix) Path")]
         [When(@"I parse the path as a (Windows|Posix) Path")]
-        public void WhenIParseThePathAsA_pathType_Path(PathType pathtype)
+        public void WhenIParseThePathAsA_pathType_Path(PathType pathType)
         {
-            PathType = pathtype;
-            parsedPath = pathParser.Parse(suppliedPath, pathtype);
+            PathType = pathType;
+            parsedPath = pathParser.Parse(suppliedPath, pathType);
         }
 
         [When(@"I preparse the path as a (Posix|Windows) style path")]
@@ -496,7 +510,7 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
 
         [When(@"the (parsed|resulting) path's (Name|NameWithoutExtension|Extension) should be: (.*)")]
         [Then(@"the (parsed|resulting) path's (Name|NameWithoutExtension|Extension) should be: (.*)")]
-        public void WhenIRetreiveTheNameOfTheLastSegment(string whichPath, string nameFunction, string value)
+        public void WhenIRetrieveTheNameOfTheLastSegment(string whichPath, string nameFunction, string value)
         {
             value = PreparePathForTest(value);
             var path = whichPath == "parsed" ? parsedPath : pathChangeResult;
@@ -541,7 +555,7 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
             switch (serializeTo)
             {
                 case "Json":
-                    seralizedForm = JsonConvert.SerializeObject(parsedPath);
+                    serializedForm = JsonConvert.SerializeObject(parsedPath);
                     break;
                 case "Xml":
                     var XmlSer = new XmlSerializer(typeof(ParsedPath));
@@ -550,12 +564,13 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
                     {
                         writer.Formatting = Formatting.Indented;
                         XmlSer.Serialize(writer, parsedPath);
-                        seralizedForm = Encoding.UTF8.GetString(stream.ToArray());
+                        serializedForm = Encoding.UTF8.GetString(stream.ToArray());
                     }
+
                     break;
                 case "Yaml":
                     var YamlSer = new Serializer();
-                    seralizedForm = YamlSer.Serialize(parsedPath);
+                    serializedForm = YamlSer.Serialize(parsedPath);
                     break;
             }
         }
@@ -580,6 +595,22 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
         public void WhenThePathSHasExtensionPropertyIs(bool hasExtension)
         {
             parsedPath.HasExtension.Should().Be(hasExtension);
+        }
+
+        private void CompareSegment(ISegment actualSegment, string value)
+        {
+            //            value = PreparePathForTest(value);
+            var expected = ParseSegment(value);
+            if (PathType == PathType.Posix)
+            {
+                actualSegment.ToString().Should().Be(expected.ToString());
+            }
+            else
+            {
+                actualSegment.ToString().Should().BeEquivalentTo(expected.ToString());
+            }
+
+            actualSegment.SegmentType.Should().Be(expected.SegmentType);
         }
 
         private ISegment ParseSegment(string value)
@@ -651,6 +682,29 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
             }
 
             return expected;
+        }
+
+        private string PreparePathForTest(string path)
+        {
+            for (var i = 0; i <= WindowsRelevantPathCharacters.Space; i++)
+            {
+                path = path.Replace($"%{i:X2}", ((char)i).ToString(), StringComparison.Ordinal);
+            }
+
+            if (path == "(null)")
+            {
+                path = null;
+            }
+            else if (path == "(empty)")
+            {
+                path = string.Empty;
+            }
+            else
+            {
+                path = path.Replace('`', '\\');
+            }
+
+            return path;
         }
 
         internal class MockRuntimeInformation : IRuntimeInformation

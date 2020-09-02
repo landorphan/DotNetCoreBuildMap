@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Landorphan.BuildMap.UnitTests.TestHelpers
+﻿namespace Landorphan.BuildMap.UnitTests.TestHelpers
 {
     public class TestProjectReference
     {

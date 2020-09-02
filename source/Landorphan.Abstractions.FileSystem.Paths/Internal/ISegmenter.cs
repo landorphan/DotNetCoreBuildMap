@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Landorphan.Abstractions.FileSystem.Paths.Internal
+﻿namespace Landorphan.Abstractions.FileSystem.Paths.Internal
 {
+    using System.Collections.Generic;
+
     public interface ISegmenter
     {
         IEnumerable<Segment> GetSegments(string[] tokens);

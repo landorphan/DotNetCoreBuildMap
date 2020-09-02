@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Landorphan.BuildMap.UnitTests.TestHelpers
+﻿namespace Landorphan.BuildMap.UnitTests.TestHelpers
 {
-    class LocatedProjectsInSolutions
+    internal class LocatedProjectsInSolutions
     {
-        public string Solution { get; set; }
         public string Project { get; set; }
+        public string Solution { get; set; }
     }
 }

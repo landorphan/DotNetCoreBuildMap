@@ -1,12 +1,12 @@
-using System.CommandLine;
-
 namespace dotnetmap.Commands
 {
+    using System.CommandLine;
+
     public class ActUponBase : MapBase
     {
         public ActUponBase(string name, string description) : base(name, description)
         {
-            this.AddOption(MapFileArgument.ExistingOnly());
+            AddOption(MapFileArgument.ExistingOnly());
         }
     }
 }

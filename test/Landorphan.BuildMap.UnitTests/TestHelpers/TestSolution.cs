@@ -1,45 +1,43 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Landorphan.BuildMap.UnitTests.TestAssets.TestHelpers
+﻿namespace Landorphan.BuildMap.UnitTests.TestAssets.TestHelpers
 {
-    using NUnit.Framework.Constraints;
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
 
     public class TestSolution
     {
-        public Guid SolutionId { get; set; } = Guid.NewGuid();
-        public string Name { get; set; }
-        public string FileName => $"{Name}.sln";
-
-        public List<string> BuildConfigurations = new List<string>()
+        public List<string> BuildConfigurations = new List<string>
         {
             "Debug|Any CPU"
         };
-
-        public List<TestProject> Projects { get; set; } = new List<TestProject>();
-
-        private const string VisualStudioHeader = "Microsoft Visual Studio Solution File, Format Version 12.00";
-        private const string VisualStudioVersionComment = "# Visual Studio Version 16";
-        private const string VisualStudioVersionLine = "VisualStudioVersion = 16.0.30225.117";
-        private const string VisualStudioMinimumVersion = "MinimumVisualStudioVersion = 15.0.26124.0";
-        private string GenerateProjectLineStart(TestProject project)
-        {
-            return $"Project(\"{{{project.ProjectGuid}}}\") = \"{project.Name}\", \"{project.RelativePath}\", \"{{{project.Id}}}\"";
-        }
+        private const string EndGlobalLine = "EndGlobal";
+        private const string EndGlobalSection = "    EndGlobalSection";
 
         private const string ProjectLineEnd = "EndProject";
-        public Dictionary<Guid, List<Guid>> SolutionDependencies { get; set; } = new Dictionary<Guid, List<Guid>>();
-        private const string SolutionDependenciesStart = "    ProjectSection(ProjectDependencies) = postProject";
         private const string SolutionDependenciesEnd = "    EndProjectSection";
-        private string GenerateSolutionDependencyLine(Guid projectId)
-        {
-            return $"        {{{projectId}}} = {{{projectId}}}";
-        }
-        private string GenerateConfigurationLine(string buildConfig)
-        {
-            return $"        {{{buildConfig}}} = {{{buildConfig}}}";
-        }
+        private const string SolutionDependenciesStart = "    ProjectSection(ProjectDependencies) = postProject";
+
+        private const string StartBuildConfigurationPlatforms = "    GlobalSection(ProjectConfigurationPlatforms) = postSolution";
+
+        private const string StartConfigurationPlatforms = "    GlobalSection(SolutionConfigurationPlatforms) = preSolution";
+
+        private const string StartGlobalLine = "Global";
+
+        private const string StartSolutionExtGlobals = "    GlobalSection(ExtensibilityGlobals) = postSolution";
+
+        private const string StartSolutionProperties = "    GlobalSection(SolutionProperties) = preSolution";
+
+        private const string VisualStudioHeader = "Microsoft Visual Studio Solution File, Format Version 12.00";
+        private const string VisualStudioMinimumVersion = "MinimumVisualStudioVersion = 15.0.26124.0";
+        private const string VisualStudioVersionComment = "# Visual Studio Version 16";
+        private const string VisualStudioVersionLine = "VisualStudioVersion = 16.0.30225.117";
+        public string FileName => $"{Name}.sln";
+        public string Name { get; set; }
+
+        public List<TestProject> Projects { get; set; } = new List<TestProject>();
+        public Dictionary<Guid, List<Guid>> SolutionDependencies { get; set; } = new Dictionary<Guid, List<Guid>>();
+        public Guid SolutionId { get; set; } = Guid.NewGuid();
+
         public void AddSolutionDependency(TestProject project, TestProject dependentOnProject)
         {
             if (!SolutionDependencies.TryGetValue(project.Id, out var dependentOnList))
@@ -47,37 +45,22 @@ namespace Landorphan.BuildMap.UnitTests.TestAssets.TestHelpers
                 dependentOnList = new List<Guid>();
                 SolutionDependencies.Add(project.Id, dependentOnList);
             }
+
             if (!dependentOnList.Contains(dependentOnProject.Id))
             {
                 dependentOnList.Add(dependentOnProject.Id);
             }
         }
 
-        private const string StartGlobalLine = "Global";
-        private const string EndGlobalLine = "EndGlobal";
-
-        private const string StartConfigurationPlatforms = "    GlobalSection(SolutionConfigurationPlatforms) = preSolution";
-        private const string EndGlobalSection = "    EndGlobalSection";
-
-        private const string StartBuildConfigurationPlatforms = "    GlobalSection(ProjectConfigurationPlatforms) = postSolution";
-        private string GenerateBuildConfigurationPlatformLine(TestProject project, string buildConfig)
-        {
-            return $"        {{{project.Id}}}.{buildConfig}.Build.0 = {buildConfig}";
-        }
-
-        private const string StartSolutionProperties = "    GlobalSection(SolutionProperties) = preSolution";
-
-        private const string StartSolutionExtGlobals = "	GlobalSection(ExtensibilityGlobals) = postSolution";
-
         public string GetFileContent()
         {
-            StringBuilder builder = new StringBuilder();
+            var builder = new StringBuilder();
             builder.AppendLine(VisualStudioHeader);
             builder.AppendLine(VisualStudioVersionComment);
             builder.AppendLine(VisualStudioVersionLine);
             builder.AppendLine(VisualStudioMinimumVersion);
 
-            foreach(var project in Projects)
+            foreach (var project in Projects)
             {
                 builder.AppendLine(GenerateProjectLineStart(project));
                 if (SolutionDependencies.TryGetValue(project.Id, out var dependentOnProjects))
@@ -87,8 +70,10 @@ namespace Landorphan.BuildMap.UnitTests.TestAssets.TestHelpers
                     {
                         builder.AppendLine(GenerateSolutionDependencyLine(dependentOnProject));
                     }
+
                     builder.AppendLine(SolutionDependenciesEnd);
                 }
+
                 builder.AppendLine(ProjectLineEnd);
             }
 
@@ -98,6 +83,7 @@ namespace Landorphan.BuildMap.UnitTests.TestAssets.TestHelpers
             {
                 builder.AppendLine(GenerateConfigurationLine(buildConfiguration));
             }
+
             builder.AppendLine(EndGlobalSection);
             builder.AppendLine(StartBuildConfigurationPlatforms);
             foreach (var project in Projects)
@@ -107,6 +93,7 @@ namespace Landorphan.BuildMap.UnitTests.TestAssets.TestHelpers
                     builder.AppendLine(GenerateBuildConfigurationPlatformLine(project, buildConfig));
                 }
             }
+
             builder.AppendLine(EndGlobalSection);
             builder.AppendLine(StartSolutionProperties);
             builder.AppendLine("        HideSolutionNode = FALSE");
@@ -118,6 +105,26 @@ namespace Landorphan.BuildMap.UnitTests.TestAssets.TestHelpers
             builder.AppendLine(EndGlobalLine);
 
             return builder.ToString();
+        }
+
+        private string GenerateBuildConfigurationPlatformLine(TestProject project, string buildConfig)
+        {
+            return $"        {{{project.Id}}}.{buildConfig}.Build.0 = {buildConfig}";
+        }
+
+        private string GenerateConfigurationLine(string buildConfig)
+        {
+            return $"        {{{buildConfig}}} = {{{buildConfig}}}";
+        }
+
+        private string GenerateProjectLineStart(TestProject project)
+        {
+            return $"Project(\"{{{project.ProjectGuid}}}\") = \"{project.Name}\", \"{project.RelativePath}\", \"{{{project.Id}}}\"";
+        }
+
+        private string GenerateSolutionDependencyLine(Guid projectId)
+        {
+            return $"        {{{projectId}}} = {{{projectId}}}";
         }
     }
 }

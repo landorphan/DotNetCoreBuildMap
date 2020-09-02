@@ -18,6 +18,7 @@
                     {
                         return PathAnchor.Absolute;
                     }
+
                     return PathAnchor.Relative;
                 }
 
@@ -58,6 +59,7 @@
             {
                 return separator;
             }
+
             var builder = new StringBuilder();
 
             for (var i = 0; i < segmentArray.Length; i++)
@@ -67,6 +69,7 @@
                 {
                     builder.Append(separator);
                 }
+
                 switch (segment.SegmentType)
                 {
                     case SegmentType.RemoteSegment:

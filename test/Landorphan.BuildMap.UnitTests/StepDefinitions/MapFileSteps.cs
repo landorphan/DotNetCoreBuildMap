@@ -1,38 +1,46 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using TechTalk.SpecFlow;
-
-namespace Landorphan.BuildMap.UnitTests.StepDefinitions
+﻿namespace Landorphan.BuildMap.UnitTests.StepDefinitions
 {
+    using System;
+    using System.Collections.Generic;
     using System.IO;
-    using System.Reflection;
+    using System.Linq;
+    using System.Text;
     using FluentAssertions;
     using Landorphan.BuildMap.Construction;
     using Landorphan.BuildMap.Model;
     using Landorphan.BuildMap.UnitTests.TestAssets.TestHelpers;
     using Landorphan.BuildMap.UnitTests.TestHelpers;
+    using TechTalk.SpecFlow;
     using TechTalk.SpecFlow.Assist;
 
     [Binding]
     public sealed class MapFileSteps
     {
-        private ScenarioContext scenario;
-        private TestProjectsAndSolutions projectsAndSolutions = new TestProjectsAndSolutions();
         private Dictionary<string, TestProject> allProjects = new Dictionary<string, TestProject>();
         private Dictionary<string, TestSolution> allSolutions = new Dictionary<string, TestSolution>();
+        private string currentLocation;
+
+        private Dictionary<int, Guid> idMap = new Dictionary<int, Guid>();
+        private Map map;
         private MapManagement mapManagement = new MapManagement();
+        private TestProjectsAndSolutions projectsAndSolutions = new TestProjectsAndSolutions();
+        private ScenarioContext scenario;
+
+        private List<FileStatus> setableStatuses = new List<FileStatus>
+        {
+            FileStatus.Empty,
+            FileStatus.Malformed,
+            FileStatus.Missing,
+            FileStatus.Valid
+        };
         private string testDirectory;
         private string testId = Guid.NewGuid().ToString();
-        private string currentLocation;
         private string testName;
-        private Map map;
 
         public MapFileSteps(ScenarioContext scenario)
         {
             this.scenario = scenario;
-            testName = scenario.ScenarioInfo.Title.Replace(" ", string.Empty, StringComparison.Ordinal).TrimEnd(new char[] {'.', ' '});
+            testName = scenario.ScenarioInfo.Title.Replace(" ", string.Empty, StringComparison.Ordinal).TrimEnd('.', ' ');
             currentLocation = Path.GetDirectoryName(typeof(MapFileSteps).Assembly.Location);
             testDirectory = Path.Combine(currentLocation, "TestExecution", testName, testId);
         }
@@ -67,6 +75,69 @@ namespace Landorphan.BuildMap.UnitTests.StepDefinitions
             //TODO: implement logic that has to run after executing each scenario
         }
 
+        [Given(@"I locate the following project files:")]
+        public void GivenIHaveTheFollowingProjectFiles(Table table)
+        {
+            foreach (var project in table.CreateSet<TestProject>())
+            {
+                if (!setableStatuses.Contains(project.Status))
+                {
+                    throw new ArgumentException("Can not create projects of that status here.  Use a different test step.");
+                }
+
+                if (project.Status != FileStatus.Missing)
+                {
+                    projectsAndSolutions.Projects.Add(project.Name, project);
+                }
+
+                allProjects.Add(project.Name, project);
+            }
+        }
+
+        [Given(@"I locate the following solution files:")]
+        public void GivenIHaveTheFollowingSolutionFiles(Table table)
+        {
+            foreach (var solution in table.CreateSet<TestSolution>())
+            {
+                projectsAndSolutions.Solutions.Add(solution.Name, solution);
+                allSolutions.Add(solution.Name, solution);
+            }
+        }
+
+        [Given(@"the following projects contain the following references:")]
+        public void GivenTheFollowingProjectsContainTheFollowingReferences(Table table)
+        {
+            foreach (var projectReference in table.CreateSet<TestProjectReference>())
+            {
+                var project = allProjects[projectReference.Project];
+                var reference = allProjects[projectReference.Reference];
+                project.References.Add(reference);
+            }
+        }
+
+        [Given(@"the following solutions contain the following located projects:")]
+        public void GivenTheFollowingSolutionsContainTheFollowingProjects(Table table)
+        {
+            foreach (var locatedProjectInSolutions in table.CreateSet<LocatedProjectsInSolutions>())
+            {
+                var solution = projectsAndSolutions.Solutions[locatedProjectInSolutions.Solution];
+                var project = allProjects[locatedProjectInSolutions.Project];
+                solution.Projects.Add(project);
+            }
+        }
+
+        [Given(@"the following solutions define the following additional dependencies:")]
+        public void GivenTheFollowingSolutionsDefineTheFollowingAdditionalDependencies(Table table)
+        {
+            foreach (var solutionDependency in table.CreateSet<TestSolutionDependency>())
+            {
+                var solution = allSolutions[solutionDependency.Solution];
+                var baseProject = allProjects[solutionDependency.BaseProject];
+                var dependentOnProject = allProjects[solutionDependency.DependentOn];
+                solution.AddSolutionDependency(baseProject, dependentOnProject);
+            }
+        }
+
         [Given(@"the projects and solutions are saved on disk")]
         public void GivenTheProjectsAndSolutionsAreSavedOnDisk()
         {
@@ -95,6 +166,7 @@ namespace Landorphan.BuildMap.UnitTests.StepDefinitions
                     }
                 }
             }
+
             foreach (var solution in allSolutions.Values)
             {
                 var solutionLocation = Path.Combine(testDirectory, solution.FileName);
@@ -112,29 +184,10 @@ namespace Landorphan.BuildMap.UnitTests.StepDefinitions
             }
         }
 
-        private Dictionary<int, Guid> idMap = new Dictionary<int, Guid>();
-
-        [When(@"I create the map file with the following search patterns: (.*)")]
-        public void WhenICreateTheMapFile(string searchPatterns)
-        {
-            map = mapManagement.Create(testDirectory, searchPatterns.Split(';'));
-            var projects =
-               (from p in map.Build.Projects
-             orderby p.Name
-              select p);
-            // Intentionally 1 adjusted (counting like normal people not developers) so
-            // the test case makes more sense to non developers.
-            int i = 1;
-            foreach (var project in projects)
-            {
-                idMap.Add(i++, project.Id);
-            }
-        }
-        
         [Then(@"the map file should contain the following projects:")]
         public void ThenTheMapFileShouldContainTheFollowingProjects(Table table)
         {
-            List<Project> expectedProjectLists = new List<Project>();
+            var expectedProjectLists = new List<Project>();
             var orderedExpected = table.CreateSet<TestMapProject>().OrderBy(p => p.Name);
             foreach (var testMapProject in orderedExpected)
             {
@@ -142,16 +195,17 @@ namespace Landorphan.BuildMap.UnitTests.StepDefinitions
                 project.Id = idMap[testMapProject.Id];
                 project.Group = testMapProject.Group;
                 project.Item = testMapProject.Item;
-                project.Types = testMapProject.Types.Split(new char[] {',', ';'});
+                project.Types = testMapProject.Types.Split(',', ';');
                 project.Language = testMapProject.Language;
                 project.Name = testMapProject.Name;
                 project.Status = testMapProject.Status;
-                project.Solutions = (from n in testMapProject.Solutions.Split(new char[] {',', ';'})
-                                   select $"{n}.sln").ToArray();
+                project.Solutions = (
+                    from n in testMapProject.Solutions.Split(',', ';')
+                    select $"{n}.sln").ToArray();
                 project.RelativePath = testMapProject.RelativePath.Replace('`', '\\');
                 if (!string.IsNullOrWhiteSpace(testMapProject.DependentOn))
                 {
-                    var strings = testMapProject.DependentOn.Split(new char[] {',', ';'});
+                    var strings = testMapProject.DependentOn.Split(',', ';');
                     foreach (var str in strings)
                     {
                         if (!string.IsNullOrWhiteSpace(str))
@@ -162,14 +216,15 @@ namespace Landorphan.BuildMap.UnitTests.StepDefinitions
                         }
                     }
                 }
+
                 expectedProjectLists.Add(project);
             }
 
-            Project[] actualProjects = map.Build.Projects.ToArray();
-            Project[] expectedProjects = expectedProjectLists.ToArray();
+            var actualProjects = map.Build.Projects.ToArray();
+            var expectedProjects = expectedProjectLists.ToArray();
 
             actualProjects.Length.Should().Be(expectedProjects.Length);
-            for (int i = 0; i < expectedProjects.Length; i++)
+            for (var i = 0; i < expectedProjects.Length; i++)
             {
                 var expectedProject = expectedProjects[i];
                 var actualProject = actualProjects[i];
@@ -187,75 +242,21 @@ namespace Landorphan.BuildMap.UnitTests.StepDefinitions
             }
         }
 
-
-        [Given(@"the following solutions contain the following located projects:")]
-        public void GivenTheFollowingSolutionsContainTheFollowingProjects(Table table)
+        [When(@"I create the map file with the following search patterns: (.*)")]
+        public void WhenICreateTheMapFile(string searchPatterns)
         {
-            foreach (var locatedProjectInSolutions in table.CreateSet<LocatedProjectsInSolutions>())
+            map = mapManagement.Create(testDirectory, searchPatterns.Split(';'));
+            var projects =
+                from p in map.Build.Projects
+                orderby p.Name
+                select p;
+            // Intentionally 1 adjusted (counting like normal people not developers) so
+            // the test case makes more sense to non developers.
+            var i = 1;
+            foreach (var project in projects)
             {
-                var solution = projectsAndSolutions.Solutions[locatedProjectInSolutions.Solution];
-                var project = allProjects[locatedProjectInSolutions.Project];
-                solution.Projects.Add(project);
+                idMap.Add(i++, project.Id);
             }
         }
-
-        [Given(@"the following projects contain the following references:")]
-        public void GivenTheFollowingProjectsContainTheFollowingReferences(Table table)
-        {
-            foreach (var projectReference in table.CreateSet<TestProjectReference>())
-            {
-                var project = allProjects[projectReference.Project];
-                var reference = allProjects[projectReference.Reference];
-                project.References.Add(reference);
-            }
-        }
-
-
-        [Given(@"the following solutions define the following additional dependencies:")]
-        public void GivenTheFollowingSolutionsDefineTheFollowingAdditionalDependencies(Table table)
-        {
-            foreach (var solutionDependency in table.CreateSet<TestSolutionDependency>())
-            {
-                var solution = allSolutions[solutionDependency.Solution];
-                var baseProject = allProjects[solutionDependency.BaseProject];
-                var dependentOnProject = allProjects[solutionDependency.DependentOn];
-                solution.AddSolutionDependency(baseProject, dependentOnProject);
-            }
-        }
-
-        private List<FileStatus> setableStatuses = new List<FileStatus>(){
-                FileStatus.Empty,
-                FileStatus.Malformed,
-                FileStatus.Missing,
-                FileStatus.Valid
-            };
-
-        [Given(@"I locate the following project files:")]
-        public void GivenIHaveTheFollowingProjectFiles(Table table)
-        {
-            foreach (var project in table.CreateSet<TestProject>())
-            {
-                if (!setableStatuses.Contains(project.Status))
-                {
-                    throw new ArgumentException("Can not create projects of that status here.  Use a different test step.");
-                }
-                if (project.Status != FileStatus.Missing)
-                {
-                    projectsAndSolutions.Projects.Add(project.Name, project);
-                }
-                allProjects.Add(project.Name, project);
-            }
-        }
-
-        [Given(@"I locate the following solution files:")]
-        public void GivenIHaveTheFollowingSolutionFiles(Table table)
-        {
-            foreach (var solution in table.CreateSet<TestSolution>())
-            {
-                projectsAndSolutions.Solutions.Add(solution.Name, solution);
-                allSolutions.Add(solution.Name, solution);
-            }
-        }
-
     }
 }

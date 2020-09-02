@@ -28,6 +28,26 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{02B21CD9-EEF1-4CED-843C-D043274C7C7D}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		.gitignore = .gitignore
+		LICENSE = LICENSE
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JetBrains", "JetBrains", "{5E283DF1-6248-40CF-BECB-7D8BD20229D8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Layout", "Layout", "{9D22DB47-16C1-463D-B561-961A3E11C8AE}"
+	ProjectSection(SolutionItems) = preProject
+		JetBrains\Layout\ResharperLayout.Current.xml = JetBrains\Layout\ResharperLayout.Current.xml
+		JetBrains\Layout\ResharperLayout.Editing.xml = JetBrains\Layout\ResharperLayout.Editing.xml
+		JetBrains\Layout\ResharperLayoutFull.2018.1.4.WithoutRegions.xml = JetBrains\Layout\ResharperLayoutFull.2018.1.4.WithoutRegions.xml
+		JetBrains\Layout\ResharperLayoutFull.2018.2.3.WithoutRegions.xml = JetBrains\Layout\ResharperLayoutFull.2018.2.3.WithoutRegions.xml
+		JetBrains\Layout\ResharperLayoutFull.2018.3.2.WithoutRegions.xml = JetBrains\Layout\ResharperLayoutFull.2018.3.2.WithoutRegions.xml
+		JetBrains\Layout\ResharperLayoutFull.2018.3.3.WithoutRegions.xml = JetBrains\Layout\ResharperLayoutFull.2018.3.3.WithoutRegions.xml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Rider", "Rider", "{53BB6EDA-0B82-4FEA-AF2C-C20236A46A3B}"
+	ProjectSection(SolutionItems) = preProject
+		JetBrains\Rider\JetBrains.Rider.Settings.FromLinux.zip = JetBrains\Rider\JetBrains.Rider.Settings.FromLinux.zip
+		JetBrains\Rider\JetBrains.Rider.Settings.FromWindows.jar = JetBrains\Rider\JetBrains.Rider.Settings.FromWindows.jar
 	EndProjectSection
 EndProject
 Global
@@ -110,6 +130,8 @@ Global
 		{AC59C39F-835C-49D9-BAE7-A3053E6700A9} = {4CA46513-1029-4EE4-83B6-882623A9F7FB}
 		{9E2026C4-F4D6-4D8B-8BD7-4DA2B358D14C} = {4CA46513-1029-4EE4-83B6-882623A9F7FB}
 		{364231A5-CADE-438B-8391-54A77470784A} = {D524C632-A572-4AAD-9AB6-F80832FC2FEB}
+		{9D22DB47-16C1-463D-B561-961A3E11C8AE} = {5E283DF1-6248-40CF-BECB-7D8BD20229D8}
+		{53BB6EDA-0B82-4FEA-AF2C-C20236A46A3B} = {5E283DF1-6248-40CF-BECB-7D8BD20229D8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A00F56A6-D7FB-4D52-95CF-FFBDA93FA0AD}

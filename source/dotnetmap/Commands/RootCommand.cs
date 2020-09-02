@@ -1,7 +1,7 @@
-using System.CommandLine;
-
 namespace dotnetmap.Commands
 {
+    using System.CommandLine;
+
     public class DotNetMapCommand : RootCommand
     {
         public const string DotNetMapDescription =

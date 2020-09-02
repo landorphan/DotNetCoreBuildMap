@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Landorphan.BuildMap.Construction
+﻿namespace Landorphan.BuildMap.Construction
 {
+    using System.Collections.Generic;
     using System.Linq;
     using DotNet.Globbing;
     using Landorphan.BuildMap.Abstractions;
@@ -18,10 +15,11 @@ namespace Landorphan.BuildMap.Construction
             {
                 workingDirectory = fs.GetWorkingDirectory();
             }
-            List<FilePaths> retval = new List<FilePaths>();
+
+            var retval = new List<FilePaths>();
             var globs =
-                (from g in globPatterns
-                    select Glob.Parse(g));
+                from g in globPatterns
+                select Glob.Parse(g);
             var files = fs.GetFiles(workingDirectory);
             foreach (var file in files)
             {
@@ -34,6 +32,7 @@ namespace Landorphan.BuildMap.Construction
                     }
                 }
             }
+
             return retval;
         }
     }

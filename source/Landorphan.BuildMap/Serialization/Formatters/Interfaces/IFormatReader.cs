@@ -1,10 +1,10 @@
-using Landorphan.BuildMap.Model;
-
 namespace Landorphan.BuildMap.Serialization.Formatters.Interfaces
 {
+    using Landorphan.BuildMap.Model;
+
     public interface IFormatReader
     {
-        bool SniffValidFormat(string text);
         Map Read(string text);
+        bool SniffValidFormat(string text);
     }
 }

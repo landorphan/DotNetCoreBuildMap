@@ -20,7 +20,8 @@ namespace Landorphan.Abstractions.FileSystem.Paths
         public static readonly string PathSegmentNotationPathRegexPattern =
             $@"\w*\[{PathSegmentNotationQuickCheckToken}(?<{PathTypeGroupName}>{PathSegmentNotationComponents.WindowsPathType}|{PathSegmentNotationComponents.PosixPathType})\]" +
             $@"(?<{SegmentGroupName}>{PathSegmentNotationSegmentRegexPattern})*";
-        public static readonly Regex PathSegmentNotationPathRegex = new Regex(PathSegmentNotationPathRegexPattern,
+        public static readonly Regex PathSegmentNotationPathRegex = new Regex(
+            PathSegmentNotationPathRegexPattern,
             RegexOptions.Compiled);
 
         public IPath Parse(string pathString)
@@ -58,6 +59,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths
                         default:
                             throw new ArgumentException("Unrecognized Path Type");
                     }
+
                     var segmentMatchGroup = match.Groups[SegmentGroupName];
                     var parsedSegments = new List<Segment>();
                     foreach (Capture capture in segmentMatchGroup.Captures)
@@ -71,12 +73,14 @@ namespace Landorphan.Abstractions.FileSystem.Paths
                         {
                             parsedSegment = WindowsSegment.ParseFromString(capture.Value);
                         }
+
                         parsedSegments.Add(parsedSegment);
                     }
 
                     return ParsedPath.CreateFromSegments(pathType, pathString, parsedSegments);
                 }
             }
+
             var tokenizer = GetTokenizer(pathString, pathType);
             var tokens = tokenizer.GetTokens();
             var segmenter = GetSegmenter(pathType);

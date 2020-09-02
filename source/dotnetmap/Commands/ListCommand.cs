@@ -1,16 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.CommandLine;
-using System.CommandLine.Invocation;
-using System.IO;
-using System.Linq;
-using Landorphan.BuildMap.Model;
-using Landorphan.BuildMap.Serialization;
-using Landorphan.BuildMap.Serialization.Formatters.Implementation;
-
 namespace dotnetmap.Commands
 {
+    using System;
+    using System.Collections.Generic;
+    using System.CommandLine.Invocation;
+    using System.IO;
+    using Landorphan.BuildMap.Model;
+    using Landorphan.BuildMap.Serialization;
     using Landorphan.Common;
+
     public class ListCommand : DisplayBase
     {
         public ListCommand() : base("list", "Lists the projects in the map.")
@@ -24,7 +21,7 @@ namespace dotnetmap.Commands
 
             Console.Error.WriteLine("Listing projects...");
             IMapReader reader = new MapReader();
-            IMapWritter writer = new MapWritter();
+            IMapWriter writer = new MapWriter();
             Map mapObject = null;
             ReadFormat formatHint;
 
@@ -45,9 +42,10 @@ namespace dotnetmap.Commands
                     formatHint = ReadFormat.Map;
                     break;
             }
+
             Console.Error.WriteLine($"Map Structure is {formatHint}...");
 
-            Console.Error.WriteLine($"Reading Input...");
+            Console.Error.WriteLine("Reading Input...");
             using (var stream = map.OpenRead())
             {
                 mapObject = reader.Read(stream, formatHint);
@@ -55,14 +53,15 @@ namespace dotnetmap.Commands
 
             if (mapObject != null)
             {
-                Console.Error.WriteLine($"Map successfully read ... ");
+                Console.Error.WriteLine("Map successfully read ... ");
                 byte[] data;
-                using (var memstream = new MemoryStream())
+                using (var memoryStream = new MemoryStream())
                 {
                     Console.Error.WriteLine("Writing output");
-                    writer.Write(memstream, mapObject, format, items);
-                    data = memstream.GetBuffer();
+                    writer.Write(memoryStream, mapObject, format, items);
+                    data = memoryStream.GetBuffer();
                 }
+
                 Stream outputStream = null;
                 try
                 {
@@ -74,6 +73,7 @@ namespace dotnetmap.Commands
                     {
                         outputStream = Console.OpenStandardOutput();
                     }
+
                     outputStream.Write(data);
                 }
                 finally
