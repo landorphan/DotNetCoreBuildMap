@@ -55,7 +55,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
 
         public IReadOnlyList<ISegment> Segments { get; private set; }
 
-        public SerializationForm SerializationMethod { get; set; } = PathDefaults.DefaultSerializationMethod;
+        public SerializationForm SerializationMethod { get; set; } = PathUtilities.DefaultSerializationMethod;
 
         public SimplificationLevel SimplificationLevel => simplification;
 

@@ -6,6 +6,7 @@
     public static class PathUtilities
     {
         public static IPathComparerAndEquator CaseInsensitiveComparerAndEquator { get; } = PathComparerAndEquator.CaseInsensitive;
+
         public static IPathComparerAndEquator CaseSensitiveComparerAndEquator { get; } = PathComparerAndEquator.CaseSensitive;
 
         public static IPathComparerAndEquator DefaultComparerAndEquator
@@ -18,5 +19,7 @@
                 return ri.IsOSPlatform(OSPlatform.Windows) ? CaseInsensitiveComparerAndEquator : CaseSensitiveComparerAndEquator;
             }
         }
+
+        public static SerializationForm DefaultSerializationMethod { get; set; }
     }
 }

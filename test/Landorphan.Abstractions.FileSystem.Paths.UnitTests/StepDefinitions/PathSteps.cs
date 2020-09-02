@@ -121,8 +121,22 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
         [Then(@"The join result should be a new instance")]
         public void TheJoinResultShouldBeANewInstance()
         {
-            ReferenceEquals(joinResultPath, parsedPath).Should().BeFalse();
-            ReferenceEquals(joinResultPath, otherParsedPath).Should().BeFalse();
+            joinResultPath.Should().NotBeSameAs(parsedPath);
+            joinResultPath.Should().NotBeSameAs(otherParsedPath);
+        }
+
+        [Then(@"The join result should have the expected status: (.*)")]
+        public void TheJoinResultShouldHaveTheExpectedStatus (string expectedStatus)
+        {
+            var actualStatus = joinResultPath.Status.ToString();
+            actualStatus.Should().BeEquivalentTo(expectedStatus);
+        }
+
+        [Then(@"The join result should have the expected value: (.*)")]
+        public void TheJoinResultShouldHaveTheExpectedValue(string expectedPsn)
+        {
+            var actualPsn = joinResultPath.ToPathSegmentNotation();
+            actualPsn.Should().BeEquivalentTo(expectedPsn);
         }
 
         [Then(@"an exception of type ""(.*)"" should be thrown")]
