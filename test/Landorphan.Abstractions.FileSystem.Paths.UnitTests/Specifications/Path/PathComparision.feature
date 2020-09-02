@@ -4,9 +4,9 @@ Feature: Path Comparison
 	As a developer
 	I need to be able to compare two paths
 
-# TODO: mocking mechansim for PathUtilities.DefaultComparison (i.e. on Windows run a Linux test).
+# TODO: mocking mechanism for PathUtilities.DefaultComparison (i.e. on Windows run a Linux test).
 
-Scenario Outline: Comare two paths
+Scenario Outline: Compare two paths
 	Given I'm running on the following Operating System: <OS>
 	  And I parse the following as path 1: <Path 1>
 	  And I parse the following as path 2: <Path 2>

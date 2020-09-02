@@ -37,8 +37,8 @@ namespace Landorphan.Abstractions.FileSystem.Paths.UnitTests.Specifications.Path
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Specifications/Path", "Path Segment Notation", "\tIn order to round trip path\'s to strings\r\n\tAs a developer\r\n\tI want to to be able" +
-                    " to convert strings to path and back without loosing fidelity", ProgrammingLanguage.CSharp, new string[] {
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Specifications/Path", "Path Segment Notation", "\tIn order to round trip path\'s to strings\r\n\tAs a developer\r\n\tI want to be able to" +
+                    " convert strings to path and back without loosing fidelity", ProgrammingLanguage.CSharp, new string[] {
                         "Check-In"});
             testRunner.OnFeatureStart(featureInfo);
         }

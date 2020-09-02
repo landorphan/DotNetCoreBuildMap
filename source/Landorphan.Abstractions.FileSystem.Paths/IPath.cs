@@ -1,53 +1,24 @@
 namespace Landorphan.Abstractions.FileSystem.Paths
 {
     using System.Collections.Generic;
+    using Landorphan.Common.Interfaces;
 
-    public enum PathStatus
-    {
-        Undetermined,
-        Legal,
-        Discouraged,
-        Illegal
-    }
-
-    public enum SerializationForm
-    {
-        Simple,
-        PathSegmentNotation
-    }
-
-    public enum PathType
-    {
-        Windows,
-        Posix,
-    }
-
-    public enum PathAnchor
-    {
-        Absolute,
-        Relative
-    }
-
-    public enum SimplificationLevel
-    {
-        NotNormalized,
-        LeadingParentsOnly,
-        SelfReferenceOnly,
-        Fully
-    }
-
-    public interface IPath
+    public interface IPath : ICloneable<IPath>
     {
         PathAnchor Anchor { get; }
+
         string Extension { get; }
+
         bool HasExtension { get; }
 
         bool IsDiscouraged { get; }
+
         bool IsFullyQualified { get; }
 
         ISegment LeadingSegment { get; }
 
         string Name { get; }
+
         string NameWithoutExtension { get; }
 
         PathType PathType { get; }
@@ -67,10 +38,13 @@ namespace Landorphan.Abstractions.FileSystem.Paths
         string SuppliedPathString { get; }
 
         ISegment TrailingSegment { get; }
+
         IPath AppendSegmentAfter(int offset, ISegment segment);
+
         IPath AppendSegmentAtEnd(ISegment segment);
 
         IPath ChangeExtension(string newExtension);
+
         IPath ConvertToRelativePath();
 
         ISegment CreateSegment(SegmentType segmentType, string name);
@@ -78,9 +52,13 @@ namespace Landorphan.Abstractions.FileSystem.Paths
         IPath GetParent();
 
         IPath InsertSegmentAtBeginning(ISegment segment);
+
         IPath InsertSegmentBefore(int offset, ISegment segment);
 
+        IPath Join(IPath other);
+
         IPath ReplaceSegment(int offset, ISegment segment);
+
         IPath Simplify();
 
         string ToPathSegmentNotation();

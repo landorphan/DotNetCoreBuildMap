@@ -2,7 +2,7 @@
 Feature: Path Segment Notation
 	In order to round trip path's to strings
 	As a developer
-	I want to to be able to convert strings to path and back without loosing fidelity
+	I want to be able to convert strings to path and back without loosing fidelity
 
 Scenario Outline: I can convert paths to and from Path Segment Notation
 # Test 1 Convert the path to Path Segment Notation

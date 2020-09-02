@@ -7,7 +7,8 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
     // TODO: Make this internal once we have enough build system to do InternalsVisibleTo
     public class WindowsSegment : Segment
     {
-        public static readonly string[] DeviceNames = {
+        public static readonly string[] DeviceNames =
+        {
             "CON", "PRN", "AUX", "NUL", "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8",
             "COM9", "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9"
         };
@@ -42,7 +43,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
             }
         }
 
-        public override ISegment Clone()
+        public override ISegment DeepClone()
         {
             return new WindowsSegment(SegmentType, Name);
         }
@@ -117,6 +118,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
             {
                 return false;
             }
+
             if (this == ParentSegment || this == EmptySegment || this == SelfSegment || this == NullSegment)
             {
                 return true;
@@ -138,7 +140,9 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
                 return false;
             }
 
-            if (Name.EndsWith(WindowsRelevantPathCharacters.Period.ToString(CultureInfo.InvariantCulture), StringComparison.Ordinal) && SegmentType != SegmentType.ParentSegment && SegmentType != SegmentType.SelfSegment)
+            if (Name.EndsWith(WindowsRelevantPathCharacters.Period.ToString(CultureInfo.InvariantCulture), StringComparison.Ordinal) &&
+                SegmentType != SegmentType.ParentSegment &&
+                SegmentType != SegmentType.SelfSegment)
             {
                 return false;
             }

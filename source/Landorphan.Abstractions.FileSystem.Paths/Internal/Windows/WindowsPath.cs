@@ -19,6 +19,7 @@
                     {
                         return PathAnchor.Absolute;
                     }
+
                     foreach (var segment in Segments)
                     {
                         if (segment.SegmentType == SegmentType.DeviceSegment)
@@ -26,6 +27,7 @@
                             return PathAnchor.Absolute;
                         }
                     }
+
                     return PathAnchor.Relative;
                 }
 
@@ -60,6 +62,7 @@
             {
                 return separator.ToString(CultureInfo.InvariantCulture);
             }
+
             var builder = new StringBuilder();
 
             var skipNextSeparator = false;

@@ -67,7 +67,7 @@ namespace Landorphan.BuildMap.UnitTests.TestAssets.TestHelpers
 
         private const string StartSolutionProperties = "    GlobalSection(SolutionProperties) = preSolution";
 
-        private const string StartSolutionExtGlobals = "	GlobalSection(ExtensibilityGlobals) = postSolution";
+        private const string StartSolutionExtGlobals = "    GlobalSection(ExtensibilityGlobals) = postSolution";
 
         public string GetFileContent()
         {

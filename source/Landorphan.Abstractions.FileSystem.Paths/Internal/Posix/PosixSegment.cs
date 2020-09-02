@@ -37,7 +37,7 @@
             }
         }
 
-        public override ISegment Clone()
+        public override ISegment DeepClone()
         {
             return new PosixSegment(SegmentType, Name);
         }
@@ -86,6 +86,7 @@
                         return true;
                     }
                 }
+
                 if (Name.StartsWith(PosixRelevantPathChars.Space.ToString(CultureInfo.InvariantCulture), StringComparison.Ordinal) ||
                     Name.EndsWith(PosixRelevantPathChars.Space.ToString(CultureInfo.InvariantCulture), StringComparison.Ordinal) ||
                     SegmentType != SegmentType.SelfSegment &&
@@ -125,6 +126,7 @@
                             }
                         }
                     }
+
                     break;
             }
 

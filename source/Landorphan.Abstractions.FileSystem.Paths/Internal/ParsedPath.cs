@@ -14,16 +14,30 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
     {
         internal SimplificationLevel simplification;
         internal IPath simplifiedForm;
-
         internal IPath suppliedForm;
+
+        public object Clone()
+        {
+            return DeepClone();
+        }
+
+        public IPath DeepClone()
+        {
+            var clones = CloneSegments(Segments);
+            return CreateFromSegments(clones);
+        }
+
         public abstract PathAnchor Anchor { get; }
 
         public string Extension => simplifiedForm.TrailingSegment.Extension;
+
         public bool HasExtension => simplifiedForm.TrailingSegment.HasExtension;
 
-        public bool IsDiscouraged => (from s in Segments
-                                      where s.IsDiscouraged()
-                                      select s).Any() && Status == PathStatus.Legal;
+        public bool IsDiscouraged => (
+                                         from s in Segments
+                                         where s.IsDiscouraged()
+                                         select s).Any() &&
+                                     Status == PathStatus.Legal;
 
         public bool IsFullyQualified => simplifiedForm.LeadingSegment.SegmentType == SegmentType.RootSegment ||
                                         simplifiedForm.LeadingSegment.SegmentType == SegmentType.VolumeRelativeSegment ||
@@ -32,7 +46,9 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
         public ISegment LeadingSegment { get; private set; }
 
         public string Name => simplifiedForm.TrailingSegment.Name;
+
         public string NameWithoutExtension => simplifiedForm.TrailingSegment.NameWithoutExtension;
+
         public abstract PathType PathType { get; }
 
         public ISegment RootSegment => simplifiedForm.LeadingSegment.IsRootSegment ? simplifiedForm.LeadingSegment : Segment.GetEmptySegment(PathType);
@@ -50,9 +66,10 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
                 if (this == simplifiedForm)
                 {
                     var loc = 0;
-                    if ((from s in Segments
-                         where !s.IsLegalForSegmentOffset(loc++)
-                         select s).Any())
+                    if ((
+                        from s in Segments
+                        where !s.IsLegalForSegmentOffset(loc++)
+                        select s).Any())
                     {
                         return PathStatus.Illegal;
                     }
@@ -65,7 +82,9 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
         }
 
         public IPath SuppliedPath { get; private set; }
+
         public string SuppliedPathString { get; private set; }
+
         public ISegment TrailingSegment { get; private set; }
 
         public IPath AppendSegmentAfter(int offset, ISegment segment)
@@ -81,7 +100,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
             //    segment = Segment.GetEmptySegment(PathType);
             //}
             //var clones = CloneSegments(this.Segments);
-            //clones.Add(segment.Clone());
+            //clones.Add(segment.DeepClone());
             //return CreateFromSegments(clones);
         }
 
@@ -91,6 +110,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
             {
                 newExtension = string.Empty;
             }
+
             if (newExtension.Length == 1 && newExtension[0] == '.')
             {
                 newExtension = string.Empty;
@@ -124,9 +144,10 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
                 }
                 else
                 {
-                    path = CreateFromSegments(new[] { (Segment)Segment.GetSelfSegment(path.PathType) });
+                    path = CreateFromSegments(new[] {(Segment)Segment.GetSelfSegment(path.PathType)});
                 }
             }
+
             return path;
         }
 
@@ -146,6 +167,18 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
         public IPath InsertSegmentBefore(int offset, ISegment segment)
         {
             return AddToSegments(offset, false, segment);
+        }
+
+        public IPath Join(IPath other)
+        {
+            if (ReferenceEquals(null, other))
+            {
+                return AppendSegmentAtEnd(Segment.GetNullSegment(PathType));
+            }
+
+            var clones = CloneSegments(Segments);
+            clones.AddRange(other.Segments.Select(s => s.DeepClone()));
+            return CreateFromSegments(clones);
         }
 
         public IPath ReplaceSegment(int offset, ISegment segment)
@@ -174,12 +207,14 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
             {
                 builder.Append(PathSegmentNotationComponents.PosixPathType);
             }
+
             builder.Append(PathSegmentNotationComponents.CloseBracket);
             foreach (var segment in Segments)
             {
                 builder.Append(PathSegmentNotationComponents.ForwardSlash);
                 builder.Append(segment.ToPathSegmentNotation());
             }
+
             return builder.ToString();
         }
 
@@ -199,6 +234,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
             {
                 retval = new PosixPath();
             }
+
             retval.InitializeFromSuppliedPathAndSegments(suppliedPath, segments);
             return retval;
         }
@@ -241,6 +277,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
                     popDepth--;
                     return true;
                 }
+
                 return false;
             };
 
@@ -254,7 +291,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
                     // Any Device Segment anywhere in the path resolves immediately to
                     // that device and causes all other segments to be irrelevant.
                     case SegmentType.DeviceSegment:
-                        return new[] { current };
+                        return new[] {current};
 
                     // Handle all Absolute Segment types
                     // "True" Absolute segments must be the first segment.
@@ -278,6 +315,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
                             // other purposes after this.
                             result.Push(current);
                         }
+
                         break;
 
                     // Special case Vol Rel Segment
@@ -296,6 +334,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
                                 result.Push(current);
                             }
                         }
+
                         break;
 
                     // Parents simply increase the "pop" count.
@@ -323,6 +362,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
                         {
                             result.Push(current);
                         }
+
                         break;
                 }
             }
@@ -371,6 +411,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
             {
                 segment = Segment.GetEmptySegment(PathType);
             }
+
             var clones = CloneSegments(Segments);
 
             newSegments.AddRange(clones.Take(offset));
@@ -384,8 +425,9 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
 
         private static List<ISegment> CloneSegments(IEnumerable<ISegment> originalSegments)
         {
-            var segments = new List<ISegment>(from s in originalSegments
-                                              select (Segment)s.Clone());
+            var segments = new List<ISegment>(
+                from s in originalSegments
+                select (Segment)s.DeepClone());
             return segments;
         }
 
@@ -430,15 +472,16 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
         {
             var retval = new List<Segment>();
             var selfSegment = pathType == PathType.Windows ? WindowsSegment.SelfSegment : (Segment)PosixSegment.SelfSegment;
-            if (segments == null || !segments.Any() ||
+            if (segments == null ||
+                !segments.Any() ||
                 segments.Count() == 1 && (segments.First().SegmentType == SegmentType.NullSegment || segments.First().SegmentType == SegmentType.EmptySegment))
             {
-                segments = new[] { (Segment)selfSegment.Clone() };
+                segments = new[] {(Segment)selfSegment.DeepClone()};
             }
 
             foreach (var segment in segments)
             {
-                var newSegment = (Segment)segment.Clone();
+                var newSegment = (Segment)segment.DeepClone();
                 retval.Add(newSegment);
             }
 
