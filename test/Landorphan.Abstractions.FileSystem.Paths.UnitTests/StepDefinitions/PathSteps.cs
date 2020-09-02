@@ -21,12 +21,17 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
     [Binding]
     public sealed class PathSteps
     {
+        public IPath joinResultPath;
         public IPath normalizedPath;
         public IPath originalForm;
+        public IPath otherNormalizedPath;
+        public IPath otherParsedPath;
+        public string otherSuppliedPath;
         public IPath parsedPath;
         public IPath pathChangeResult;
         public string preParsedPath;
         public string suppliedPath;
+
         private static OSPlatform osPlatform;
         private readonly PathParser pathParser = new PathParser();
         private bool areEqual;
@@ -43,6 +48,7 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
         private Exception thrownException;
         private string[] tokens;
         private string toStringReturned;
+        private PathType OtherPathType { get; set; }
         private PathType PathType { get; set; }
 
         [BeforeScenario]
@@ -51,16 +57,29 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
             PathAbstractionManager.GetRuntimeInformation = () => new MockRuntimeInformation();
         }
 
-        [Given(@"I have the following path: (.*)")]
-        public void GivenIHaveTheFollowingPath(string path)
+        [Given(@"I have the following other path: (.*)")]
+        public void GivenIHaveTheFollowingOtherPath(string path)
         {
-            if (path.Contains("PSN:", StringComparison.Ordinal))
+            if (path == "(null)")
             {
-                suppliedPath = path.Replace('`', '\\');
+                otherSuppliedPath = null;
             }
             else
             {
-                suppliedPath = PreparePathForTest(path);
+                otherSuppliedPath = path.Contains("PSN:", StringComparison.Ordinal) ? path.Replace('`', '\\') : PreparePathForTest(path);
+            }
+        }
+
+        [Given(@"I have the following path: (.*)")]
+        public void GivenIHaveTheFollowingPath(string path)
+        {
+            if (path == "(null)")
+            {
+                suppliedPath = null;
+            }
+            else
+            {
+                suppliedPath = path.Contains("PSN:", StringComparison.Ordinal) ? path.Replace('`', '\\') : PreparePathForTest(path);
             }
         }
 
@@ -97,6 +116,13 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
             {
                 path2 = path == "(null)" ? null : parser.Parse(path, PathType);
             }
+        }
+
+        [Then(@"The join result should be a new instance")]
+        public void TheJoinResultShouldBeANewInstance()
+        {
+            ReferenceEquals(joinResultPath, parsedPath).Should().BeFalse();
+            ReferenceEquals(joinResultPath, otherParsedPath).Should().BeFalse();
         }
 
         [Then(@"an exception of type ""(.*)"" should be thrown")]
@@ -349,6 +375,12 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
             toStringReturned = parsedPath.ToString();
         }
 
+        [When(@"I call path join other")]
+        public void WhenICallPathJoinOther()
+        {
+            joinResultPath = parsedPath.Join(otherParsedPath);
+        }
+
         [When(@"I change the path's extension to: (.*)")]
         public void WhenIChangeThePathSExtensionTo_Json(string newExtension)
         {
@@ -413,6 +445,16 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
             normalizedPath = parsedPath.Simplify();
             pathChangeResult = normalizedPath;
             preParsedPath = normalizedPath.ToString();
+        }
+
+        [Given(@"I parse the other path")]
+        [When(@"I parse the other path")]
+        public void WhenIParseTheOtherPath()
+        {
+            otherParsedPath = pathParser.Parse(otherSuppliedPath);
+            OtherPathType = otherParsedPath.PathType;
+            // NOTE: Unless this is overriden by a test step ... the normalized path = the parsedPath on first parsing 
+            otherNormalizedPath = otherParsedPath;
         }
 
         [Given(@"I parse the path")]

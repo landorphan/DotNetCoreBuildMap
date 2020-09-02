@@ -5,12 +5,13 @@ Feature: Path Join
 	I need to be able to join paths
 
 
-#Scenario Outline: Join a path to a path
-	#Given I have the following path: <Target>
-	#And I have the following path: <Other>
-	# When I call target Join other
-	# Then <Target> should be unmodified
-	# And <Other> should be unmodified
-	# And The Join result should be a new instance
-	# And the Join result should have the expected value
-
+Scenario Outline: Join null a path
+	Given I have the following path: <Target>
+	  And I have the following other path: <Other>
+	 When I parse the path
+	  And I parse the other path
+	  And I call path join other
+	 Then The join result should be a new instance
+	 #And the join result should have the value:
+| Target | Other  |
+| c:\\   | (null) |
