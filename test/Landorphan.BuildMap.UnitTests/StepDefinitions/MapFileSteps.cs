@@ -8,7 +8,6 @@
     using FluentAssertions;
     using Landorphan.BuildMap.Construction;
     using Landorphan.BuildMap.Model;
-    using Landorphan.BuildMap.UnitTests.TestAssets.TestHelpers;
     using Landorphan.BuildMap.UnitTests.TestHelpers;
     using TechTalk.SpecFlow;
     using TechTalk.SpecFlow.Assist;

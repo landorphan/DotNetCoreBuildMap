@@ -1,29 +1,23 @@
 ﻿namespace Landorphan.Abstractions.FileSystem.Paths
 {
     using System;
-    using System.Collections;
-    using System.Collections.Generic;
     using System.Globalization;
     using Landorphan.Common;
 
-    public interface IPathComparerAndEquator : IComparer<IPath>, IEqualityComparer<IPath>, IComparer, IEqualityComparer
-    {
-    }
-
-    public sealed class PathComparerAndEquator : IPathComparerAndEquator
+    public sealed class PathComparer : IPathComparer
     {
         private readonly StringComparison stringComparison;
 
-        internal PathComparerAndEquator(StringComparison comparison)
+        internal PathComparer(StringComparison comparison)
         {
             comparison.ArgumentMustBeValidEnumValue(nameof(comparison));
 
             stringComparison = comparison;
         }
 
-        public static IPathComparerAndEquator CaseInsensitive { get; } = new PathComparerAndEquator(StringComparison.OrdinalIgnoreCase);
+        public static IPathComparer CaseInsensitive { get; } = new PathComparer(StringComparison.OrdinalIgnoreCase);
 
-        public static IPathComparerAndEquator CaseSensitive { get; } = new PathComparerAndEquator(StringComparison.Ordinal);
+        public static IPathComparer CaseSensitive { get; } = new PathComparer(StringComparison.Ordinal);
 
         public int Compare(object x, object y)
         {

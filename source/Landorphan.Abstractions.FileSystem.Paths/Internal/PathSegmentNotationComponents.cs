@@ -1,4 +1,4 @@
-﻿namespace Landorphan.Abstractions.FileSystem.Paths
+﻿namespace Landorphan.Abstractions.FileSystem.Paths.Internal
 {
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
@@ -18,6 +18,7 @@
         public const string PosixPathType = "POS";
         public const char Space = ' ';
         public const string WindowsPathType = "WIN";
+
         public static readonly IReadOnlyDictionary<SegmentType, string> SegmentTypeToString = new ReadOnlyDictionary<SegmentType, string>(
             new Dictionary<SegmentType, string>
             {

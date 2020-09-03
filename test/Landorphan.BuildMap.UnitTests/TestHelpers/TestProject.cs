@@ -1,4 +1,4 @@
-﻿namespace Landorphan.BuildMap.UnitTests.TestAssets.TestHelpers
+﻿namespace Landorphan.BuildMap.UnitTests.TestHelpers
 {
     using System;
     using System.Collections.Generic;

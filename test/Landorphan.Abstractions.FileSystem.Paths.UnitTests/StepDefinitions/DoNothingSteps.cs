@@ -1,4 +1,4 @@
-namespace Landorphan.Abstractions.Tests.StepDefinitions
+namespace Landorphan.Abstractions.FileSystem.Paths.UnitTests.StepDefinitions
 {
     using TechTalk.SpecFlow;
 

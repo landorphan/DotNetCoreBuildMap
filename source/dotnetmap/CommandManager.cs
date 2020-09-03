@@ -1,4 +1,4 @@
-namespace Landorphan.BuildMap
+namespace dotnetmap
 {
     public class CommandManager
     {

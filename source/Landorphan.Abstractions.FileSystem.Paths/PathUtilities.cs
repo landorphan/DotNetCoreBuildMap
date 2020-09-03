@@ -5,18 +5,18 @@
 
     public static class PathUtilities
     {
-        public static IPathComparerAndEquator CaseInsensitiveComparerAndEquator { get; } = PathComparerAndEquator.CaseInsensitive;
+        public static IPathComparer CaseInsensitiveComparer { get; } = PathComparer.CaseInsensitive;
 
-        public static IPathComparerAndEquator CaseSensitiveComparerAndEquator { get; } = PathComparerAndEquator.CaseSensitive;
+        public static IPathComparer CaseSensitiveComparer { get; } = PathComparer.CaseSensitive;
 
-        public static IPathComparerAndEquator DefaultComparerAndEquator
+        public static IPathComparer DefaultComparer
         {
             get
             {
                 // ri is not cached by design
                 // TODO: how to override in a test scenario?
                 IRuntimeInformation ri = new RuntimeInformationAbstraction();
-                return ri.IsOSPlatform(OSPlatform.Windows) ? CaseInsensitiveComparerAndEquator : CaseSensitiveComparerAndEquator;
+                return ri.IsOSPlatform(OSPlatform.Windows) ? CaseInsensitiveComparer : CaseSensitiveComparer;
             }
         }
 

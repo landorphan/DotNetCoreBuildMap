@@ -3,6 +3,7 @@
     using System.Globalization;
     using System.Text;
     using System.Text.RegularExpressions;
+    using Landorphan.Abstractions.FileSystem.Paths.Internal;
     using Landorphan.Abstractions.FileSystem.Paths.Internal.Posix;
     using Landorphan.Abstractions.FileSystem.Paths.Internal.Windows;
 

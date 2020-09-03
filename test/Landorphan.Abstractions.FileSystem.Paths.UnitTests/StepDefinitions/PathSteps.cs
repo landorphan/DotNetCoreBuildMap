@@ -1,4 +1,4 @@
-namespace Landorphan.Abstractions.Tests.StepDefinitions
+namespace Landorphan.Abstractions.FileSystem.Paths.UnitTests.StepDefinitions
 {
     using System;
     using System.IO;
@@ -406,17 +406,17 @@ namespace Landorphan.Abstractions.Tests.StepDefinitions
         [When(@"I compare the paths using the (Sensitive|Insensitive|Default) comparer")]
         public void WhenICompareThePaths(string Comparer)
         {
-            IPathComparerAndEquator comparer = null;
+            IPathComparer comparer = null;
             switch (Comparer)
             {
                 case "Sensitive":
-                    comparer = PathUtilities.CaseSensitiveComparerAndEquator;
+                    comparer = PathUtilities.CaseSensitiveComparer;
                     break;
                 case "Insensitive":
-                    comparer = PathUtilities.CaseInsensitiveComparerAndEquator;
+                    comparer = PathUtilities.CaseInsensitiveComparer;
                     break;
                 default:
-                    comparer = PathUtilities.DefaultComparerAndEquator;
+                    comparer = PathUtilities.DefaultComparer;
                     break;
             }
 

@@ -251,7 +251,7 @@ this.ScenarioInitialize(scenarioInfo);
                 table7.AddRow(new string[] {
                             "Project4",
                             "CSharp",
-                            "Missing"});
+                            "Empty"});
 #line 34
  testRunner.Given("I locate the following project files:", ((string)(null)), table7, "Given ");
 #line hidden
@@ -365,7 +365,7 @@ this.ScenarioInitialize(scenarioInfo);
                             "Library",
                             "CSharp",
                             "Project4",
-                            "Missing",
+                            "Empty",
                             "Solution2",
                             "4",
                             "Project4`Project4.csproj",
