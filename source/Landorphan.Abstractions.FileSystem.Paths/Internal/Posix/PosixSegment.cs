@@ -4,7 +4,7 @@
     using System.Globalization;
     using System.Linq;
 
-    public class PosixSegment : Segment
+    public sealed class PosixSegment : Segment
     {
         public static readonly PosixSegment EmptySegment = new PosixSegment(SegmentType.EmptySegment, string.Empty);
         public static readonly PosixSegment NullSegment = new PosixSegment(SegmentType.NullSegment, null);
