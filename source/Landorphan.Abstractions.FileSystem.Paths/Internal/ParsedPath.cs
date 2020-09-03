@@ -12,9 +12,9 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
     [JsonConverter(typeof(ParsedPathConverter))]
     public abstract class ParsedPath : IPath //, IYamlConvertible
     {
-        internal SimplificationLevel simplification;
-        internal IPath simplifiedForm;
-        internal IPath suppliedForm;
+        internal SimplificationLevel Simplification;
+        internal IPath SimplifiedForm;
+        internal IPath SuppliedForm;
 
         public object Clone()
         {
@@ -29,9 +29,9 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
 
         public abstract PathAnchor Anchor { get; }
 
-        public string Extension => simplifiedForm.TrailingSegment.Extension;
+        public string Extension => SimplifiedForm.TrailingSegment.Extension;
 
-        public bool HasExtension => simplifiedForm.TrailingSegment.HasExtension;
+        public bool HasExtension => SimplifiedForm.TrailingSegment.HasExtension;
 
         public bool IsDiscouraged => (
                                          from s in Segments
@@ -39,31 +39,31 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
                                          select s).Any() &&
                                      Status == PathStatus.Legal;
 
-        public bool IsFullyQualified => simplifiedForm.LeadingSegment.SegmentType == SegmentType.RootSegment ||
-                                        simplifiedForm.LeadingSegment.SegmentType == SegmentType.VolumeRelativeSegment ||
-                                        simplifiedForm.LeadingSegment.SegmentType == SegmentType.RemoteSegment;
+        public bool IsFullyQualified => SimplifiedForm.LeadingSegment.SegmentType == SegmentType.RootSegment ||
+                                        SimplifiedForm.LeadingSegment.SegmentType == SegmentType.VolumeRelativeSegment ||
+                                        SimplifiedForm.LeadingSegment.SegmentType == SegmentType.RemoteSegment;
 
         public ISegment LeadingSegment { get; private set; }
 
-        public string Name => simplifiedForm.TrailingSegment.Name;
+        public string Name => SimplifiedForm.TrailingSegment.Name;
 
-        public string NameWithoutExtension => simplifiedForm.TrailingSegment.NameWithoutExtension;
+        public string NameWithoutExtension => SimplifiedForm.TrailingSegment.NameWithoutExtension;
 
         public abstract PathType PathType { get; }
 
-        public ISegment RootSegment => simplifiedForm.LeadingSegment.IsRootSegment ? simplifiedForm.LeadingSegment : Segment.GetEmptySegment(PathType);
+        public ISegment RootSegment => SimplifiedForm.LeadingSegment.IsRootSegment ? SimplifiedForm.LeadingSegment : Segment.GetEmptySegment(PathType);
 
         public IReadOnlyList<ISegment> Segments { get; private set; }
 
         public SerializationForm SerializationMethod { get; set; } = PathUtilities.DefaultSerializationMethod;
 
-        public SimplificationLevel SimplificationLevel => simplification;
+        public SimplificationLevel SimplificationLevel => Simplification;
 
         public PathStatus Status
         {
             get
             {
-                if (this == simplifiedForm)
+                if (this == SimplifiedForm)
                 {
                     var loc = 0;
                     if ((
@@ -77,7 +77,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
                     return PathStatus.Legal;
                 }
 
-                return simplifiedForm.Status;
+                return SimplifiedForm.Status;
             }
         }
 
@@ -190,7 +190,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
 
         public IPath Simplify()
         {
-            return simplifiedForm;
+            return SimplifiedForm;
         }
 
         public string ToPathSegmentNotation()
@@ -256,11 +256,11 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
             retval.Segments = TraverseSegmentChain(suppliedPath.PathType, simplifiedSegments);
             retval.LeadingSegment = retval.Segments[0];
             retval.TrailingSegment = retval.Segments[retval.Segments.Count - 1];
-            retval.suppliedForm = suppliedPath;
+            retval.SuppliedForm = suppliedPath;
             retval.SuppliedPathString = suppliedPath.SuppliedPathString;
             retval.SuppliedPath = suppliedPath;
-            retval.simplifiedForm = retval;
-            retval.simplification = GetSimplificationLevel(retval);
+            retval.SimplifiedForm = retval;
+            retval.Simplification = GetSimplificationLevel(retval);
             return retval;
         }
 
@@ -500,11 +500,11 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal
             Segments = segments.ToArray();
             LeadingSegment = Segments[0];
             TrailingSegment = segments.Last();
-            suppliedForm = this;
+            SuppliedForm = this;
             SuppliedPathString = suppliedPath;
             SuppliedPath = this;
-            simplifiedForm = CreateSimplifiedForm(this);
-            simplification = GetSimplificationLevel(this);
+            SimplifiedForm = CreateSimplifiedForm(this);
+            Simplification = GetSimplificationLevel(this);
         }
 
         //public void Read(IParser parser, Type expectedType, ObjectDeserializer nestedObjectDeserializer)

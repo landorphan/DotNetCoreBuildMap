@@ -10,7 +10,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths
     using Landorphan.Abstractions.FileSystem.Paths.Internal.Posix;
     using Landorphan.Abstractions.FileSystem.Paths.Internal.Windows;
 
-    public class PathParser : IPathParser
+    public sealed class PathParser : IPathParser
     {
         public const string PathSegmentNotationQuickCheckToken = "PSN:";
         public const string PathTypeGroupName = "PathType";

@@ -11,7 +11,7 @@
         {
             get
             {
-                if (this == simplifiedForm)
+                if (this == SimplifiedForm)
                 {
                     if (LeadingSegment.SegmentType == SegmentType.RemoteSegment ||
                         LeadingSegment.SegmentType == SegmentType.RootSegment)
@@ -22,7 +22,7 @@
                     return PathAnchor.Relative;
                 }
 
-                return simplifiedForm.Anchor;
+                return SimplifiedForm.Anchor;
             }
         }
 

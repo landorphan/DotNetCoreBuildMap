@@ -15,11 +15,11 @@ namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
 
     public class MapFormatter : IFormatter
     {
-        private const string ColumnId = "Id";
-        private const string ColumnValue = "Value";
+        private const string columnId = "Id";
+        private const string columnValue = "Value";
 
         private readonly Regex buildParse = new Regex($@"\+\s+(?<{nameof(PropertyInfo.Name)}>[^ =]+)\s*=\s*(?<{nameof(PropertyInfo.SetValue)}>[^+]+)");
-        private readonly Regex columnParse = new Regex($@"(?<{ColumnId}>\d+)>(?<{ColumnValue}>.*)<\d+");
+        private readonly Regex columnParse = new Regex($@"(?<{columnId}>\d+)>(?<{columnValue}>.*)<\d+");
 
         private readonly Regex headerParse = new Regex(
             $@"#\s+(?<{nameof(PropertyInfo.Name)}>[^ =]+)\s*=\s*(?<{nameof(PropertyInfo.SetValue)}>[^#]+)",
@@ -157,9 +157,9 @@ namespace Landorphan.BuildMap.Serialization.Formatters.Implementation
                     if (match.Success)
                     {
                         var property = properties[int.Parse(
-                            match.Groups[ColumnId].Value,
+                            match.Groups[columnId].Value,
                             CultureInfo.InvariantCulture)];
-                        var rawValue = match.Groups[ColumnValue].Value;
+                        var rawValue = match.Groups[columnValue].Value;
                         SetPropertyValue(project, property.Value, rawValue);
                     }
                 }

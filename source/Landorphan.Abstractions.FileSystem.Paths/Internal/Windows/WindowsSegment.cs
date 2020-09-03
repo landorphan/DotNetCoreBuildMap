@@ -5,7 +5,7 @@ namespace Landorphan.Abstractions.FileSystem.Paths.Internal.Windows
     using System.Linq;
 
     // TODO: Make this internal once we have enough build system to do InternalsVisibleTo
-    public class WindowsSegment : Segment
+    public sealed class WindowsSegment : Segment
     {
         public static readonly string[] DeviceNames =
         {

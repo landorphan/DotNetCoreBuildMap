@@ -6,7 +6,7 @@
 
     public class PosixSegmenter : ISegmenter
     {
-        private const string UncIndicator = "UNC:";
+        private const string uncIndicator = "UNC:";
 
         public IEnumerable<Segment> GetSegments(string[] tokens)
         {
@@ -36,9 +36,9 @@
 
                 if (i == 0)
                 {
-                    if (tokens[i].StartsWith(UncIndicator, StringComparison.Ordinal))
+                    if (tokens[i].StartsWith(uncIndicator, StringComparison.Ordinal))
                     {
-                        segments.Add(new PosixSegment(SegmentType.RemoteSegment, tokens[i].Substring(UncIndicator.Length)));
+                        segments.Add(new PosixSegment(SegmentType.RemoteSegment, tokens[i].Substring(uncIndicator.Length)));
                         continue;
                     }
 
